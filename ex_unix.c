@@ -10,7 +10,7 @@
 
 char	uxb[UXBSZ + 2];
 
-unix()
+ex_unix()
 {
 	register char *up, *fp;
 	register c;
@@ -88,7 +88,7 @@ unix2(opt, printub, up)
 		if (!value(FORK))
 			error("No write@since last change");
 		dingdong();
-		printf(mesg("[No write]\n|[No write since last change]\n"));
+		ex_printf(mesg("[No write]\n|[No write since last change]\n"));
 		flush();
 	}
 	if (value(HUSH) == 0 && printub) {
@@ -120,7 +120,7 @@ unix2(opt, printub, up)
 	waitfor();
 	signal(INTR, savint);
 	if (value(HUSH) == 0)
-		printf("!\n");
+		ex_printf("!\n");
 	flush();
 	termreset();
 	gettmode();

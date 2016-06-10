@@ -6,13 +6,13 @@
  * Bill Joy UCB June-October 1977
  */
 
-char	version[];
+char	*version;
 
-char	CHANGE[]	"change";
-char	PRINT[]		"print";
-char	RECOVER[]	"recover";
-char	PRESERVE[]	"preserve";
-char	READ[]		"read";
+char	CHANGE[]	= "change";
+char	PRINT[]		= "print";
+char	RECOVER[]	= "recover";
+char	PRESERVE[]	= "preserve";
+char	READ[]		= "read";
 
 static	char pflag, nflag, kflag;
 static	int poffset;
@@ -101,7 +101,7 @@ commands(noprompt, exitoneof)
 					c = xargc0 - xargc;
 				newline();
 				for (; c < xargc0; c++)
-					printf("%6d  %s\n", c - (xargc0 - xargc) + 1, xargv0[c]);
+					ex_printf("%6d  %s\n", c - (xargc0 - xargc) + 1, xargv0[c]);
 				continue;
 			}
 			tail("append");
@@ -497,7 +497,7 @@ dorecover:
 			case 'e':
 				tail("version");
 				setNAEOL();
-				printf("%s\n", version);
+				ex_printf("%s\n", version);
 				flush();
 				continue;
 
@@ -536,10 +536,10 @@ dorecover:
 		case '=':
 			newline();
 			setall();
-			printf("%d\n", addr2 - zero);
+			ex_printf("%d\n", addr2 - zero);
 			continue;
 		case '!':
-			unix();
+			ex_unix();
 			continue;
 		case '<':
 		case '>':

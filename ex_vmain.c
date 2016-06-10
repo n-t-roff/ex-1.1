@@ -136,12 +136,12 @@ vup:
 					beep();
 					continue;
 				}
-				dot =- cnt;
+				dot -= cnt;
 				if (cnt > vcline || !visual) {
 					vch = '.';
 					return (1);
 				}
-				vcline =- cnt;
+				vcline -= cnt;
 				goto vnline;
 			case '\'':
 				c = getesc();
@@ -202,7 +202,7 @@ gogo:
 				cnt = vSCROLL;
 				if (visual) {
 					ind = vcnt - vcline - 1;
-					cnt =+ ind;
+					cnt += ind;
 				}
 			case '+':	/* next line, first non-white */
 			case CR:
@@ -221,33 +221,33 @@ vdown:
 				}
 				vsave();
 				if (cnt > dol - dot) {
-					ind =- cnt - (dol - dot);
+					ind -= cnt - (dol - dot);
 					if (ind < 0)
 						ind = 0;
 					cnt = dol - dot;
 				}
 				i = vcnt - vcline - 1;
 				if (c != CTRL(d) && cnt <= i) {
-					vcline =+ cnt;
-					dot =+ cnt;
+					vcline += cnt;
+					dot += cnt;
 					goto vnline;
 				}
-				cnt =- i;
-				dot =+ i;
-				vcline =+ i;
+				cnt -= i;
+				dot += i;
+				vcline += i;
 				if (c != CTRL(d)) {
 					if (!visual || vfit(cnt, dot) > LINES) {
 						vch = '.';
-						dot =+ cnt;
+						dot += cnt;
 						return (1);
 					}
 				}
 				vroll(cnt);
 				if (c == CTRL(d) && VLINES != LINES) {
-					vcline =- ind;
-					dot =- ind;
+					vcline -= ind;
+					dot -= ind;
 					if (vcline < 0) {
-						dot =- vcline;
+						dot -= vcline;
 						vcline = 0;
 					}
 				}
@@ -716,7 +716,7 @@ vundoit:
 				vgetline(0, genbuf + 1, &hadcnt);
 back:
 				vcline = c;
-				vliny[vcnt] =- i;
+				vliny[vcnt] -= i;
 				Pline = OP;
 				splitw = 0;
 				if (genbuf[0] == 0 || Peekkey == DELETE ||
@@ -819,7 +819,7 @@ vgetcnt()
 		c = getkey();
 		if (!digit(c))
 			break;
-		cnt =* 10, cnt =+ c - '0';
+		cnt *= 10, cnt += c - '0';
 	}
 	ungetkey(c);
 	Xhadcnt = 1;

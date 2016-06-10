@@ -17,7 +17,7 @@ unpack(sp)
 
 	for (lp = linebuf; c = *sp++;) {
 		if ((c & 0200) != 0) {
-			c =& 0177;
+			c &= 0177;
 			switch (c) {
 
 			case 0:

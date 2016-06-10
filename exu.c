@@ -70,8 +70,8 @@ undo(c)
 			 * for restoration of saved deleted lines.
 			 */
 			if (unddel >= jp)
-				unddel =- i;
-			newdol =- i;
+				unddel -= i;
+			newdol -= i;
 			/*
 			 * For the case where no lines are restored, dot
 			 * is the line before the first line deleted.
@@ -94,12 +94,12 @@ undo(c)
 			 * for restoration of the deleted lines.
 			 */
 			if (undap1 >= jp)
-				undap1 =+ i;
+				undap1 += i;
 			/*
 			 * Dot is the first resurrected line.
 			 */
 			dot = jp;
-			newdol =+ i;
+			newdol += i;
 		}
 		/*
 		 * Clean up so we are invertible

@@ -36,8 +36,6 @@ struct stb {
 #define	EROFS	30
 #define	EQUOT	33
 
-int	errno;
-
 #define	DTTYMAJ	3
 #define	DTTYMIN	0
 

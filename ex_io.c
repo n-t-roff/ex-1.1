@@ -66,7 +66,7 @@ dumbness:
 	}
 	ichanged = 0;
 	strcat(tfname, tftail);
-	for (p = strend(tfname), i = 5, j = getpid(); i > 0; i--, j =/ 10)
+	for (p = strend(tfname), i = 5, j = getpid(); i > 0; i--, j /= 10)
 		*--p = j % 10 | '0';
 	tfile = creat(tfname, 0600);
 	if (tfile < 0)
@@ -111,18 +111,18 @@ iostats()
 	io = -1;
 	if (value(HUSH) == 0) {
 		if (value(TERSE))
-			printf(" %d/%ld", cntln, cntch);
+			ex_printf(" %d/%ld", cntln, cntch);
 		else
-			printf(" %d line%s, %ld character%s", cntln, plural(cntln), cntch, cntch == 1 ? "" : "s");
+			ex_printf(" %d line%s, %ld character%s", cntln, plural(cntln), cntch, cntch == 1 ? "" : "s");
 		if (cntnull || cntodd) {
-			printf(" (");
+			ex_printf(" (");
 			if (cntnull) {
-				printf("%ld null", cntnull);
+				ex_printf("%ld null", cntnull);
 				if (cntodd)
-					printf(", ");
+					ex_printf(", ");
 			}
 			if (cntodd)
-				printf("%ld dirty", cntodd);
+				ex_printf("%ld dirty", cntodd);
 			putchar(')');
 		}
 		putnl();
@@ -147,10 +147,10 @@ getline(tl)
 	lp = scratch;
 	bp = getblock(tl, READ);
 	nl = nleft;
-	tl =& ~0177;
+	tl &= ~0177;
 	while (*lp++ = *bp++)
 		if (--nl == 0) {
-			bp = getblock(tl =+ 0200, READ);
+			bp = getblock(tl += 0200, READ);
 			nl = nleft;
 		}
 	return (unpack(scratch));
@@ -170,15 +170,15 @@ putline()
 	tl = tline;
 	bp = getblock(tl, WRITE);
 	nl = nleft;
-	tl =& ~0177;
+	tl &= ~0177;
 	while (*bp++ = *lp++) {
 		if (--nl == 0) {
-			bp = getblock(tl =+ 0200, WRITE);
+			bp = getblock(tl += 0200, WRITE);
 			nl = nleft;
 		}
 	}
 	nl = tline;
-	tline =+ (((lp - scratch) + 07) >> 2) & 077776;
+	tline += (((lp - scratch) + 07) >> 2) & 077776;
 	return (nl);
 }
 
@@ -196,7 +196,7 @@ getfile()
 			ninbuf = read(io, genbuf, LBSIZE) - 1;
 			if (ninbuf < 0) {
 				if (lp != linebuf) {
-					printf("[Incomplete last line] ");
+					ex_printf("[Incomplete last line] ");
 					break;
 				}
 				return (EOF);
@@ -212,13 +212,13 @@ getfile()
 		}
 		if (c & 0200) {
 			cntodd++;
-			c =& 0177;
+			c &= 0177;
 			if (c == 0)
 				continue;
 		}
 		*lp++ = c;
 	} while (c != '\n');
-	cntch =+ lp - linebuf;
+	cntch += lp - linebuf;
 	*--lp = 0;
 	nextip = fp;
 	cntln++;
@@ -244,7 +244,7 @@ putfile()
 			if (--nib < 0) {
 				if (write(io, genbuf, nib = fp-genbuf) != nib)
 					wrerror();
-				cntch =+ nib;
+				cntch += nib;
 				nib = 511;
 				fp = genbuf;
 			}
@@ -256,7 +256,7 @@ putfile()
 	} while (a1 <= addr2);
 	if (write(io, genbuf, nib = fp-genbuf) != nib)
 		wrerror();
-	cntch =+ nib;
+	cntch += nib;
 }
 
 wrerror()
@@ -309,7 +309,7 @@ getblock(atl, iof)
 		error(" Tmp file too large");
 	nleft = 512 - off;
 	if (bno == iblock) {
-		ichanged =| iof;
+		ichanged |= iof;
 		return (ibuff + off);
 	}
 	if (bno == oblock)
@@ -349,11 +349,11 @@ synctmp()
 	time(&header.Atime);
 	header.Auid = getuid() & mask;
 	*zero = header.Atime[1];
-	for (a = zero, bp = blocks; a <= dol; a =+ 256, bp++) {
+	for (a = zero, bp = blocks; a <= dol; a += 256, bp++) {
 		if (*bp < 0) {
 			tline = (tline + 0177) &~ 0177;
 			*bp = ((tline >> 7) & 0777);
-			tline =+ 0200;
+			tline += 0200;
 			oblock = *bp + 1;
 			bp[1] = -1;
 		}
@@ -364,7 +364,7 @@ synctmp()
 		if (write(tfile, a, cnt) != cnt) {
 oops:
 			*zero = 0;
-			printf("SYNC error:");
+			ex_printf("SYNC error:");
 			ioerror();
 		}
 		*zero = 0;

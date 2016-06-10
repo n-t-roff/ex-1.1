@@ -159,7 +159,7 @@ amatch(as, ap)
 	p = ap;
 nextc:
 	if (scc = *s++ & 0177)
-		if ((scc =& 0177) == 0)
+		if ((scc &= 0177) == 0)
 			scc = 0200;
 	switch (c = *p++) {
 		case '[':

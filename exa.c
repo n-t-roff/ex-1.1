@@ -22,14 +22,18 @@ append(f, a)
 	}
 	while ((*f)() == 0) {
 		if (unddol >= endcore) {
+#ifdef UNIX_SBRK
 			if (sbrk(1024) == -1) {
+#endif
 				if (!inglobal && f == getsub) {
 					undap1 = addr1;
 					undap2 = addr2 + 1;
 				}
 				error("Out of memory@- too many lines in file");
+#ifdef UNIX_SBRK
 			}
-			endcore.integer =+ 1024;
+#endif
+			endcore.integer += 1024;
 		}
 		nline++;
 		a1 = unddol + 1;

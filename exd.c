@@ -23,9 +23,9 @@ deleted()
 	a1 = addr1;
 	a2 = addr2 + 1;
 	a3 = unddol;
-	unddol =- a2 - a1;
-	undap2 =- a2 - a1;
-	dol =- a2 - a1;
+	unddol -= a2 - a1;
+	undap2 -= a2 - a1;
+	dol -= a2 - a1;
 	do
 		*a1++ = *a2++;
 	while (a2 <= a3);
@@ -50,7 +50,7 @@ deletem()
 		reverse(a2, dol + 1);
 		reverse(a1, dol + 1);
 	}
-	dol =- a2 - a1;
+	dol -= a2 - a1;
 	unddel = a1 - 1;
 	if (a1 > dol)
 		a1 = dol;

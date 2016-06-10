@@ -34,7 +34,7 @@ listchar(c)
 	register CHAR c;
 {
 
-	c =& 0377;
+	c &= 0377;
 	switch (c) {
 		case '\t':
 			c = '>';
@@ -74,7 +74,7 @@ normchar(c)
 {
 	register char *colp;
 
-	c =& 0377;
+	c &= 0377;
 	if (c & QUOTE)
 		switch (c) {
 			case ' ' | QUOTE:
@@ -83,7 +83,7 @@ normchar(c)
 			case QUOTE:
 				return;
 			default:
-				c =& 0177;
+				c &= 0177;
 		}
 	if (UPPERCASE) {
 		if (ucletter(c)) {
@@ -110,7 +110,7 @@ numbline(i)
 
 	if (shudclob)
 		slobber(' ');
-	printf("%6d  ", i);
+	ex_printf("%6d  ", i);
 	normline();
 }
 
@@ -120,7 +120,7 @@ normline()
 	if (shudclob)
 		slobber(linebuf[0]);
 	if (Putchar == &listchar || value(PRINTALL))
-		printf("%s", linebuf);
+		ex_printf("%s", linebuf);
 	else {
 		if (value(INDICATEUL) && !inopen && !inconf)
 			doulg();
@@ -129,7 +129,7 @@ normline()
 			outchar('\n');
 			if (Pline == &numbline)
 				outchar('\t');
-			printf("%s", genbuf);
+			ex_printf("%s", genbuf);
 		}
 	}
 	if (!inopen && !inconf)
@@ -154,7 +154,7 @@ slobber(c)
 	}
 	if (OS)
 		return;
-	printf("\240\210");
+	ex_printf("\240\210");
 }
 
 int	(*Outchar)(), termchar();
@@ -172,6 +172,6 @@ lprintf(a1, a2, a3)
 	register int (*P)();
 
 	P = setlist();
-	printf(a1, a2, a3);
+	ex_printf(a1, a2, a3);
 	Putchar = P;
 }

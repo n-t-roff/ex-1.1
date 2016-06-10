@@ -32,7 +32,7 @@ getchar()
 	}
 again:
 	if (read(0, &lastc, 1) == 1) {
-		lastc =& 0177;
+		lastc &= 0177;
 		if (junk(lastc)) {
 			checkjunk(lastc);
 			goto again;
@@ -69,7 +69,7 @@ gettty()
 	offset = Pline == &numbline ? 8 : 0;
 	if (intty && !inglobal) {
 		if (offset)
-			printf("\240\240%4d", dot - zero + 1);
+			ex_printf("\240\240%4d", dot - zero + 1);
 		if (value(AUTOINDENT) ^ (aiflag != 0)) {
 			setcol(lastin + offset);
 			while ((c = read(0, &genbuf, 512)) == 0) {
@@ -107,7 +107,7 @@ gettty()
 				spruce(genbuf);
 				if (hadup == 0 && genbuf[0]) {
 					lastin = smunch(lastin, genbuf);
-					for (c = lastin; c >= 7; c =- 8)
+					for (c = lastin; c >= 7; c -= 8)
 						*lp++ = '\t';
 					for (; c > 0; c--)
 						*lp++ = ' ';
@@ -118,7 +118,7 @@ gettty()
 				lp--;
 			}
 		} else if (offset) {
-			printf("  ");
+			ex_printf("  ");
 			flush();
 		}
 		while (hadnl == 0) {
@@ -136,7 +136,7 @@ gettty()
 			c = read(0, lp, linebuf + LBSIZE - lp);
 			if (c <= 0 && lp == linebuf)
 				return (EOF);
-			lp =+ c;
+			lp += c;
 			*lp = 0;
 			if (lp >= &linebuf[LBSIZE - 2])
 				goto toolong;
@@ -153,7 +153,7 @@ gettty()
 					ungetchar(EOF);
 				return (EOF);
 			}
-			c =& 0177;
+			c &= 0177;
 			*lp++ = c;
 			if (lp >= &linebuf[LBSIZE-2])
 toolong:
@@ -175,7 +175,7 @@ backtab(i)
 	j = i % value(SHIFTWIDTH);
 	if (j == 0)
 		j = value(SHIFTWIDTH);
-	i =- j;
+	i -= j;
 	if (i < 0)
 		i = 0;
 	return (i);
@@ -211,7 +211,7 @@ spruce(ocp)
 
 	cp = ocp;
 	while (c = *ocp++) {
-		c =& 0177;
+		c &= 0177;
 		if (junk(c)) {
 			checkjunk(c);
 			continue;

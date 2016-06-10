@@ -7,7 +7,7 @@
 #include "ex.h"
 #include "ex_tty.h"
 
-char	tspace[64], **Tspace;
+char	tspace[1024], **Tspace;
 char	ttycap[];
 
 int	COLUMNS	1000;
@@ -51,6 +51,7 @@ Setterm(type, printerr)
 	IT = tgetflag("it");
 */
 	CA = tgetflag("ca");
+	CM = Tgetstr("cm");
 	if (cgoto()[0] == 'O')
 		CA = 0;
 	AM = tgetflag("am");

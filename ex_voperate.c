@@ -77,7 +77,7 @@ operate(c, cnt)
 			goto nocount;
 	}
 	if (digit(peekkey()) && peekkey() != '0') {
-		cnt =* vgetcnt();
+		cnt *= vgetcnt();
 		Xcnt = cnt;
 		if (cnt < 0) {
 			beep();
@@ -171,7 +171,7 @@ fixup:
 		case '|':
 			if (Xhadcnt) {
 				if (Pline == &numbline)
-					cnt =+ 8;
+					cnt += 8;
 				vmovcol = cnt;
 			}
 			vmoving = 1;
@@ -196,11 +196,11 @@ space:
 				goto errlab;
 moveit:
 			while (cnt > 0 && !margin()) {
-				wcursor =+ dir;
+				wcursor += dir;
 				cnt--;
 			}
 			if (margin() && op == &vmove || wcursor < linebuf)
-				wcursor =- dir;
+				wcursor -= dir;
 			break;
 		case 'D':
 			cnt = INF;
@@ -213,7 +213,7 @@ deleteit:
 			if (margin())
 				goto errlab;
 			while (cnt > 0 && !margin()) {
-				wcursor =+ dir;
+				wcursor += dir;
 				cnt--;
 			}
 			op = deleteop;
@@ -233,7 +233,7 @@ find(c)
 	for(;;) {
 		if (edge())
 			return (0);
-		wcursor =+ dir;
+		wcursor += dir;
 		if (*wcursor == c)
 			return (1);
 	}

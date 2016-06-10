@@ -7,7 +7,8 @@ struct varbl {
 	char	vtype;
 	int	vdefault;
 	int	vvalue;
-} varbls[];
+};
+extern struct varbl varbls[];
 #define	value(a)	varbls[a].vvalue
 
 #define	AUTOINDENT	0

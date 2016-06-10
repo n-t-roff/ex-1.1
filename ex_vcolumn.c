@@ -48,8 +48,8 @@ qcount(c)
 
 	switch (c) {
 		case '\t':
-			vcntcol =+ 8;
-			vcntcol =& ~07;
+			vcntcol += 8;
+			vcntcol &= ~07;
 			break;
 		default:
 			vcntcol++;

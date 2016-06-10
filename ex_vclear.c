@@ -70,8 +70,8 @@ vclreol()
 
 	if (destcol == VCOLUMNS)
 		return;
-	destline =+ destcol / VCOLUMNS;
-	destcol =% VCOLUMNS;
+	destline += destcol / VCOLUMNS;
+	destcol %= VCOLUMNS;
 #ifdef DEBUG
 	if (destline < 0 || destline > TUBELINES)
 		error("Internal error: vclreol@- please tell someone");

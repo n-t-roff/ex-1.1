@@ -16,7 +16,7 @@ shift(c, cnt)
 
 	if (!inglobal)
 		save12(), undkind = UNDCHANGE;
-	cnt =* value(SHIFTWIDTH);
+	cnt *= value(SHIFTWIDTH);
 	for (addr = addr1; addr <= addr2; addr++) {
 		getline(*addr);
 		i = whitecnt(linebuf);
@@ -29,7 +29,7 @@ shift(c, cnt)
 			case '<':
 				if (i == 0)
 					continue;
-				i =- cnt;
+				i -= cnt;
 				cp = i > 0 ? genindent(i) : genbuf;
 				break;
 		}

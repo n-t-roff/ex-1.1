@@ -39,7 +39,7 @@ setcount()
 	cnt = getnum();
 	if (cnt <= 0)
 		error("Bad count|Nonzero count required");
-	addr2 =+ cnt - 1;
+	addr2 += cnt - 1;
 	if (addr2 > dol)
 		addr2 = dol;
 	nonzero();
@@ -121,12 +121,12 @@ address()
 				addr = zero;
 				bigmove = 1;
 			}
-			addr =+ offset;
+			addr += offset;
 			offset = getnum();
 			if (lastsign >= 0)
-				addr =+ offset;
+				addr += offset;
 			else
-				addr =- offset;
+				addr -= offset;
 			lastsign = 0;
 			offset = 0;
 		}
@@ -142,7 +142,7 @@ address()
 			if (addr || offset)
 				error("Relocation error@- can only offset by constants");
 		}
-		offset =+ lastsign;
+		offset += lastsign;
 		lastsign = 0;
 		switch (c) {
 
@@ -192,7 +192,7 @@ address()
 				c = 'z' + 1;
 			else if (c < 'a' || c > 'z')
 				error("Marks are ' and a-z");
-			c =- 'a';
+			c -= 'a';
 			for (addr = one; addr <= dol; addr++)
 				if (names[c] == (*addr &~ 01))
 					break;
@@ -205,7 +205,7 @@ address()
 			if (offset) {
 				if (addr == 0)
 					addr = dot;
-				addr =+ offset;
+				addr += offset;
 			}
 			if (addr == 0) {
 				bigmove = 0;
@@ -213,7 +213,7 @@ address()
 			}
 			if (addr != zero)
 				notempty();
-			addr =+ lastsign;
+			addr += lastsign;
 			if (addr < zero)
 				error("Negative address@- first buffer line is 1");
 			if (addr > dol)

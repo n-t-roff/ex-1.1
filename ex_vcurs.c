@@ -76,12 +76,12 @@ vgoto(y, x)
 	 * Fold the possibly too large value of x.
 	 */
 	if (x >= COLUMNS) {
-		y =+ x / COLUMNS;
-		x =% COLUMNS;
+		y += x / COLUMNS;
+		x %= COLUMNS;
 	}
 	if (outcol >= COLUMNS) {
-		outline =+ outcol / COLUMNS;
-		outcol =% COLUMNS;
+		outline += outcol / COLUMNS;
+		outcol %= COLUMNS;
 	}
 	if (!CA) {
 		/*
@@ -122,8 +122,8 @@ vputchar(c)
 	if (destcol >= VCOLUMNS && !visual && !CA)
 		error("Line too long@for single line open");
 	if (destcol >= COLUMNS) {
-		destline =+ destcol / COLUMNS;
-		destcol =% VCOLUMNS;
+		destline += destcol / COLUMNS;
+		destcol %= VCOLUMNS;
 	}
 	if (destline > VLINES) {
 		if (splitw) {

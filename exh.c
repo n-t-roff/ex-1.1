@@ -65,7 +65,7 @@ dingdong()
 {
 
 	if (value(ERRBELLS))
-		printf("\207\207");
+		ex_printf("\207\207");
 }
 
 /*
@@ -138,7 +138,7 @@ helpthem()
 		if (buffcnt <= 0)
 			break;
 		buff[buffcnt] = 0;
-		printf("%s", buff);
+		ex_printf("%s", buff);
 	}
 	flush();
 }

@@ -5,11 +5,21 @@
  * Bill Joy UCB June 1977
  */
 
-STATIC	char line[66] "Error message file not available\n/usr/lib/ex1.1strings";
-STATIC	char *linp line + 33;
-extern	char *erpath line + 33;
+STATIC	char line[66] = "Error message file not available\n/usr/lib/ex1.1strings";
+STATIC	char *linp = line + 33;
+extern	char *erpath = line + 33;
 extern	char pfast;
 STATIC	char phadnl;
+
+/*
+ * Indirect to current definition of putchar.
+ */
+putchar(c)
+	int c;
+{
+
+	(*Putchar)(c);
+}
 
 termchar(c)
 	char c;
@@ -46,7 +56,7 @@ flush1()
 	while (*lp)
 		switch (c = *lp++) {
 			case '\r':
-				destline =+ destcol / COLUMNS;
+				destline += destcol / COLUMNS;
 				destcol = 0;
 				continue;
 			case '\013':
@@ -75,11 +85,11 @@ flush1()
 			case '\t':
 				if (value(PRINTALL))
 					goto printit;
-				destcol =+ 8;
-				destcol =& ~7;
+				destcol += 8;
+				destcol &= ~7;
 				continue;
 			case '\n':
-				destline =+ destcol / COLUMNS + 1;
+				destline += destcol / COLUMNS + 1;
 				if (destcol != 0 && destcol % COLUMNS == 0)
 					destline--;
 				destcol = 0;
@@ -90,7 +100,7 @@ printit:
 				for (;;) {
 					if (AM == 0 && outcol == COLUMNS)
 						fgoto();
-					c =& 0177;
+					c &= 0177;
 					putch(c);
 					if (c == '\b') {
 						outcol--;
@@ -150,13 +160,13 @@ fgoto()
 	 * non-virtual by performing line folding.
 	 */
 	if (destcol > COLUMNS - 1) {
-		destline =+ destcol / COLUMNS;
-		destcol =% COLUMNS;
+		destline += destcol / COLUMNS;
+		destcol %= COLUMNS;
 	}
 	if (outcol > COLUMNS - 1) {
 		l = (outcol + 1) / COLUMNS;
-		outline =+ l;
-		outcol =% COLUMNS;
+		outline += l;
+		outcol %= COLUMNS;
 		if (AM == 0) {
 			/*
 			 * Software automatic margins
@@ -175,7 +185,7 @@ fgoto()
 		 * to "rolling" the screen up.
 		 */
 		if (outline > LINES - 1) {
-			destline =- outline - (LINES - 1);
+			destline -= outline - (LINES - 1);
 			outline = LINES - 1;
 		}
 	}
@@ -239,10 +249,10 @@ setcol(col)
 	 * ADM3A special - fix tabs
 	 */
 	if (TTY == 'ca' && (del <= -4 || del >= 4)) {
-		del =- 3;
-		del =& 07;
+		del -= 3;
+		del &= 07;
 		if (del < 0)
-			del =+ 8;
+			del += 8;
 		while (del > 0) {
 			/*
 			 * A tip of the hatlo hat here too!
@@ -273,15 +283,15 @@ motion()
 			destline = outline;
 	h = destcol;
 	if (!v || pfast) {
-		h =- outcol;
+		h -= outcol;
 		if (h < 0)
 			h = -h;
 	}
-	h =+ v;
+	h += v;
 	if (pfast || !NOCR) {
 		if (outcol)
 			v++;
-		v =+ destcol;
+		v += destcol;
 	} else
 		v = 5;
 	if (v >= 4 && h >= 4)
@@ -357,8 +367,8 @@ notech(i)
 	int i;
 {
 
-	outcol =+ i;
-	destcol =+ i;
+	outcol += i;
+	destcol += i;
 }
 
 
@@ -380,7 +390,7 @@ pstart()
 	gTTY(1);
 	normtty = 1;
 	normf = tty[2];
-	tty[2] =& ~(ECHO|CRLF);
+	tty[2] &= ~(ECHO|CRLF);
 	sTTY(1);
 }
 

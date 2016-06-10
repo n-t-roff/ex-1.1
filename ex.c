@@ -9,7 +9,7 @@
 #include "ex_glob.h"
 
 int	vyancnt;
-char	endline	1;
+char	endline = 1;
 
 /*
  * Ex uses a modified C runtime startup which allocates
@@ -18,20 +18,23 @@ char	endline	1;
  * to this area, and the pointer xargv0 and the counter
  * xargc0 are also initialized to point to the arguments.
  */
-main()
+int
+main(int xargc0, char **xargv0)
 {
 	char oop, nop, inite, reenter;
 	register char **axargv0;
 	register int c;
 
 	axargv0 = xargv0;
+#if 0
 	if (axargv0[0][0] == 'a')
-		erpath =+ 9;
+		erpath += 9;
 	if (axargv0[0][1] == 'd' || axargv0[0][2] == 'd') {
 		value(OPEN) = 0;
 		value(NOTIFY) = 1;
 		value(MAGIC) = 0;
 	}
+#endif
 	axargv0++;
 	xargc0--;
 	draino();
@@ -39,7 +42,9 @@ main()
 	oldhup = signal(HUP, onhup);
 	oldquit = signal(QUIT, 1);
 	ruptible = (signal(INTR, 1) & 01) == 0;
+#ifdef UNIX_SBRK
 	fendcore = sbrk(0);
+#endif
 	oop = 0;
 	nop = 0;
 	while (xargc0 && axargv0[0][0] == '-') {
@@ -69,7 +74,7 @@ main()
 				oop = 1;
 				break;
 			default:
-				printf("Unknown option %s\n", xargv[0]);
+				ex_printf("Unknown option %s\n", xargv[0]);
 				flush();
 				break;
 		}
@@ -77,7 +82,7 @@ main()
 		axargv0++;
 	}
 	if (recov && xargc0 == 0) {
-		printf("Recover which file?\n");
+		ex_printf("Recover which file?\n");
 		flush();
 		recov = 0;
 	}
@@ -147,6 +152,7 @@ nofiles:
 			error("No more files@to edit");
 		}
 	}
+	return 0;
 }
 
 onintr()
@@ -172,11 +178,17 @@ init()
 	extern int vyancnt;
 
 	fileinit();
+#ifdef UNIX_SBRK
 	brk(fendcore + 1);
+	endcore = fendcore - 2;
+#else
+# define LINELIMIT 0x8000
+	fendcore = malloc(LINELIMIT * sizeof(int *));
+	endcore = fendcore + LINELIMIT - 1;
+#endif
 	dot = zero = dol = fendcore;
 	one = zero+1;
 	undkind = UNDNONE;
-	endcore = fendcore - 2;
 	chngflag = 0;
 	value(EDITED) = 0;
 	for (i = 0; i <= 26; i++)

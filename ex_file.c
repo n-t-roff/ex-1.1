@@ -42,13 +42,13 @@ filename(comm)
 		lprintf("\"%s\"", file);
 		if (comm == 'f') {
 			if (value(EDITED))
-				printf(" [Edited]");
+				ex_printf(" [Edited]");
 			if (tchngflag)
-				printf(" [Modified]");
+				ex_printf(" [Modified]");
 		}
 		flush();
 	} else
-		printf("No file ");
+		ex_printf("No file ");
 	if (comm == 'f')
-		printf(mesg(" %d lin%c@in buffer"), dol - zero, dol == one ? 'e' : 'es');
+		ex_printf(mesg(" %d lin%c@in buffer"), dol - zero, dol == one ? 'e' : 'es');
 }

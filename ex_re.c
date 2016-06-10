@@ -135,7 +135,7 @@ magic:
 					cerror("Illegal *|Can't * a \\( ... \\) in regular expression");
 				if (*lastep == CCHR && (lastep[1] & QUOTE))
 					cerror("Illegal *|Can't * a \\n in regular expression");
-				*lastep =| STAR;
+				*lastep |= STAR;
 				continue;
 
 			case '[':
@@ -175,7 +175,7 @@ magic:
 				*ep++ = c;
 				continue;
 			}
-			c =- '1';
+			c -= '1';
 			if (c >= nbra)
 				cerror("Bad \\n|\\n in regular expression with n greater than the number of \\('s");
 			*ep++ = c | QUOTE;
@@ -314,14 +314,14 @@ advance(lp, ep)
 
 	case CCL:
 		if (cclass(ep, *lp++, 1)) {
-			ep =+ *ep;
+			ep += *ep;
 			continue;
 		}
 		return (0);
 
 	case NCCL:
 		if (cclass(ep, *lp++, 0)) {
-			ep =+ *ep;
+			ep += *ep;
 			continue;
 		}
 		return (0);
@@ -353,7 +353,7 @@ advance(lp, ep)
 		curlp = lp;
 		while (cclass(ep, *lp++, ep[-1] == (CCL|STAR)))
 			continue;
-		ep =+ *ep;
+		ep += *ep;
 		goto star;
 star:
 		do {
@@ -398,8 +398,8 @@ cclass(set, c, af)
 		if (n > 2 && set[1] == '-') {
 			if (c >= (set[0] & 0177) && c <= (set[2] & 0177))
 				return (af);
-			set =+ 3;
-			n =- 2;
+			set += 3;
+			n -= 2;
 		} else
 			if ((*set++ & 0177) == c)
 				return (af);

@@ -22,8 +22,10 @@ canCA()
 
 */
 
+char *
 cgoto()
 {
+#if 0
 	static char result[10];
 
 	switch (TTY) {
@@ -47,4 +49,6 @@ cgoto()
 		break;
 	}
 	return (result);
+#endif
+	return (tgoto(CM, destcol, destline));
 }

@@ -137,7 +137,7 @@ vcook()
 {
 
 	gTTY(1);
-	tty[2] =& ~RAW;
+	tty[2] &= ~RAW;
 	sTTY(1);
 }
 
@@ -145,7 +145,7 @@ vraw()
 {
 
 	gTTY(1);
-	tty[2] =| RAW;
+	tty[2] |= RAW;
 	sTTY(1);
 }
 
@@ -163,7 +163,7 @@ vok(atube)
 	vtube0 = atube;
 	for (i = 0; i < TUBELINES; i++) {
 		vtube[i] = atube;
-		atube =+ COLUMNS;
+		atube += COLUMNS;
 	}
 	vutmp = atube;
 	vundkind = VNONE;

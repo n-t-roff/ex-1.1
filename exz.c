@@ -42,13 +42,13 @@ zop(hadpr)
 			c = getchar();
 			if (!digit(c))
 				break;
-			lines =* 10;
-			lines =+ c - '0';
+			lines *= 10;
+			lines += c - '0';
 		}
 		if (lines < value(WINDOW))
 			znoclear++;
 		if (op == '=')
-			lines =+ 2;
+			lines += 2;
 	} else
 		lines = op == EOF ? value(SCROLL) : value(WINDOW);
 	if (c != EOF) {
@@ -74,25 +74,25 @@ zop2(lines, op)
 		case '+':
 			if (addr2 == dol)
 				error("At EOF");
-			addr2 =+ lines * zweight;
+			addr2 += lines * zweight;
 			if (addr2 > dol)
 				error("Hit BOTTOM");
 			addr2++;
 		default:
 			addr1 = addr2;
-			addr2 =+ lines-1;
+			addr2 += lines-1;
 			dot = addr2;
 			break;
 		case '=':
 		case '.':
 			lines--;
-			lines =>> 1;
+			lines >>= 1;
 			if (op == '=')
 				lines--;
 			addr1 = addr2-lines;
 			if (op == '=')
 				dot = split = addr2;
-			addr2 =+ lines;
+			addr2 += lines;
 			if (op == '.') {
 				markDOT();
 				dot = addr2;
@@ -100,7 +100,7 @@ zop2(lines, op)
 			break;
 		case '^':
 		case '-':
-			addr2 =- lines * zweight;
+			addr2 -= lines * zweight;
 			if (addr2 < one)
 				error("Hit TOP");
 			lines--;
@@ -142,7 +142,7 @@ splitit()
 	for (l = COLUMNS == 1000 ? 72 : COLUMNS, lp = linebuf; l > 0; l--)
 		*lp++ = '-';
 	*lp = 0;
-	printf("%s\n", linebuf);
+	ex_printf("%s\n", linebuf);
 }
 
 zeq(cnt)

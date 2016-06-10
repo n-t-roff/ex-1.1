@@ -60,14 +60,14 @@ global(k)
 	*gp++ = 0;
 	inglobal = 1;
 	for (a1 = one; a1 <= dol; a1++) {
-		*a1 =& ~01;
+		*a1 &= ~01;
 		if (a1 >= addr1 && a1 <= addr2 && execute(0, a1) == k)
-			*a1 =| 01;
+			*a1 |= 01;
 	}
 	saveall();
 	for (a1 = one; a1 <= dol; a1++) {
 		if (*a1 & 01) {
-			*a1 =& ~01;
+			*a1 &= ~01;
 			dot = a1;
 			globp = globuf;
 			commands(1, 1);
@@ -92,9 +92,11 @@ save(a1, a2)
 	undadot = dot;
 	for (dest = dol + 1, addr = a1; addr <= a2; *dest++ = *addr++)
 		if (dest >= endcore) {
+#ifdef UNIX_SBRK
 			if (sbrk(1024) == -1)
+#endif
 				error("Out of memory@saving lines for undo - try using ed or re)");
-			endcore.integer =+ 1024;
+			endcore.integer += 1024;
 		}
 	undkind = UNDALL;
 	unddel = a1 - 1;

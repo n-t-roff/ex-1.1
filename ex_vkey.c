@@ -51,7 +51,7 @@ getbr()
 	flusho();
 	if (read(0, &c, 1) != 1)
 		error("Input read error");
-	c =& 0177;
+	c &= 0177;
 	return (c);
 }
 

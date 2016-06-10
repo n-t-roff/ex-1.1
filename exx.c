@@ -64,16 +64,16 @@ tabulate(c)
 				dcol++;
 				break;
 			case '\t':
-				dcol =+ 8;
-				dcol =& ~07;
+				dcol += 8;
+				dcol &= ~07;
 				break;
 			default:
 				while (((ocol + 8) &~ 07) <= dcol) {
 					if (ocol + 1 == dcol)
 						break;
 					*dp++ = '\t';
-					ocol =+ 8;
-					ocol =& ~07;
+					ocol += 8;
+					ocol &= ~07;
 				}
 				while (ocol < dcol) {
 					*dp++ = ' ';

@@ -29,11 +29,15 @@ struct savre {
 	char	scircfl;
 	char	*sbraslist[NBRA];
 	char	*sbraelist[NBRA];
-} re, scanre, subre;
+};
+extern struct savre re, scanre, subre;
 
+extern
 char	rhsbuf[LBSIZE / 2];
 
+extern
 char	*loc1, *loc2, *locs;
+extern
 char	*linebp;
 
 #define	circfl		re.scircfl

@@ -24,7 +24,7 @@ vback(i)
 		j = vdepth();
 		if (j > i)
 			break;
-		i =- j;
+		i -= j;
 	}
 	return (tp);
 }
@@ -155,13 +155,13 @@ vfit(i, t)
 	while (i > 0) {
 		i--;
 		getline(t[i]);
-		j =+ vdepth();
+		j += vdepth();
 	}
 	/*
 	 * Account for the free space
 	 * at the bottom.
 	 */
-	j =- VLINES - vlast;
+	j -= VLINES - vlast;
 	return (j);
 }
 
@@ -208,7 +208,7 @@ vrollup(ip)
 
 	i = *ip - LINES + 2;
 	vscroll(i);
-	*ip =- i;
+	*ip -= i;
 	vmoveitup(i);
 	vscrap();
 }
@@ -252,7 +252,7 @@ vscroll(i)
 	for (j = TUBELINES -  i; j < TUBELINES; j++)
 		vclrbyte(vtube[j], VCOLUMNS);
 	for (j = 0; j <= vcnt; j++)
-		vliny[j] =- i;
+		vliny[j] -= i;
 }
 
 /*
@@ -270,8 +270,8 @@ vscrap()
 			/*
 			 * Discard the first j physical lines off the top
 			 */
-			vcnt =- j;
-			vcline =- j;
+			vcnt -= j;
+			vcline -= j;
 			for (i = 0; i <= vcnt; i++)
 				vliny[i] = vliny[i + j];
 			break;
@@ -306,7 +306,7 @@ vopenup(i)
 	if (i > j)
 		i = j;
 	for (l = vcline + 1; l <= vcnt; l++)
-		vliny[l] =+ i;
+		vliny[l] += i;
 	vscrap();
 }
 
@@ -336,7 +336,7 @@ vredraw(p)
 		else
 			getline(*tp);
 		vliny[l] = p;
-		p =+ vreopen(p, tp - zero);
+		p += vreopen(p, tp - zero);
 		tp++;
 	}
 	ovcline = vcline;
@@ -345,7 +345,7 @@ vredraw(p)
 		getline(*tp);
 		if (p + vdepth() > VLINES)
 			break;
-		p =+ vopen(tp, p);
+		p += vopen(tp, p);
 		vcline++;
 	}
 	vcline = ovcline;
@@ -379,7 +379,7 @@ vsync(p)
 				strcLIN(temp);
 			else
 				getline(dot[l - vcline]);
-			p =+ vreopen(p, (dot - zero) + (l - vcline)) - 1;
+			p += vreopen(p, (dot - zero) + (l - vcline)) - 1;
 			l++;
 		} else
 			vclrlin(p, dot + (l - vcline));
@@ -409,7 +409,7 @@ velide(cnt, vfirst)
 	/*
 	 * Lost cnt lines.
 	 */
-	vcnt =- cnt;
+	vcnt -= cnt;
 }
 
 vup1()

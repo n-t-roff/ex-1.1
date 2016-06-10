@@ -43,7 +43,7 @@ move1(cflag, addrt)
 	} else {
 		ad2 = addr2;
 		for (ad1 = addr1; ad1 <= ad2;)
-			*ad1++ =& ~01;
+			*ad1++ &= ~01;
 		ad1 = addr1;
 	}
 	ad2++;

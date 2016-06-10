@@ -29,12 +29,12 @@ substitute(c)
 				if (dosubcon(1, addr) == 0)
 					break;
 		if (scount) {
-			stotal =+ scount;
+			stotal += scount;
 			slines++;
 			putmark(addr);
 			n = append(getsub, addr);
-			addr =+ n;
-			addr2 =+ n;
+			addr += n;
+			addr2 += n;
 		}
 	}
 	if (stotal == 0 && !inglobal && !xflag)
@@ -113,7 +113,7 @@ comprhs(seof)
 				 * and all other chars work fine quoted.
 				 */
 				if (c != '&')
-					c =| QUOTE;
+					c |= QUOTE;
 				break;
 			}
 			/*
@@ -130,7 +130,7 @@ magic:
 					continue;
 			     /* case '&': */
 				default:
-					c =| QUOTE;
+					c |= QUOTE;
 					break;
 			}
 			break;
@@ -262,7 +262,7 @@ dosub()
 					casecnt = 0;
 					continue;
 		}
-		if (c < 0 && (c =& 0177) >= '1' && c < nbra + '1') {
+		if (c < 0 && (c &= 0177) >= '1' && c < nbra + '1') {
 			sp = place(sp, braslist[c - '1'], braelist[c - '1']);
 			if (sp == 0)
 				goto ovflo;
@@ -291,9 +291,9 @@ fixcase(c)
 		return (c);
 	casecnt--;
 	if (destcase)
-		c =& ~' ';
+		c &= ~' ';
 	else
-		c =| ' ';
+		c |= ' ';
 	return (c);
 }
 
@@ -322,7 +322,7 @@ putmk1(addr, n)
 {
 	register int *markp;
 
-	*addr =& ~1;
+	*addr &= ~1;
 	for (markp = names; markp < &names[27]; markp++)
 		if (*markp == *addr)
 			*markp = n;

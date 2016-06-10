@@ -56,7 +56,7 @@ doulg()
 			default:
 				if (gp >= maxgp)
 					break;
-				c =| (*gp & QUOTE);
+				c |= (*gp & QUOTE);
 				break;
 			case '_':
 				if (gp >= maxgp)
@@ -83,7 +83,7 @@ ovflo:
 	strcLIN(genbuf);
 	for (lp = linebuf, gp = genbuf; c = *lp; gp++, lp++)
 		if (c & QUOTE) {
-			c =& 0177;
+			c &= 0177;
 			if (c == 0)
 				*lp = '_', *gp = ' ';
 			else

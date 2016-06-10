@@ -110,7 +110,7 @@ pfile:
 			goto next;
 		}
 		if (!eq(op, NOTify) && op[0] == 'n' && op[1] == 'o') {
-			op =+ 2;
+			op += 2;
 			no++;
 		}
 		for (vp = varbls; vp->vname[0]; vp++)
@@ -212,19 +212,19 @@ propt(vp)
 
 	switch (vp->vtype) {
 		case ONOFF:
-			printf("%s%s\n", vp->vvalue ? "" : "no", vp->vname[0]);
+			ex_printf("%s%s\n", vp->vvalue ? "" : "no", vp->vname[0]);
 			break;
 		case NUMERIC:
 			if (vp == &varbls[MODE]) {
-				printf("mode=");
+				ex_printf("mode=");
 				pro(value(MODE));
 				putnl();
 			} else
-				printf("%s=%d\n", vp->vname[0], vp->vvalue);
+				ex_printf("%s=%d\n", vp->vname[0], vp->vvalue);
 			break;
 		case STRING:
 		case TERM:
-			printf("%s=%s\n", vp->vname[0], vp->vvalue);
+			ex_printf("%s=%s\n", vp->vname[0], vp->vvalue);
 			break;
 	}
 	flush();

@@ -21,9 +21,9 @@ killed()
 	cnt = addr2 - addr1 + 1;
 	if (!notable(cnt))
 		return;
-	printf("%d lines", cnt);
+	ex_printf("%d lines", cnt);
 	if (value(TERSE) == 0) {
-		printf(" %c%s", Command[0] | ' ', Command + 1);
+		ex_printf(" %c%s", Command[0] | ' ', Command + 1);
 		if (Command[strlen(Command) - 1] != 'e')
 			putchar('e');
 		putchar('d');
@@ -49,7 +49,7 @@ netchange(i)
 		cp = "less", i = -i;
 	if (!notable(i))
 		return;
-	printf(mesg("%d %s lines@in file after %s"), i, cp, Command);
+	ex_printf(mesg("%d %s lines@in file after %s"), i, cp, Command);
 	putNFL();
 }
 
@@ -59,16 +59,16 @@ snote(total, lines)
 
 	if (!notable(total))
 		return;
-	printf(mesg("%d subs|%d substitutions"), total);
+	ex_printf(mesg("%d subs|%d substitutions"), total);
 	if (lines != 1 && lines != total)
-		printf(" on %d lines", lines);
+		ex_printf(" on %d lines", lines);
 	putNFL();
 }
 
 noteargs()
 {
 	if (argc > 1) {
-		printf(mesg("%d files@to edit"), argc);
+		ex_printf(mesg("%d files@to edit"), argc);
 		putNFL();
 	}
 }

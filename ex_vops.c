@@ -28,7 +28,7 @@ vdelete(c)
 	if (cp > linebuf && (cp[0] == 0 || c == '#'))
 		cp--;
 	i = vliny[vcline];
-	i =+ vreopen(i, dot - zero);
+	i += vreopen(i, dot - zero);
 	while (i < vliny[vcline + 1]) {
 		vclrlin(i, dot + 1);
 		i++;
@@ -221,7 +221,7 @@ vappend(ch, cnt, indent)
 		 */
 		do {
 			strcpy(cursor, genbuf);
-			cursor =+ gcursor - genbuf;
+			cursor += gcursor - genbuf;
 		} while (--cnt > 0);
 		/*
 		 * If the insert didnt terminate with a new line character
@@ -314,7 +314,7 @@ vappend(ch, cnt, indent)
 			vup1();
 			voinit();
 		} else {
-			i =+ vliny[vcline - 1];
+			i += vliny[vcline - 1];
 			vopen(dot, i);
 		}
 		/*
@@ -348,7 +348,7 @@ genindent(indent)
 {
 	register char *cp;
 
-	for (cp = genbuf; indent >= 8; indent =- 8)
+	for (cp = genbuf; indent >= 8; indent -= 8)
 		*cp++ = '\t';
 	for (; indent > 0; indent--)
 		*cp++ = ' ';
@@ -391,8 +391,8 @@ whitecnt(cp)
 	for (;;)
 		switch (*cp++) {
 			case '\t':
-				i =+ 8;
-				i =& ~7;
+				i += 8;
+				i &= ~7;
 				break;
 			case ' ':
 				i++;
