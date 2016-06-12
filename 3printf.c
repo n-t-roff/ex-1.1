@@ -23,6 +23,11 @@ void
 ex_printf(const char *fmt, ...)
 {
 	va_list ap;
+	va_start(ap, fmt);
+}
+
+void
+ex_vprintf(char *fmt, va_list ap) {
 	char fcode;
 	int prec;
 	int length,mask1,nbits,n;
@@ -31,7 +36,6 @@ ex_printf(const char *fmt, ...)
 	char *ptr;
 	char buf[134];
 
-	va_start(ap, fmt);
 	for (;;) {
 		/* process format string first */
 		while ((fcode = *fmt++)!='%') {

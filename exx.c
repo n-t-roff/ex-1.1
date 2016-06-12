@@ -23,7 +23,8 @@ xop(f, c)
 	}
 }
 
-xpand()
+void
+xpand(void)
 {
 	register char *cp, *dp;
 	register int col;
@@ -48,8 +49,8 @@ xovflo:
 	*dp++ = 0;
 }
 
-tabulate(c)
-	char c;
+void
+tabulate(char c)
 {
 	register char *cp, *dp;
 	register int dcol;

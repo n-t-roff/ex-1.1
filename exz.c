@@ -53,7 +53,7 @@ zop(hadpr)
 		lines = op == EOF ? value(SCROLL) : value(WINDOW);
 	if (c != EOF) {
 		ungetchar(c);
-		newline();
+		ex_newline();
 	}
 	addr1 = addr2;
 	setdot();

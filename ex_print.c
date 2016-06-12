@@ -1,17 +1,18 @@
-#
 /*
  * Ex - a text editor
  * Bill Joy UCB June 1977
  */
 
+#include <stdarg.h>
 #include "ex.h"
 #include "ex_tty.h"
+#include "ex_vis.h"
 
-int	(*Outchar)(), (*Putchar)();
-int	listchar(), normchar();
+static void slobber(int);
 
-/* Put in assembly language to save space
-setlist()
+/* Put in assembly language to save space */
+int (*
+setlist(void))()
 {
 	register int (*P)();
 
@@ -20,7 +21,8 @@ setlist()
 	return (P);
 }
 
-setnorm()
+int (*
+setnorm(void))()
 {
 	register int (*P)();
 
@@ -28,10 +30,9 @@ setnorm()
 	Putchar = &normchar;
 	return (P);
 }
-*/
 
-listchar(c)
-	register CHAR c;
+void
+listchar(int c)
 {
 
 	c &= 0377;
@@ -69,8 +70,8 @@ escit:
 	normchar(c);
 }
 
-normchar(c)
-	register CHAR c;
+void
+normchar(int c)
 {
 	register char *colp;
 
@@ -102,10 +103,8 @@ normchar(c)
 	outchar(c);
 }
 
-extern	int (*Pline)(), numbline();
-
-numbline(i)
-	int i;
+void
+numbline(int i)
 {
 
 	if (shudclob)
@@ -114,7 +113,8 @@ numbline(i)
 	normline();
 }
 
-normline()
+void
+normline(void)
 {
 
 	if (shudclob)
@@ -136,8 +136,8 @@ normline()
 		putchar('\n' | QUOTE);
 }
 
-slobber(c)
-	char c;
+static void
+slobber(int c)
 {
 
 	shudclob = 0;
@@ -157,21 +157,21 @@ slobber(c)
 	ex_printf("\240\210");
 }
 
-int	(*Outchar)(), termchar();
-
-/*
-setoutt()
+void
+setoutt(void)
 {
 
 	Outchar = &termchar;
 }
-*/
 
-lprintf(a1, a2, a3)
+void
+lprintf(char *fmt, ...)
 {
-	register int (*P)();
+	int (*P)();
+	va_list ap;
 
 	P = setlist();
-	ex_printf(a1, a2, a3);
+	va_start(ap, fmt);
+	ex_vprintf(fmt, ap);
 	Putchar = P;
 }

@@ -9,13 +9,11 @@
 
 #define	blank()	white(wcursor[0])
 
-int beep(), vmove(), vdelete(), vchange(), vyankit(), vgrabit();
-
 operate(c, cnt)
 	register int c, cnt;
 {
 	register int i;
-	int (*moveop)(), (*deleteop)(), listchar();
+	int (*moveop)(), (*deleteop)();
 	register int (*op)();
 	extern int (*Putchar)();
 	char subop;
@@ -28,7 +26,7 @@ operate(c, cnt)
 	subop = 0;
 	switch (c) {
 		case '@':
-		case CTRL(x):
+		case CTRL('x'):
 			wcursor = linebuf;
 			vdelete('@');
 			return;
@@ -93,7 +91,7 @@ operate(c, cnt)
 		goto space;
 nocount:
 	switch (c) {
-		case CTRL(w):
+		case CTRL('w'):
 			c = 'B';
 		case 'b':
 		case 'B':
@@ -186,7 +184,7 @@ fixup:
 			wcursor = strend(linebuf) - 1;
 			goto fixup;
 		case 'h':
-		case CTRL(h):
+		case CTRL('h'):
 			dir = -1;
 		case ' ':
 space:
@@ -359,7 +357,8 @@ margin()
 	return (wcursor < linebuf || wcursor[0] == 0);
 }
 
-beep()
+void
+beep(void)
 {
 	vputc('\07');
 }

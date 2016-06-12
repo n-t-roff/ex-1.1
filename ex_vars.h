@@ -2,14 +2,18 @@
  * Ex - a text editor
  * Bill Joy UCB June 1977
  */
+#define	ONMSZ	30
+
 struct varbl {
 	char	*vname[2];
 	char	vtype;
 	int	vdefault;
 	int	vvalue;
+	char	*vsvalue;
 };
 extern struct varbl varbls[];
 #define	value(a)	varbls[a].vvalue
+#define	svalue(a)	varbls[a].vsvalue
 
 #define	AUTOINDENT	0
 #define	AUTOPRINT	1

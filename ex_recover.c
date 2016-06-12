@@ -4,8 +4,8 @@
  * Bill Joy UCB October 1977
  */
 
-char	exrecover[]	"/usr/lib/exrecover";
-char	expreserve[]	"/usr/lib/expreserve";
+char	exrecover[]	= "/usr/lib/exrecover";
+char	expreserve[]	= "/usr/lib/expreserve";
 
 recover()
 {

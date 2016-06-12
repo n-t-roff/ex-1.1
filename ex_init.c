@@ -3,8 +3,9 @@
  * Ex - a text editor
  * Bill Joy UCB September, 1977
  */
-int	mask	0377;		/* Standard V6 - only 256 users */
 
+#include <unistd.h>
+#include <sys/types.h>
 #include "ex.h"
 #include "ex_tty.h"
 #include "ex_io.h"
@@ -14,16 +15,16 @@ int	mask	0377;		/* Standard V6 - only 256 users */
 #define	TABS	02
 #define	CRFLG	020
 
-char	TTYNAM[]	"/dev/ttyx";
+char	TTYNAM[]	= "/dev/ttyx";
 
 initoptions(f)
 	char f;
 {
-	int uid, ttyno, rcio;
+	int ttyno, rcio;
 	char Home[40];
 	register char *H;
 
-	intty = gTTY(0) == 0;
+	intty = isatty(0);
 	if (!intty && f == 0) {
 unknown:
 		setterm("u");
@@ -35,23 +36,14 @@ unknown:
 		f = 2;
 	} else
 		f = 1;
-	UPPERCASE = (tty[2] & UCASE) != 0;
-	PT = (tty[2] & TABS) == 0;
-	NOCR = (tty[2] & CRFLG) == 0;
-	ttyno = ttyn(f);
-	if (ttyno != 'x') {
-		if (hget(ttyno) == 0)
-			isetterm(hsgettype());
-	}
-	uid = getuid() & mask;
-	H = hgethome();
-	if (uid == 0)
-		strcpy(H, "/");
-	else if (uid != hgetuid())
-		return;
-	TTYNAM[8] = ttyno;
-	gettmode();
-	strcpy(home, H);
+#ifdef IUCLC
+	UPPERCASE = (tty.c_iflag & IUCLC) != 0;
+#endif
+#ifdef TAB3
+	PT = (tty.c_oflag & TABDLY) != TAB3;
+#endif
+	NOCR = (tty.c_oflag & ONLCR) == 0;
+	H = getenv("HOME");
 	strcpy(Home, H);
 	strcat(Home, "/.exrc");
 	source(Home, 1);

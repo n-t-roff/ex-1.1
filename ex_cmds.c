@@ -1,6 +1,7 @@
 #include "ex.h"
 #include "ex_glob.h"
 #include "ex_tty.h"
+#include "ex_vis.h"
 /*
  * Ex - a text editor
  * Bill Joy UCB June-October 1977
@@ -16,8 +17,6 @@ char	READ[]		= "read";
 
 static	char pflag, nflag, kflag;
 static	int poffset;
-
-int	xpand(), tabulate();
 
 commands(noprompt, exitoneof)
 	int noprompt;
@@ -99,7 +98,7 @@ commands(noprompt, exitoneof)
 				c = 0;
 				if (!exclam())
 					c = xargc0 - xargc;
-				newline();
+				ex_newline();
 				for (; c < xargc0; c++)
 					ex_printf("%6d  %s\n", c - (xargc0 - xargc) + 1, xargv0[c]);
 				continue;
@@ -107,7 +106,7 @@ commands(noprompt, exitoneof)
 			tail("append");
 			setdot();
 			setai(exclam());
-			newline();
+			ex_newline();
 			deletenone();
 			append(gettty, setin(addr2));
 			lchngflag = chngflag;
@@ -142,7 +141,7 @@ changdir:
 #endif
 						skipwh();
 						if (endcmd(peekchar())) {
-							newline();
+							ex_newline();
 							p = home;
 						} else
 							getone(), p = file;
@@ -233,7 +232,7 @@ doecmd:
 			setdot();
 			nonzero();
 			setai(exclam());
-			newline();
+			ex_newline();
 			deletenone();
 			setin(addr2);
 			append(gettty, addr2 - 1);
@@ -246,7 +245,7 @@ doecmd:
 			c = exclam();
 			setcount();
 			nonzero();
-			newline();
+			ex_newline();
 			if (addr1 == addr2) {
 				if (addr1 == dol) {
 					if (dol != one)
@@ -262,7 +261,7 @@ casek:
 			c = getchar();
 			if (endcmd(c))
 				error("Mark what?|%s requires following letter", Command);
-			newline();
+			ex_newline();
 			if (c != letter(c))
 				error("Bad mark|Mark must specify a letter");
 			setdot();
@@ -391,7 +390,7 @@ print:
 					tail2of("rewind");
 					setnoaddr();
 					quickly();
-					newline();
+					ex_newline();
 					rewind();
 					return (2);
 
@@ -488,7 +487,7 @@ dorecover:
 			setnoaddr();
 			markDOT();
 			c = exclam();
-			newline();
+			ex_newline();
 			undo(c);
 			continue;
 		case 'v':
@@ -534,7 +533,7 @@ dorecover:
 			pflag = 0;
 			continue;
 		case '=':
-			newline();
+			ex_newline();
 			setall();
 			ex_printf("%d\n", addr2 - zero);
 			continue;
@@ -617,9 +616,8 @@ plines(adr1, adr2, movedot)
 	}
 }
 
-int	normline();
-
-newline()
+void
+ex_newline(void)
 {
 	register c;
 
@@ -679,8 +677,6 @@ resetflav()
 	poffset = 0;
 	setflav();
 }
-
-int	(*Pline)(), normline(), numbline();
 
 setflav()
 {

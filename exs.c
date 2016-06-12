@@ -84,7 +84,7 @@ compsub(ch)
 			default:
 				ungetchar(c);
 				setcount();
-				newline();
+				ex_newline();
 				return (gsubf);
 		}
 	}
@@ -277,7 +277,7 @@ ovflo:
 			error("Line overflow@in substitute - limit 512 chars");
 	}
 	lp = loc2;
-	loc2 = sp + linebuf - genbuf;
+	loc2 = sp - genbuf + linebuf;
 	while (*sp++ = *lp++)
 		if (sp >= &genbuf[LBSIZE])
 			goto ovflo;

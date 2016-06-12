@@ -20,7 +20,7 @@ vmain(ic)
 
 int	delete(), join(), vshift();
 
-char	vscandir[3]	"/\n";
+char	vscandir[3] = "/\n";
 
 static	char op;
 
@@ -74,14 +74,14 @@ vagain:
 		if (UPLINE && UPLINE[0] == c && UPLINE[1] == 0)
 			goto upline;
 		switch (c) {
-			case CTRL(z):	/* sync */
+			case CTRL('z'):	/* sync */
 				if (!visual)
 					vsync(LINES - 1);
 				else
 					vredraw(ZERO);
 				vfixcurs();
 				continue;
-			case CTRL(s):
+			case CTRL('s'):
 				vsave();
 				synctmp();
 				continue;
@@ -196,7 +196,7 @@ gogo:
 				}
 				markDOT();
 				goto vdown;
-			case CTRL(d):	/* scroll half-screen */
+			case CTRL('d'):	/* scroll half-screen */
 				if (hadcnt)
 					vSCROLL = cnt;
 				cnt = vSCROLL;
@@ -227,7 +227,7 @@ vdown:
 					cnt = dol - dot;
 				}
 				i = vcnt - vcline - 1;
-				if (c != CTRL(d) && cnt <= i) {
+				if (c != CTRL('d') && cnt <= i) {
 					vcline += cnt;
 					dot += cnt;
 					goto vnline;
@@ -235,7 +235,7 @@ vdown:
 				cnt -= i;
 				dot += i;
 				vcline += i;
-				if (c != CTRL(d)) {
+				if (c != CTRL('d')) {
 					if (!visual || vfit(cnt, dot) > LINES) {
 						vch = '.';
 						dot += cnt;
@@ -243,7 +243,7 @@ vdown:
 					}
 				}
 				vroll(cnt);
-				if (c == CTRL(d) && VLINES != LINES) {
+				if (c == CTRL('d') && VLINES != LINES) {
 					vcline -= ind;
 					dot -= ind;
 					if (vcline < 0) {
@@ -773,7 +773,9 @@ xtra:
 				if (addr == NIL) {
 					putchar('F');
 					beep();
+#if 0
 					vraw();
+#endif
 					goto oops;
 				}
 				markDOT();
@@ -877,7 +879,7 @@ vundcurs()
 	return (vskipwh(linebuf));
 }
 
-vrestor()
+vrestore()
 {
 
 	if (vresCNT == vrescnt)

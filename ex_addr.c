@@ -223,6 +223,25 @@ address()
 	}
 }
 
+/*
+ * Abbreviations to make code smaller
+ * Left over from squashing ex version 1.1 into
+ * 11/34's and 11/40's.
+ */
+setCNL()
+{
+
+	setcount();
+	ex_newline();
+}
+
+setNAEOL()
+{
+
+	setnoaddr();
+	eol();
+}
+
 scanfor(c)
 	char c;
 {

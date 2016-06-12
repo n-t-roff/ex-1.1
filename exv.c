@@ -57,7 +57,7 @@ vop()
 		ZERO = VLINES - 1;
 	if (ZERO < 0)
 		ZERO = 0;
-	newline();
+	ex_newline();
 	Outchar = &vputchar;
 	if (!inglobal)
 		saveall();
@@ -92,7 +92,9 @@ vinit()
 	char *ic;
 	int nvc;
 
+#if 0
 	vcook();
+#endif
 	holdat = 1;
 	vclear();
 	getDOT();
@@ -129,10 +131,13 @@ vinit()
 	flusho();
 	holdat = 0;
 	vsync(vlast);
+#if 0
 	vraw();
+#endif
 	return (ic);
 }
 
+#if 0
 vcook()
 {
 
@@ -148,6 +153,7 @@ vraw()
 	tty[2] |= RAW;
 	sTTY(1);
 }
+#endif
 
 vok(atube)
 	register char *atube;

@@ -55,7 +55,7 @@ global(k)
 			error("Global command too long@- limit 254 characters");
 	}
 	ungetchar(c);
-	newline();
+	ex_newline();
 	*gp++ = c;
 	*gp++ = 0;
 	inglobal = 1;
@@ -96,7 +96,7 @@ save(a1, a2)
 			if (sbrk(1024) == -1)
 #endif
 				error("Out of memory@saving lines for undo - try using ed or re)");
-			endcore.integer += 1024;
+			endcore += 1024;
 		}
 	undkind = UNDALL;
 	unddel = a1 - 1;

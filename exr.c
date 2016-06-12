@@ -1,3 +1,4 @@
+#include <errno.h>
 #include "ex.h"
 #include "ex_io.h"
 /*
@@ -34,7 +35,7 @@ rop(c)
 				error(" Directory");
 			case FPLAIN:
 				i = read(io, &magic, 2);
-				seek(io, 0, 0);
+				lseek(io, 0, 0);
 				if (i != 2)
 					break;
 				switch (magic) {

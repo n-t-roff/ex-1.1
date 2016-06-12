@@ -1,3 +1,4 @@
+#include <errno.h>
 #include "ex.h"
 #include "ex_re.h"
 #include "ex_io.h"
@@ -6,10 +7,12 @@
  * Bill Joy UCB June 1977
  */
 
-extern	int tfile -1;
+extern	int tfile = -1;
 
 #define	READ	0
 #define	WRITE	1
+
+static char *getblock(int, int);
 
 STATIC	char ichanged;
 STATIC	int nleft;
@@ -25,7 +28,7 @@ STATIC	char obuff[512];
 STATIC	int oblock;
 
 STATIC	char tfname[40];
-STATIC	char tftail[] "/ExXXXXX";
+STATIC	char tftail[] = "/ExXXXXX";
 STATIC	char havetmp;
 
 fileinit()
@@ -297,9 +300,8 @@ ioerror()
 int	read();
 int	write();
 
-getblock(atl, iof)
-	int atl;
-	int (*iof)();
+static char *
+getblock(int atl, int iof)
 {
 	register int bno, off;
 	
@@ -332,7 +334,7 @@ blkio(b, buf, iofcn)
 	int (*iofcn)();
 {
 
-	seek(tfile, b, 3);
+	lseek(tfile, b, 3);
 	if ((*iofcn)(tfile, buf, 512) != 512)
 		ioerror();
 }
@@ -357,7 +359,7 @@ synctmp()
 			oblock = *bp + 1;
 			bp[1] = -1;
 		}
-		seek(tfile, *bp, 3);
+		lseek(tfile, *bp, 3);
 		cnt = (dol - a + 2) << 1;
 		if (cnt > 512)
 			cnt = 512;
@@ -370,11 +372,11 @@ oops:
 		*zero = 0;
 	}
 	header.Alines = dol - zero;
-	seek(tfile, 0, 3);
+	lseek(tfile, 0, 3);
 	if (write(tfile, &header, sizeof header) != sizeof header)
 		goto oops;
 /*
-	seek(tfile, 504, 0);
+	lseek(tfile, 504, 0);
 	write(tfile, "LOST", 5);
 */
 }

@@ -5,6 +5,7 @@
  *
  * This glob routine mercilessly stolen from the shell.
  */
+#include <errno.h>
 #include "ex.h"
 #include "ex_glob.h"
 #include "ex_io.h"

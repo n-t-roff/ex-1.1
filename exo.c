@@ -44,7 +44,7 @@ oop()
 		getline(*addr1);
 		ic = vskipwh(linebuf);
 	}
-	newline();
+	ex_newline();
 	VLINES = LINES;
 	vok(atube);
 	Outchar = &vputchar;

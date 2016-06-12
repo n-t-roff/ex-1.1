@@ -29,7 +29,6 @@ vback(i)
 	return (tp);
 }
 
-int	listchar(), (*Putchar)();
 /*
  * Return the depth of the line in linebuf.
  * Note that VCOLUMNS are always completely usable.
@@ -108,7 +107,6 @@ vfixopen(i)
 	register int i;
 {
 	register int need;
-	extern int (*Pline)(), numbline();
 
 	if (LINES != VLINES) {
 		need = vliny[vcline] + i - vliny[vcline + 1];
@@ -176,8 +174,10 @@ vroll(ocnt)
 	register int cnt;
 
 	cnt = ocnt;
+#if 0
 	if (cnt > 1)
 		vcook();
+#endif
 	for (; cnt > 0; cnt--) {
 		dot++;
 		vcline++;
@@ -189,10 +189,12 @@ vroll(ocnt)
 		vopen(dot, vlast);
 		vcsync();
 	}
+#if 0
 	if (ocnt > 1) {
 		flusho();
 		vraw();
 	}
+#endif
 }
 
 /*

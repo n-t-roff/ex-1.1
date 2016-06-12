@@ -1,5 +1,6 @@
 #include "ex.h"
 #include "ex_tty.h"
+#include "ex_vis.h"
 /*
  * Ex - a text editor
  * Bill Joy UCB June 1977
@@ -12,7 +13,7 @@
 static	junkbs;
 
 int	peekc;
-int	lastc	'\n';
+int	lastc	= '\n';
 
 getchar()
 {
@@ -61,7 +62,7 @@ gettty()
 	register c;
 	register char *lp, *gp;
 	char hadup, hadnl;
-	int offset, numbline();
+	int offset;
 	extern int (*Pline)();
 
 	lp = linebuf;
@@ -221,7 +222,7 @@ spruce(ocp)
 	*cp++ = 0;
 }
 
-char	cntrlhm[]	"CTRL(H) discarded\n";
+char	cntrlhm[]	= "CTRL(H) discarded\n";
 
 checkjunk(c)
 	char c;

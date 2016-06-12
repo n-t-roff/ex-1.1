@@ -1,15 +1,32 @@
 #include "ex.h"
 #include "ex_tty.h"
+#include "ex_vis.h"
 /*
  * Ex - a text editor
  * Bill Joy UCB June 1977
  */
+
+static void putS(char *);
+static void plod(void);
 
 STATIC	char line[66] = "Error message file not available\n/usr/lib/ex1.1strings";
 STATIC	char *linp = line + 33;
 extern	char *erpath = line + 33;
 extern	char pfast;
 STATIC	char phadnl;
+int	(*Outchar)() = termchar;
+int	(*Putchar)() = normchar;
+int	(*Pline)() = normline;
+
+int (*
+setnumb(int t))()
+{
+	register int (*P)();
+
+	P = Pline;
+	Pline = t ? numbline : normline;
+	return (P);
+}
 
 /*
  * Indirect to current definition of putchar.
@@ -21,8 +38,8 @@ putchar(c)
 	(*Putchar)(c);
 }
 
-termchar(c)
-	char c;
+void
+termchar(int c)
 {
 
 	if (pfast == 0 && phadnl)
@@ -119,8 +136,8 @@ printit:
 	linp = line;
 }
 
-putS(cp)
-	char *cp;
+static void
+putS(char *cp)
 {
 
 	if (cp == NIL)
@@ -151,7 +168,8 @@ flush2()
  *	UPLINE	up line sequence (reverse line-feed)
  *	AM	if true, terminal has automatic return at right margin
  */
-fgoto()
+void
+fgoto(void)
 {
 	register int l, c;
 
@@ -243,6 +261,7 @@ setcol(col)
 	destcol = col;
 	if (destcol < 0)
 		destcol = 0;
+#if 0
 	/* off the line may not work on 3a here */
 	fgoto();
 	/*
@@ -263,6 +282,7 @@ setcol(col)
 		}
 	}
 	flush();
+#endif
 }
 
 /*
@@ -300,7 +320,8 @@ motion()
 	return (1);
 }
 
-plod()
+static void
+plod(void)
 {
 	register int i;
 
@@ -372,10 +393,23 @@ notech(i)
 }
 
 
+#ifndef ECHO
 #define	ECHO	010
+#endif
 #define	CRLF	020
 
-pstart()
+/*
+ * Newline + flush.
+ */
+putNFL()
+{
+
+	putnl();
+	flush();
+}
+
+void
+pstart(void)
 {
 
  	if (NOCR || !value(OPTIMIZE) || value(PRINTALL))
@@ -389,12 +423,18 @@ pstart()
 	pfast = 1;
 	gTTY(1);
 	normtty = 1;
-	normf = tty[2];
-	tty[2] &= ~(ECHO|CRLF);
+	normf = tty;
+	tty.c_oflag &= ~(ONLCR
+#ifdef TAB3
+	|TAB3
+#endif
+	);
+	tty.c_lflag &= ~ECHO;
 	sTTY(1);
 }
 
-pstop()
+void
+pstop(void)
 {
 
 	phadnl = 0;
@@ -437,8 +477,16 @@ ostart()
 		error("Open and visual must be used interactively");
 	gTTY(1);
 	normtty = 1;
-	normf = tty[2];
-	tty[2] = (tty[2] &~ (ECHO|CRLF)) | RAW;
+	normf = tty;
+	tty.c_iflag &= ~ICRNL;
+	tty.c_lflag &= ~(ECHO|ICANON);
+	tty.c_oflag &= ~(
+#ifdef TAB3
+	TAB3|
+#endif
+	ONLCR);
+	tty.c_cc[VMIN] = 1;
+	tty.c_cc[VTIME] = 1;
 	sTTY(1);
 	pfast = 2;
 }
@@ -465,12 +513,12 @@ putnl()
 
 gTTY(i)
 {
-	gtty(i, tty);
+	tcgetattr(i, &tty);
 }
 
 sTTY(i)
 {
-	stty(i, tty);
+	tcsetattr(i, TCSAFLUSH, &tty);
 }
 
 putch(c)

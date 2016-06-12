@@ -50,13 +50,15 @@ vdcMID()
 	}
 }
 
-vgrabit()
+void
+vgrabit(void)
 {
 
 	takeout(INS);
 }
 
-vyankit()
+void
+vyankit(void)
 {
 
 	takeout(DEL);
@@ -83,7 +85,8 @@ takeout(BUF)
 		beep();
 }
 
-vchange()
+void
+vchange(void)
 {
 	register char *cp;
 	register int i;
@@ -436,12 +439,12 @@ vgetline(cnt, gcursor, aescaped)
 			case FS:	/* quit */
 				ungetkey(c);
 				goto vadone;
-			case CTRL(d):
-			case CTRL(t):
+			case CTRL('d'):
+			case CTRL('t'):
 				*gcursor = 0;
 				cp = vpastwh(genbuf);
 				c = whitecnt(genbuf);
-				if (ch == CTRL(t)) {
+				if (ch == CTRL('t')) {
 					if (cp != gcursor)
 						continue;
 					cp = genindent(iwhite = backtab(c + value(SHIFTWIDTH) + 1));
@@ -469,7 +472,7 @@ vgetline(cnt, gcursor, aescaped)
 					goto bakchar;
 #endif
 				continue;
-			case CTRL(h):	/* back character */
+			case CTRL('h'):	/* back character */
 bakchar:
 				cp = gcursor - 1;
 				if (cp < ogcursor) {
@@ -477,7 +480,7 @@ bakchar:
 					continue;
 				}
 				goto vbackup;
-			case CTRL(w):	/* back word */
+			case CTRL('w'):	/* back word */
 				wdkind = 0;
 				for (cp = gcursor; cp > ogcursor &&
 				    white(cp[-1]); cp--)
@@ -487,7 +490,7 @@ bakchar:
 					continue;
 				goto vbackup;
 			case '@':
-			case CTRL(x):
+			case CTRL('x'):
 				cp = ogcursor;
 vbackup:
 				if (cp == gcursor) {
@@ -515,12 +518,12 @@ vbackup:
 				switch (c) {
 					case DELETE:
 					case FS:
-					case CTRL(d):
-					case CTRL(h):
-					case CTRL(t):
-					case CTRL(w):
+					case CTRL('d'):
+					case CTRL('h'):
+					case CTRL('t'):
+					case CTRL('w'):
 					case '@':
-					case CTRL(x):
+					case CTRL('x'):
 						vgoto(y, x);
 						break;
 					default:
@@ -590,7 +593,8 @@ vmaxrep(ch, cnt)
 	return (cnt);
 }
 
-vmove()
+void
+vmove(void)
 {
 
 	vsetcurs(wcursor);

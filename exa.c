@@ -33,7 +33,7 @@ append(f, a)
 #ifdef UNIX_SBRK
 			}
 #endif
-			endcore.integer += 1024;
+			endcore += 1024;
 		}
 		nline++;
 		a1 = unddol + 1;

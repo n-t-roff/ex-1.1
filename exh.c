@@ -21,7 +21,7 @@ error(str, i1, i2, i3)
 {
 	register c;
 
-	seek(erfile, str, 0);
+	lseek(erfile, str, 0);
 	str = linebuf;
 	if (read(erfile, str, 128) < 2)
 		str = "ERROR";
@@ -45,7 +45,7 @@ error(str, i1, i2, i3)
 	if (die)
 		exit(1);
 	undiddle();
-	seek(0, 0, 2);
+	lseek(0, 0, 2);
 	if (inglobal)
 		setlastchar('\n');
 	inglobal = 0;
@@ -102,7 +102,7 @@ normal()
 
 	if (normtty) {
 		gTTY(1);
-		tty[2] = normf;
+		tty = normf;
 		sTTY(1);
 	}
 	normtty = 0;

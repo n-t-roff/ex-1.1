@@ -60,7 +60,7 @@ cre:
 			break;
 		case 2:
 			io = open(file, 1);
-			if (io < 0 || seek(io, 0, 2)) {
+			if (io < 0 || lseek(io, 0, 2)) {
 				if (exclam /* || value(WRITEANY) */)
 					goto cre;
 				ioerror();

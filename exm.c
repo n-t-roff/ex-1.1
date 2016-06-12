@@ -19,7 +19,7 @@ move()
 	adt = address();
 	if (adt == 0)
 		error("%s where?|%s requires a trailing address", Command);
-	newline();
+	ex_newline();
 	move1(Command[0] != 'M', adt);
 	killed();
 }

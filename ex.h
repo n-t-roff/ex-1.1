@@ -1,3 +1,5 @@
+#include <setjmp.h>
+#include <termios.h>
 #define	VISUAL
 /*
  * Ex - text editor
@@ -10,7 +12,6 @@
  */
 
 #define	STATIC static
-#define	CHAR
 
 #define	NIL	0
 #define	QUOTE	0200
@@ -24,26 +25,17 @@
 
 #define	EOF	-1
 
-extern
 char	ruptible, inglobal, inopen, inconf, listf, endline, laste, intty;
-extern
 char	shudclob, diddle, die;
 
-extern
 int	chngflag, xchngflag, tchngflag;
 
-extern
 char	/* savedfile[FNS, */ file[FNSIZE], altfile[FNSIZE];
-extern
 char	linebuf[LBSIZE], genbuf[LBSIZE];
 
-extern
 int	*address(), *addr1, *addr2;
-extern
 int	*zero, *one, *dot, *dol, *unddol, *endcore, *fendcore;
-extern
 int	*unddel, *undap1, *undap2, *undadot;
-extern
 char	undkind;
 
 #define	UNDCHANGE	0
@@ -51,17 +43,11 @@ char	undkind;
 #define	UNDALL		2
 #define	UNDNONE		3
 
-extern
 int	io, erfile, tfile;
-extern
 char	*globp, *erpath;
-extern
 int	names[27];
-extern
 int	outcol;
-extern
 char	home[30];
-extern
 char	*Command;
 
 int	getfile(), gettty(), getchar(), getsub();
@@ -72,7 +58,7 @@ int	getfile(), gettty(), getchar(), getsub();
 #define	eq(a, b)	(strcmp(a, b) == 0)
 
 #ifndef CTRL
-#define	CTRL(c)	('c' & 037)
+#define	CTRL(c)	(c & 037)
 #endif
 
 #ifndef ECHO
@@ -80,56 +66,68 @@ int	getfile(), gettty(), getchar(), getsub();
 #endif
 #define	RAW	040
 
-extern
 char	normtty;
-extern
-int	normf;
-struct obuf {
+struct termios	normf;
+struct {
 	int	fildes;
 	int	nunused;
 	char	*xfree;
 	char	buff[512];
-};
-extern struct obuf obuf;
-extern
+} obuf;
 int	oldhup, onhup(), oldquit, onintr();
 
-struct header {
+struct {
 	int	Atime[2];
 	int	Auid;
 	int	Alines;
 	int	Afname[FNSIZE];
 	int	Ablocks[100];
-};
-extern struct header header;
+} header;
 
 #define	savedfile	header.Afname
 #define	blocks		header.Ablocks
 
-extern
 int	dirtcnt;
 
-extern
 char	recov;
 
-extern
-char	TTYNAM[];
-extern
+extern char	TTYNAM[];
 int	TMODE;
 
-extern
 int	lastc, peekc;
+jmp_buf	resetlab;		/* For error throws to top level (cmd mode) */
+#define	getexit(a)	copy(a, resetlab, sizeof (jmp_buf))
 #define	lastchar()	lastc
+#define	outchar(c)	(*Outchar)(c)
+#define	pline(no)	(*Pline)(no)
+#define	reset()		longjmp(resetlab,1)
+#define	resexit(a)	copy(resetlab, a, sizeof (jmp_buf))
+#define	setexit()	setjmp(resetlab)
 #define	setlastchar(c)	lastc = c
 #define	ungetchar(c)	peekc = c
 
-extern
 char	aiflag;
 #define	setai(i)	aiflag = i
 
-extern
-int	pid, rpid, status, tty[3];
-extern
+int	pid, rpid, status;
+struct termios tty;
 char	allredraw, pfast;
-extern
 int	mask, vcntcol;
+
+extern int	(*Outchar)();
+extern int	(*Pline)();
+extern int	(*Putchar)();
+
+void listchar(int);
+void normchar(int);
+void tabulate(char);
+void xpand(void);
+void lprintf(char *, ...);
+int (*setlist(void))();
+int (*setnorm(void))();
+void setoutt(void);
+void ex_newline(void);
+void pstop(void);
+void pstart(void);
+void fgoto(void);
+char *cgoto(void);

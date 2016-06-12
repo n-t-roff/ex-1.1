@@ -1,57 +1,56 @@
+#include <string.h>
 #include "ex.h"
 /*
  * Ex - a text editor
  * Bill Joy UCB September 1977
  */
 
-char	shellname[30]		"/bin/sh";
-char	direct[30]		"/tmp";
-char	ttytype[30]		"unknown";
+char	shellname[ONMSZ]		= "/bin/sh";
+char	direct[ONMSZ]		= "/tmp";
+char	ttytype[ONMSZ]		= "unknown";
 
-char	NONAME[]		"@";
+char	NONAME[]		= "@";
 
 #define	ONOFF	0
 #define	NUMERIC	1
 #define	STRING	2
 #define	TERM	3
 
-char	NOTify[]	"notify";
+char	NOTify[]	= "notify";
 
-struct varbl varbls[] {
-	"autoindent",	"ai",	ONOFF,		0,	0,
-	"autoprint",	"ap",	ONOFF,		1,	1,
-	"beautify",	NONAME,	ONOFF,		0,	0,
-	"directory",	"dir",	STRING,		0,	direct,
-	"editany",	"ea",	ONOFF,		0,	0,
-	"edited",	NONAME,	ONOFF,		1,	0,
-	"errorbells",	"eb",	ONOFF,		1,	1,
-	"fork",		NONAME,	ONOFF,		1,	1,
-	"home",		NONAME,	STRING,		0,	home,
-	"hush",		NONAME,	ONOFF,		0,	0,
-	"ignorecase",	"ic",	ONOFF,		0,	0,
-	"indicateul",	"iu",	ONOFF,		0,	0,
-	"list",		NONAME,	ONOFF,		0,	0,
-	"magic",	NONAME,	ONOFF,		1,	1,
-	"mode",		NONAME,	NUMERIC,	0644,	0644,
-	NOTify,		NONAME,	NUMERIC,	5,	5,
-	"number",	NONAME,	ONOFF,		0,	0,
-	"open",		NONAME,	ONOFF,		1,	1,
-	"optimize",	NONAME,	ONOFF,		1,	1,
-	"printall",	"pa",	ONOFF,		0,	0,
-	"prompt",	NONAME,	ONOFF,		1,	1,
-	"scroll",	NONAME,	NUMERIC,	12,	12,
-	"shell",	"sh",	STRING,		0,	shellname,
-	"shiftwidth",	"sw",	NUMERIC,	8,	8,
-	"sticky",	NONAME,	ONOFF,		0,	0,
-	"ttytype",	"tty",	TERM,		0,	ttytype,
-	"terse",	NONAME,	ONOFF,		0,	0,
-	"visualmessage","vm",	ONOFF,		0,	0,
-	"window",	NONAME,	NUMERIC,	23,	23,
-	"wrap",		NONAME,	ONOFF,		1,	1,
-	0
+struct varbl varbls[] = {
+	{ "autoindent",	"ai",	ONOFF,		0,	0,	0 },
+	{ "autoprint",	"ap",	ONOFF,		1,	1,	0 },
+	{ "beautify",	NONAME,	ONOFF,		0,	0,	0 },
+	{ "directory",	"dir",	STRING,		0,	0,	direct },
+	{ "editany",	"ea",	ONOFF,		0,	0,	0 },
+	{ "edited",	NONAME,	ONOFF,		1,	0,	0 },
+	{ "errorbells",	"eb",	ONOFF,		1,	1,	0 },
+	{ "fork",	NONAME,	ONOFF,		1,	1,	0 },
+	{ "home",	NONAME,	STRING,		0,	0,	home },
+	{ "hush",	NONAME,	ONOFF,		0,	0,	0 },
+	{ "ignorecase",	"ic",	ONOFF,		0,	0,	0 },
+	{ "indicateul",	"iu",	ONOFF,		0,	0,	0 },
+	{ "list",	NONAME,	ONOFF,		0,	0,	0 },
+	{ "magic",	NONAME,	ONOFF,		1,	1,	0 },
+	{ "mode",	NONAME,	NUMERIC,	0644,	0644,	0 },
+	{ NOTify,	NONAME,	NUMERIC,	5,	5,	0 },
+	{ "number",	NONAME,	ONOFF,		0,	0,	0 },
+	{ "open",	NONAME,	ONOFF,		1,	1,	0 },
+	{ "optimize",	NONAME,	ONOFF,		1,	1,	0 },
+	{ "printall",	"pa",	ONOFF,		0,	0,	0 },
+	{ "prompt",	NONAME,	ONOFF,		1,	1,	0 },
+	{ "scroll",	NONAME,	NUMERIC,	12,	12,	0 },
+	{ "shell",	"sh",	STRING,		0,	0,	shellname },
+	{ "shiftwidth",	"sw",	NUMERIC,	8,	8,	0 },
+	{ "sticky",	NONAME,	ONOFF,		0,	0,	0 },
+	{ "ttytype",	"tty",	TERM,		0,	0,	ttytype },
+	{ "terse",	NONAME,	ONOFF,		0,	0,	0 },
+	{ "visualmessage","vm",	ONOFF,		0,	0,	0 },
+	{ "window",	NONAME,	NUMERIC,	23,	23,	0 },
+	{ "wrap",	NONAME,	ONOFF,		1,	1,	0 },
+	{ 0,		0,	0,		0,	0,	0 }
 };
-
-#define	ONMSZ	30
 
 set(c)
 	register c;

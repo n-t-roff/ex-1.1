@@ -23,7 +23,7 @@ canCA()
 */
 
 char *
-cgoto()
+cgoto(void)
 {
 #if 0
 	static char result[10];

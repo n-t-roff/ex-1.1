@@ -4,6 +4,7 @@
  * Bill Joy UCB September 1977
  */
 
+#include <errno.h>
 #include "ex.h"
 #include "ex_io.h"
 
@@ -37,7 +38,7 @@ source(file, okfail)
 	}
 	slevel++;
 	ointty = intty;
-	intty = gtty(0, tty) == 0;
+	intty = isatty(0);
 	reenter = 0;
 	getexit(osetexit);
 	setexit();

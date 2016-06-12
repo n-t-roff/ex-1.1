@@ -4,14 +4,17 @@
  * Bill Joy UCB September 1977
  */
 
+#include <string.h>
 #include "ex.h"
 #include "ex_tty.h"
 
 char	tspace[1024], **Tspace;
+#if 0
 char	ttycap[];
+#endif
 
-int	COLUMNS	1000;
-int	LINES	24;
+int	COLUMNS	= 1000;
+int	LINES	= 24;
 
 setterm(type)
 	char *type;
@@ -35,7 +38,9 @@ Setterm(type, printerr)
 		unknown = printerr;
 		strcpy(buf, "un|unknown:0:0:?");
 	}
+#if 0
 	TTY = buf[0] | (buf[1] << 8);
+#endif
 /*
 	tgetmodes(MODES);
 */
