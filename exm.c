@@ -78,8 +78,8 @@ move1(cflag, addrt)
 		}
 }
 
-reverse(a1, a2)
-	register int *a1, *a2;
+void
+reverse(int *a1, int *a2)
 {
 	register int t;
 

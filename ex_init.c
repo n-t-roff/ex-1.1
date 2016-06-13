@@ -17,8 +17,8 @@
 
 char	TTYNAM[]	= "/dev/ttyx";
 
-initoptions(f)
-	char f;
+void
+initoptions(char f)
 {
 	int ttyno, rcio;
 	char Home[40];

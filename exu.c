@@ -10,6 +10,8 @@
  * to undap2-1 were appended by the last command.
  */
 
+static void somechange(void);
+
 undo(c)
 	char c;
 {
@@ -118,7 +120,8 @@ undo(c)
 		dot = one;
 }
 
-somechange()
+static void
+somechange(void)
 {
 	register int *ip, *jp;
 

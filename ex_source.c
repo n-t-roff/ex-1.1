@@ -12,9 +12,8 @@ STATIC	int slevel;
 
 int	onintr();
 
-source(file, okfail)
-	char *file;
-	int okfail;
+void
+source(char *file, int okfail)
 {
 	int osetexit[3], tty[3];
 	register int saveinp, ointty, oerrno;

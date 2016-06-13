@@ -228,7 +228,8 @@ getfile()
 	return (0);
 }
 
-putfile()
+void
+putfile(void)
 {
 	int *a1;
 	register char *fp, *lp;

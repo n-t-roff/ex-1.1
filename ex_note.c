@@ -14,7 +14,8 @@ notable(i)
 	return (value(HUSH) == 0 && !inglobal && i > value(NOTIFY));
 }
 
-killed()
+void
+killed(void)
 {
 	register int cnt;
 
@@ -38,8 +39,8 @@ netchHAD(cnt)
 	netchange((dol - zero) - cnt);
 }
 
-netchange(i)
-	register int i;
+void
+netchange(int i)
 {
 	register char *cp;
 
@@ -53,8 +54,8 @@ netchange(i)
 	putNFL();
 }
 
-snote(total, lines)
-	register int total, lines;
+void
+snote(int total, int lines)
 {
 
 	if (!notable(total))

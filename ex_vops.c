@@ -7,8 +7,10 @@
  * Bill Joy UCB September 1977
  */
 
-vdelete(c)
-	char c;
+static void takeout(char *);
+
+void
+vdelete(int c)
 {
 	register char *cp;
 	register int i;
@@ -64,8 +66,8 @@ vyankit(void)
 	takeout(DEL);
 }
 
-takeout(BUF)
-	char *BUF;
+static void
+takeout(char *BUF)
 {
 	register char *cp;
 
@@ -116,9 +118,8 @@ vchange(void)
 
 char	vaifirst;
 
-vappend(ch, cnt, indent)
-	char ch;
-	int cnt, indent;
+void
+vappend(int ch, int cnt, int indent)
 {
 	register int i;
 	register char *gcursor;

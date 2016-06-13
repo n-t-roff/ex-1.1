@@ -9,8 +9,8 @@
 
 #define	blank()	white(wcursor[0])
 
-operate(c, cnt)
-	register int c, cnt;
+void
+operate(int c, int cnt)
 {
 	register int i;
 	int (*moveop)(), (*deleteop)();
@@ -168,7 +168,7 @@ fixup:
 			break;
 		case '|':
 			if (Xhadcnt) {
-				if (Pline == &numbline)
+				if (Pline == numbline)
 					cnt += 8;
 				vmovcol = cnt;
 			}

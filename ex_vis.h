@@ -43,7 +43,17 @@ char vmovcol;
 
 #endif
 
-int	vdelete(), (*Outchar)(), qcount(), vputchar();
+void	vdelete(int);
+int	(*Outchar)(), qcount();
+void	vputchar(int);
+void	vgoto(int, int);
+void	vsync(int);
+void	vclreol(void);
+void	operate(int, int);
+void	addtext(char *);
+void	killglob(void);
+void	setwork(char);
+void	setLAST(void);
 
 #ifdef VISUAL
 

@@ -127,7 +127,7 @@ normline(void)
 		dographic();
 		if (value(INDICATEUL) && !inopen && !inconf && genbuf[0]) {
 			outchar('\n');
-			if (Pline == &numbline)
+			if (Pline == numbline)
 				outchar('\t');
 			ex_printf("%s", genbuf);
 		}

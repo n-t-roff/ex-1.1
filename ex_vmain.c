@@ -276,7 +276,7 @@ vdown:
 					continue;
 				}
 				xtrey(c);
-				setwork();
+				setwork(c);
 				if (*cursor == 0) {
 					ungetkey('a');
 					continue;

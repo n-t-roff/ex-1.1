@@ -8,6 +8,9 @@
  * Bill Joy UCB September 1977
  */
 
+static void vmoveitup(int);
+static void vscroll(int);
+
 vback(i)
 	register int i;
 {
@@ -218,8 +221,8 @@ vrollup(ip)
 /*
  * Move the screen up i lines physically
  */
-vmoveitup(i)
-	int i;
+static void
+vmoveitup(int i)
 {
 
 #ifdef DEBUG
@@ -236,8 +239,8 @@ vmoveitup(i)
 /*
  * Move the screen up i lines logically
  */
-vscroll(i)
-	register int i;
+static void
+vscroll(int i)
 {
 	register int j;
 	char *tlines[TUBELINES];
@@ -356,8 +359,8 @@ vredraw(p)
 	strcLIN(temp);
 }
 
-vsync(p)
-	register int p;
+void
+vsync(int p)
 {
 	register int l, lim;
 	char temp[LBSIZE];

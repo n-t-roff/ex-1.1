@@ -25,7 +25,8 @@ setdot1()
 	}
 }
 
-setcount()
+void
+setcount(void)
 {
 	register int cnt;
 
@@ -74,7 +75,8 @@ notempty()
 		error("No lines@in the buffer");
 }
 
-setall()
+void
+setall(void)
 {
 
 	if (addr2 == 0) {

@@ -63,7 +63,8 @@ vclrlin(l, tp)
 /*
  * Clear to the end of the current physical line
  */
-vclreol()
+void
+vclreol(void)
 {
 	register int i;
 	register char *tp;

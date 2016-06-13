@@ -7,8 +7,10 @@
  * Version 1.1 November, 1977
  */
 
+static void addto(char *, char *);
 
-setLAST()
+void
+setLAST(void)
 {
 
 	if (vglobp)
@@ -21,8 +23,8 @@ setLAST()
 
 char	xtree, hadx;
 
-setwork(c)
-	char c;
+void
+setwork(char c)
 {
 
 	if (vglobp) {
@@ -44,15 +46,17 @@ xtrey(c)
 	xtree = c;
 }
 
-killglob()
+void
+killglob(void)
 {
 
 	if (hadx)
 		return;
 	vglobp = 0;
 }
-addtext(cp)
-	char *cp;
+
+void
+addtext(char *cp)
 {
 
 	if (vglobp)
@@ -82,8 +86,8 @@ setBUF(BUF)
 		vyancnt = 0;
 }
 
-addto(buf, str)
-	register char *buf, *str;
+static void
+addto(char *buf, char *str)
 {
 
 	if (buf[0] == OVERBUF)

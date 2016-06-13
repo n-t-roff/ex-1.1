@@ -5,6 +5,8 @@
  * Bill Joy UCB June 1977
  */
 
+static void zop2(int, int);
+
 char	znoclear, zhadpr, zweight;
 
 zop(hadpr)
@@ -60,9 +62,8 @@ zop(hadpr)
 	zop2(lines, op);
 }
 
-zop2(lines, op)
-	register int lines;
-	register char op;
+static void
+zop2(int lines, int op)
 {
 	register int *split;
 

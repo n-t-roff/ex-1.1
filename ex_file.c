@@ -4,8 +4,8 @@
  * Bill Joy UCB September 1977
  */
 
-filename(comm)
-	char comm;
+void
+filename(int comm)
 {
 	register c;
 

@@ -52,8 +52,8 @@ struct varbl varbls[] = {
 	{ 0,		0,	0,		0,	0,	0 }
 };
 
-set(c)
-	register c;
+void
+set(int c)
 {
 	register char *op;
 	register struct varbl *vp;

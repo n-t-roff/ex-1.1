@@ -65,8 +65,8 @@ vgotoCL(x)
 	vgoto(vliny[vcline], x);
 }
 
-vgoto(y, x)
-	int y, x;
+void
+vgoto(int y, int x)
 {
 	register char *tp;
 
@@ -113,8 +113,8 @@ vgoto(y, x)
 /*
  * Process the character c onto the screen at the current position.
  */
-vputchar(c)
-	int c;
+void
+vputchar(int c)
 {
 	register char *tp;
 	int y;

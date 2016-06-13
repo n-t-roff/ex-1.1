@@ -67,7 +67,7 @@ gettty()
 
 	lp = linebuf;
 	hadnl = 0;
-	offset = Pline == &numbline ? 8 : 0;
+	offset = Pline == numbline ? 8 : 0;
 	if (intty && !inglobal) {
 		if (offset)
 			ex_printf("\240\240%4d", dot - zero + 1);
