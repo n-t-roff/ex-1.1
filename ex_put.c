@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "ex.h"
 #include "ex_tty.h"
 #include "ex_vis.h"
@@ -11,8 +12,7 @@ static void plod(void);
 
 STATIC	char line[66] = "Error message file not available\n/usr/lib/ex1.1strings";
 STATIC	char *linp = line + 33;
-extern	char *erpath = line + 33;
-extern	char pfast;
+char *erpath = line + 33;
 STATIC	char phadnl;
 int	(*Outchar)() = termchar;
 int	(*Putchar)() = normchar;
@@ -464,9 +464,6 @@ termreset()
 draino()
 {
 
-	obuf.fildes = 1;
-	obuf.nunused = 0;
-	obuf.xfree = 0;
 }
 
 
@@ -502,7 +499,7 @@ ostop()
 flusho()
 {
 
-	fflush(&obuf);
+	fflush(stdout);
 }
 
 putnl()
@@ -521,8 +518,9 @@ sTTY(i)
 	tcsetattr(i, TCSAFLUSH, &tty);
 }
 
-putch(c)
+void
+putch(int c)
 {
 
-	putc(c, &obuf);
+	putc(c, stdout);
 }

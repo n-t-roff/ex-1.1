@@ -113,9 +113,9 @@ unix2(opt, printub, up)
 */
 		signal(HUP, oldhup);
 		signal(QUIT, oldquit);
-		execl(value(SHELL), "sh", opt, up, 0);
+		execl(svalue(SHELL), "sh", opt, up, 0);
 		die++;
-		error("No %s!\n", value(SHELL));
+		error("No %s!\n", svalue(SHELL));
 	}
 	waitfor();
 	signal(INTR, savint);

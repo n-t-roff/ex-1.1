@@ -1,4 +1,3 @@
-#
 /*
  * Ex - a text editor
  * Bill Joy UCB September 1977
@@ -40,6 +39,7 @@ letter(c)
 	return (0);
 }
 
+#if 0
 strlen(cp)
 	register char *cp;
 {
@@ -50,6 +50,7 @@ strlen(cp)
 		i++;
 	return (i);
 }
+#endif
 
 white(c)
 	char c;

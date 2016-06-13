@@ -72,6 +72,6 @@ cre:
 	if (c != 2 && addr1 == one && addr2 == dol) {
 		if (eq(file, savedfile))
 			value(EDITED) = 1;
-		sync();
+		ex_sync();
 	}
 }

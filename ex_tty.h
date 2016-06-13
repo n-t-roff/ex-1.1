@@ -11,7 +11,7 @@ char	*CLEAR, *NDSPACE, *UPLINE, *HSTR, *CE;
 char	*CM;
 
 char	CA, AM, BS, OS, PT, NOCR;
-int	LINES, COLUMNS;
+extern	int LINES, COLUMNS;
 
 char	UPPERCASE;
 
@@ -26,3 +26,6 @@ char	*AL, *DL, *CD;
 char	IT;
 int	MODES[2];
  */
+
+void setterm(char *);
+void Setterm(char *, int);

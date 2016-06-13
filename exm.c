@@ -96,7 +96,7 @@ getcopy()
 {
 	if (tad1 > addr2)
 		return (EOF);
-	getline(*tad1++);
+	ex_getline(*tad1++);
 	return (0);
 }
 
@@ -104,7 +104,7 @@ getPUT()
 {
 	if (tad1 > unddol)
 		return (EOF);
-	getline(*tad1++);
+	ex_getline(*tad1++);
 	tad1++;
 	return (0);
 }

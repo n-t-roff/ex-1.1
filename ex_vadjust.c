@@ -23,7 +23,7 @@ vback(i)
 	 * exit, hence need "tp > one".
 	 */
 	for (tp = dot; tp > one; tp--) {
-		getline(tp[-1]);
+		ex_getline(tp[-1]);
 		j = vdepth();
 		if (j > i)
 			break;
@@ -85,7 +85,7 @@ vopen(tp, l)
 	 * Reopen returns the number of screen lines occupied.
 	 */
 	vcnt++;
-	getline(*tp);
+	ex_getline(*tp);
 	i = vreopen(l, tp - zero);
 	/*
 	 * If this is the last line on the screen, then there is
@@ -155,7 +155,7 @@ vfit(i, t)
 	j = 0;
 	while (i > 0) {
 		i--;
-		getline(t[i]);
+		ex_getline(t[i]);
 		j += vdepth();
 	}
 	/*
@@ -339,7 +339,7 @@ vredraw(p)
 		if (l == vcline)
 			strcLIN(temp);
 		else
-			getline(*tp);
+			ex_getline(*tp);
 		vliny[l] = p;
 		p += vreopen(p, tp - zero);
 		tp++;
@@ -347,7 +347,7 @@ vredraw(p)
 	ovcline = vcline;
 	vcline = l;
 	for (; tp <= dol; tp++) {
-		getline(*tp);
+		ex_getline(*tp);
 		if (p + vdepth() > VLINES)
 			break;
 		p += vopen(tp, p);
@@ -383,7 +383,7 @@ vsync(int p)
 			if (l == vcline)
 				strcLIN(temp);
 			else
-				getline(dot[l - vcline]);
+				ex_getline(dot[l - vcline]);
 			p += vreopen(p, (dot - zero) + (l - vcline)) - 1;
 			l++;
 		} else

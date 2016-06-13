@@ -15,7 +15,7 @@ xop(f, c)
 		save12(), undkind = UNDCHANGE;
 	for (dp = addr1; dp <= addr2; dp++) {
 		dot = dp;
-		getline(*dp);
+		ex_getline(*dp);
 		strcpy(genbuf, linebuf);
 		(*f)(c);
 		if (!eq(linebuf, genbuf))

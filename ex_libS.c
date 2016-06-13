@@ -9,6 +9,7 @@
 
 #include "ex.h"
 
+#if 0
 strcpy(oto, from)
 	char *oto;
 	register char *from;
@@ -28,6 +29,7 @@ strcat(to, from)
 	strcpy(strend(to), from);
 	return (to);
 }
+#endif
 
 strend(cp)
 	register char *cp;

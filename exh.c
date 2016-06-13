@@ -4,8 +4,6 @@
  * Bill Joy UCB June 1977
  */
 
-extern	char *erpath, pfast;
-
 helpinit()
 {
 
@@ -31,7 +29,7 @@ error(str, i1, i2, i3)
 	resetflav();
 	if (laste) {
 		laste = 0;
-		sync();
+		ex_sync();
 	}
 	dingdong();
 	if (inopen) {

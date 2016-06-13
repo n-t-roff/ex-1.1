@@ -120,7 +120,7 @@ zop2(int lines, int op)
 	if (addr2 - addr1 > 1 /* && really wanna do this */)
 		pstart();
 	if (op == EOF && zhadpr) {
-		getline(*addr1);
+		ex_getline(*addr1);
 		putchar('\r' | QUOTE);
 		shudclob = 1;
 	} else if (znoclear == 0 && CLEAR)

@@ -164,7 +164,7 @@ vup:
 gogo:
 				vsave();
 				vch = -1;
-				getline(*addr);
+				ex_getline(*addr);
 				loc1 = vskipwh(linebuf);
 				goto it;
 			case 'G':
@@ -884,7 +884,7 @@ vrestore()
 
 	if (vresCNT == vrescnt)
 		return (EOF);
-	getline(vulines[vresCNT]);
+	ex_getline(vulines[vresCNT]);
 	vresCNT++;
 	return (0);
 }
@@ -898,7 +898,7 @@ vsyncCL()
 getDOT()
 {
 
-	getline(*dot);
+	ex_getline(*dot);
 }
 
 vshift()

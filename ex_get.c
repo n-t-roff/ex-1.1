@@ -241,7 +241,7 @@ setin(addr)
 	if (addr == zero)
 		lastin = 0;
 	else
-		lastin = smunch(0, getline(*addr));
+		lastin = smunch(0, ex_getline(*addr));
 	return (addr);
 }
 

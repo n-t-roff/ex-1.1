@@ -1,4 +1,5 @@
 #include <errno.h>
+#include <unistd.h>
 #include "ex.h"
 #include "ex_re.h"
 #include "ex_io.h"
@@ -7,12 +8,14 @@
  * Bill Joy UCB June 1977
  */
 
-extern	int tfile = -1;
+int tfile = -1;
 
 #define	READ	0
 #define	WRITE	1
 
 static char *getblock(int, int);
+static void wrerror(void);
+static void blkio(off_t, void *, int (*)());
 
 STATIC	char ichanged;
 STATIC	int nleft;
@@ -31,7 +34,8 @@ STATIC	char tfname[40];
 STATIC	char tftail[] = "/ExXXXXX";
 STATIC	char havetmp;
 
-fileinit()
+void
+fileinit(void)
 {
 	register char *p;
 	register int i, j;
@@ -48,7 +52,7 @@ fileinit()
 	dirtcnt = 0;
 	iblock = -1;
 	oblock = -1;
-	strcpy(tfname, value(DIRECTORY));
+	strcpy(tfname, svalue(DIRECTORY));
 	if (stat(tfname, &stbuf)) {
 dumbness:
 		serrno = errno;
@@ -82,14 +86,16 @@ dumbness:
 	brk(fendcore);
 }
 
-cleanup()
+void
+cleanup(void)
 {
 	if (havetmp)
 		unlink(tfname);
 	havetmp = 0;
 }
 
-onhup()
+void
+onhup(void)
 {
 
 	if (chngflag == 0 || preserve())
@@ -97,7 +103,8 @@ onhup()
 	exit(1);
 }
 
-clrstats()
+void
+clrstats(void)
 {
 
 	ninbuf = 0;
@@ -107,7 +114,8 @@ clrstats()
 	cntodd = 0;
 }
 
-iostats()
+int
+iostats(void)
 {
 
 	close(io);
@@ -133,15 +141,15 @@ iostats()
 	return (cntnull != 0 || cntodd != 0);
 }
 
-plural(i)
-	int i;
+int
+plural(int i)
 {
 
 	return (i == 1 ? "" : "s");
 }
 
-getline(tl)
-	int tl;
+int
+ex_getline(int tl)
 {
 	register char *bp, *lp;
 	register nl;
@@ -159,7 +167,8 @@ getline(tl)
 	return (unpack(scratch));
 }
 
-putline()
+int
+putline(void)
 {
 	register char *bp, *lp;
 	register nl;
@@ -187,7 +196,8 @@ putline()
 
 STATIC	char *nextip;
 
-getfile()
+int
+getfile(void)
 {
 	register c;
 	register char *lp, *fp;
@@ -243,7 +253,7 @@ putfile(void)
 	nib = 512;
 	fp = genbuf;
 	do {
-		lp = getline(*a1++);
+		lp = ex_getline(*a1++);
 		for (;;) {
 			if (--nib < 0) {
 				if (write(io, genbuf, nib = fp-genbuf) != nib)
@@ -263,7 +273,8 @@ putfile(void)
 	cntch += nib;
 }
 
-wrerror()
+static void
+wrerror(void)
 {
 
 	if (eq(file, savedfile) && value(EDITED))
@@ -271,7 +282,8 @@ wrerror()
 	ioerror();
 }
 
-ioerror()
+void
+ioerror(void)
 {
 
 	switch (errno) {
@@ -297,9 +309,6 @@ ioerror()
 			error(" I/O error %d", errno);
 	}
 }
-
-int	read();
-int	write();
 
 static char *
 getblock(int atl, int iof)
@@ -331,8 +340,8 @@ getblock(int atl, int iof)
 	return (obuff + off);
 }
 
-blkio(b, buf, iofcn)
-	int (*iofcn)();
+static void
+blkio(off_t b, void *buf, int (*iofcn)())
 {
 
 	lseek(tfile, b, 3);
@@ -340,7 +349,8 @@ blkio(b, buf, iofcn)
 		ioerror();
 }
 
-synctmp()
+void
+synctmp(void)
 {
 	register int *bp, *a, cnt;
 
@@ -382,7 +392,8 @@ oops:
 */
 }
 
-TSYNC()
+void
+TSYNC(void)
 {
 
 	if (dirtcnt > 12) {

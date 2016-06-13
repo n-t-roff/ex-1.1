@@ -15,7 +15,7 @@ join(c)
 	cp = genbuf;
 	*cp = 0;
 	for (a1 = addr1; a1 <= addr2; a1++) {
-		getline(*a1);
+		ex_getline(*a1);
 		cp1 = linebuf;
 		if (a1 != addr1 && c == 0) {
 			while (*cp1 == ' ' || *cp1 == '\t')

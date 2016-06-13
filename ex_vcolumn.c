@@ -42,8 +42,8 @@ qcolumn(lim, gp)
 	return (vcntcol);
 }
 
-qcount(c)
-	char c;
+void
+qcount(int c)
 {
 
 	switch (c) {

@@ -41,7 +41,7 @@ oop()
 		if (ic > linebuf && *ic == 0)
 			ic--;
 	} else {
-		getline(*addr1);
+		ex_getline(*addr1);
 		ic = vskipwh(linebuf);
 	}
 	ex_newline();

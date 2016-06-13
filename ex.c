@@ -5,6 +5,7 @@
  * Version 1.0 September, 1977
  */
 
+#include <stdlib.h>
 #include "ex.h"
 #include "ex_glob.h"
 
@@ -96,8 +97,11 @@ main(int xargc0, char **xargv0)
 			signal(INTR, onintr);
 		if (nop == 0)
 			initoptions(oop);
-		else
-			setterm("un");
+		else {
+			char *cp;
+			if ((cp = getenv("TERM")))
+				setterm(cp);
+		}
 	}
 top:
 	noteargs();

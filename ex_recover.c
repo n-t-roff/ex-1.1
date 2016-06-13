@@ -26,7 +26,7 @@ recover()
 		dup(pvec[1]);
 	     /* close(pvec[1]); */
 	     /* execl(exrecover+4, exrecover+10, value(DIRECTORY), file, 0); */
-		execl(exrecover, exrecover+10, value(DIRECTORY), file, 0);
+		execl(exrecover, exrecover+10, svalue(DIRECTORY), file, 0);
 		die++;
 		close(1);
 		dup(2);
@@ -73,7 +73,7 @@ preserve()
 	}
 	waitfor();
 	if (rpid == pid && status == 0) {
-		sync();
+		ex_sync();
 		lprintf("File \"%s\" preserved.  Please seek help immediately.\n", savedfile);
 		return (1);
 	}

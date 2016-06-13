@@ -7,6 +7,14 @@
  * Bill Joy UCB June-October 1977
  */
 
+static int quickly(void);
+static void setflav(void);
+static void tailspec(char);
+static void tail(char *);
+static void tail2of(char *);
+static void tailof(char *, int);
+static int exclam(void);
+
 char	*version;
 
 char	CHANGE[]	= "change";
@@ -18,9 +26,8 @@ char	READ[]		= "read";
 static	char pflag, nflag, kflag;
 static	int poffset;
 
-commands(noprompt, exitoneof)
-	int noprompt;
-	char exitoneof;
+int
+commands(int noprompt, char exitoneof)
 {
 	register int *addr;
 	register c;
@@ -212,7 +219,7 @@ doecmd:
 			init();
 			addr2 = zero;
 			laste++;
-			sync();
+			ex_sync();
 			rop(c);
 			lchngflag = chngflag;
 			continue;
@@ -299,7 +306,7 @@ caseline:
 			addr1 = addr2;
 			setdot();
 			nonzero();
-			getline(*addr1);
+			ex_getline(*addr1);
 			if (c == '\013') {
 				putchar('\013' | QUOTE);	/* prototype UPLINE */
 				if (hadpr)
@@ -415,7 +422,7 @@ dorecover:
 					init();
 					addr2 = zero;
 					laste++;
-					sync();
+					ex_sync();
 					recover();
 					rop2();
 					revocer();
@@ -573,7 +580,8 @@ dorecover:
 	}
 }
 
-quickly()
+static int
+quickly(void)
 {
 
 	if (exclam())
@@ -586,14 +594,16 @@ quickly()
 	return (0);
 }
 
-change()
+void
+change(void)
 {
 
 	tchngflag++;
 	chngflag = tchngflag;
 }
 
-sync()
+void
+ex_sync(void)
 {
 
 	chngflag = 0;
@@ -601,15 +611,13 @@ sync()
 	xchngflag = 0;
 }
 
-plines(adr1, adr2, movedot)
-	int *adr1;
-	register int *adr2;
-	char movedot;
+void
+plines(int *adr1, int *adr2, char movedot)
 {
 	register int *addr;
 
 	for (addr = adr1; addr <= adr2; addr++) {
-		getline(*addr);
+		ex_getline(*addr);
 		pline(addr - zero);
 		if (movedot)
 			dot = addr;
@@ -659,7 +667,8 @@ ex_newline(void)
 	}
 }
 
-eol()
+void
+eol(void)
 {
 
 	skipwh();
@@ -667,7 +676,8 @@ eol()
 		error("Extra chars|Extra characters at end of command");
 }
 
-resetflav()
+void
+resetflav(void)
 {
 
 	listf = 0;
@@ -678,7 +688,8 @@ resetflav()
 	setflav();
 }
 
-setflav()
+static void
+setflav(void)
 {
 
 	if (nflag || kflag == 0 && value(NUMBER))
@@ -693,7 +704,8 @@ setflav()
 	setoutt();
 }
 
-endcmd(ch)
+int
+endcmd(int ch)
 {
 	switch (ch) {
 		case '\n':
@@ -707,8 +719,8 @@ endcmd(ch)
 	return (0);
 }
 
-tailspec(c)
-	char c;
+static void
+tailspec(char c)
 {
 	static char foocmd[2];
 
@@ -716,24 +728,22 @@ tailspec(c)
 	Command = foocmd;
 }
 
-tail(comm)
-	char *comm;
+static void
+tail(char *comm)
 {
 
 	tailof(comm, 1);
-	return (comm);
 }
 
-tail2of(comm)
-	char *comm;
+static void
+tail2of(char *comm)
 {
 
-	return (tailof(comm, 2));
+	tailof(comm, 2);
 }
 
-tailof(comm, i)
-	register char *comm;
-	int i;
+static void
+tailof(char *comm, int i)
 {
 	register char *cp;
 	register int c;
@@ -754,7 +764,8 @@ tailof(comm, i)
 	}
 }
 
-exclam()
+static int
+exclam(void)
 {
 
 	skipwh();

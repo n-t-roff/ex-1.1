@@ -6,6 +6,7 @@
 
 #include <unistd.h>
 #include <sys/types.h>
+#include <stdlib.h>
 #include "ex.h"
 #include "ex_tty.h"
 #include "ex_io.h"
@@ -26,8 +27,10 @@ initoptions(char f)
 
 	intty = isatty(0);
 	if (!intty && f == 0) {
+		char *cp;
 unknown:
-		setterm("u");
+		if ((cp = getenv("TERM")))
+			setterm(cp);
 		return;
 	}
 	if (gTTY(1)) {
@@ -49,6 +52,7 @@ unknown:
 	source(Home, 1);
 }
 
+#if 0
 isetterm(type)
 	char *type;
 {
@@ -64,6 +68,7 @@ isetterm(type)
 	}
 	resexit(osetexit);
 }
+#endif
 
 gettmode()
 {

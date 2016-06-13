@@ -18,7 +18,7 @@ shift(c, cnt)
 		save12(), undkind = UNDCHANGE;
 	cnt *= value(SHIFTWIDTH);
 	for (addr = addr1; addr <= addr2; addr++) {
-		getline(*addr);
+		ex_getline(*addr);
 		i = whitecnt(linebuf);
 		switch (c) {
 			case '>':

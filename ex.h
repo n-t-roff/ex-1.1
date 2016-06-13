@@ -1,5 +1,13 @@
 #include <setjmp.h>
 #include <termios.h>
+
+int tgetent(char *bp, const char *name);
+int tgetflag(char *id);
+int tgetnum(char *id);
+char *tgetstr(char *id, char **area);
+char *tgoto(const char *cap, int col, int row);
+int tputs(const char *str, int affcnt, int (*putc)(int));
+
 #define	VISUAL
 /*
  * Ex - text editor
@@ -43,14 +51,17 @@ char	undkind;
 #define	UNDALL		2
 #define	UNDNONE		3
 
-int	io, erfile, tfile;
-char	*globp, *erpath;
+int	io, erfile;
+extern	int tfile;
+char	*globp;
+extern	char *erpath;
 int	names[27];
 int	outcol;
 char	home[30];
 char	*Command;
 
-int	getfile(), gettty(), getchar(), getsub();
+int	getfile(void);
+int	gettty(), getchar(), getsub();
 
 
 #include "ex_vars.h"
@@ -68,13 +79,9 @@ int	getfile(), gettty(), getchar(), getsub();
 
 char	normtty;
 struct termios	normf;
-struct {
-	int	fildes;
-	int	nunused;
-	char	*xfree;
-	char	buff[512];
-} obuf;
-int	oldhup, onhup(), oldquit, onintr();
+int	oldhup;
+void	onhup(void);
+int	oldquit, onintr();
 
 struct {
 	int	Atime[2];
@@ -94,7 +101,8 @@ char	recov;
 extern char	TTYNAM[];
 int	TMODE;
 
-int	lastc, peekc;
+extern int	lastc;
+int	peekc;
 jmp_buf	resetlab;		/* For error throws to top level (cmd mode) */
 #define	getexit(a)	copy(a, resetlab, sizeof (jmp_buf))
 #define	lastchar()	lastc
@@ -114,8 +122,6 @@ struct termios tty;
 char	allredraw, pfast;
 int	mask, vcntcol;
 
-extern int	(*Outchar)();
-extern int	(*Pline)();
 extern int	(*Putchar)();
 
 void listchar(int);
@@ -143,3 +149,21 @@ void killed(void);
 void vappend(int, int, int);
 void reverse(int *, int *);
 void filename(int);
+void ex_sync(void);
+int commands(int, char);
+void change(void);
+void plines(int *, int *, char);
+void eol(void);
+void resetflav(void);
+int endcmd(int);
+void fileinit(void);
+void cleanup(void);
+void clrstats(void);
+int iostats(void);
+int plural(int);
+int ex_getline(int);
+int putline(void);
+void ioerror(void);
+void synctmp(void);
+void TSYNC(void);
+void putch(int);

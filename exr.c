@@ -87,6 +87,6 @@ rop3(c)
 		undkind = UNDNONE;
 	if (laste) {
 		laste = 0;
-		sync();
+		ex_sync();
 	}
 }

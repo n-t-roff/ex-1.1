@@ -21,7 +21,7 @@ int	dir;
 int	vlast;
 */
 
-#define vputc(c)	putc(c, &obuf)
+#define vputc(c)	putc(c, stdout)
 
 #define	TUBELINES	100
 #define	TUBECOLS	300
@@ -44,7 +44,8 @@ char vmovcol;
 #endif
 
 void	vdelete(int);
-int	(*Outchar)(), qcount();
+extern int	(*Outchar)();
+void	qcount(int);
 void	vputchar(int);
 void	vgoto(int, int);
 void	vsync(int);
@@ -75,7 +76,7 @@ int	vrestore(), vrescnt, vresCNT, vdelcnt, vrescurs, vyancnt;
 char	wdkind;
 int	vSCROLL;
 
-int	(*Pline)();
+extern int	(*Pline)();
 void termchar(int);
 void numbline(int);
 void normline(void);

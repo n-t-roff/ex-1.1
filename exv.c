@@ -116,7 +116,7 @@ vinit()
 	vny = ZERO;
 	for (; tp <= dol; tp++) {
 		voy = vny;
-		getline(*tp);
+		ex_getline(*tp);
 		if (tp == dot) {
 			nvc = vcline;
 			ic = vskipwh(linebuf);

@@ -8,7 +8,10 @@
 #include "ex.h"
 #include "ex_tty.h"
 
-char	tspace[1024], **Tspace;
+static char *longname(char *, char *);
+static char *Tgetstr(char *);
+
+char	tspace[1024], *Tspace;
 #if 0
 char	ttycap[];
 #endif
@@ -16,20 +19,18 @@ char	ttycap[];
 int	COLUMNS	= 1000;
 int	LINES	= 24;
 
-setterm(type)
-	char *type;
+void
+setterm(char *type)
 {
 
 	Setterm(type, 1);
 }
 
-Setterm(type, printerr)
-	char *type;
-	int printerr;
+void
+Setterm(char *type, int printerr)
 {
-	char buf[512], *cgoto();
+	char buf[1024];
 	register int unknown;
-	extern struct varbl varbls[];
 
 	if (type[0] == 0)
 		type = "un";
@@ -56,19 +57,19 @@ Setterm(type, printerr)
 	IT = tgetflag("it");
 */
 	CA = tgetflag("ca");
+	Tspace = tspace;
 	CM = Tgetstr("cm");
-	if (cgoto()[0] == 'O')
-		CA = 0;
+	if (!*CM || cgoto()[0] == 'O')
+		CA = 0, CM = 0;
 	AM = tgetflag("am");
 	BS = tgetflag("bs");
 	OS = tgetflag("os");
-	Tspace = tspace;
 	CLEAR = Tgetstr("cl");
 	NDSPACE = Tgetstr("nd");
 	UPLINE = Tgetstr("up");
 /*
 	AL = Tgetstr("al");
-	DL = Tgetstr("dl");
+	DL = Tgetstr"dl");
 */
 	CE = Tgetstr("ce");
 /*
@@ -80,9 +81,8 @@ Setterm(type, printerr)
 		error("%s: Unknown terminal type@- do \"!ttytype -n\" for a list of valid types", type);
 }
 
-longname(bp, def)
-	register char *bp;
-	char *def;
+static char *
+longname(char *bp, char *def)
 {
 	register char *cp;
 
@@ -99,8 +99,8 @@ longname(bp, def)
 	return (def);
 }
 
-Tgetstr(cp)
-	char *cp;
+static char *
+Tgetstr(char *cp)
 {
 
 	tgetstr(cp, &Tspace);

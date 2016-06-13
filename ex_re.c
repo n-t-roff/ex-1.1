@@ -239,7 +239,7 @@ execute(gf, addr)
 	} else {
 		if (addr == zero)
 			return (0);
-		p1 = getline(*addr);
+		p1 = ex_getline(*addr);
 		locs = 0;
 	}
 	p2 = expbuf;

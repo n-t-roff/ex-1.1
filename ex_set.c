@@ -162,7 +162,7 @@ printone:
 				if (vp->vtype == TERM)
 					setterm(optname);
 				else {
-					strcpy(vp->vvalue, optname);
+					strcpy(vp->vsvalue, optname);
 					vp->vdefault = 1;
 				}
 				break;
@@ -223,7 +223,7 @@ propt(vp)
 			break;
 		case STRING:
 		case TERM:
-			ex_printf("%s=%s\n", vp->vname[0], vp->vvalue);
+			ex_printf("%s=%s\n", vp->vname[0], vp->vsvalue);
 			break;
 	}
 	flush();

@@ -1,5 +1,6 @@
 #include "ex.h"
 #include "ex_re.h"
+#include "ex_vis.h"
 /*
  * Ex - a text editor
  * Bill Joy UCB June 1977
