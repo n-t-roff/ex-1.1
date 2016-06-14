@@ -4,10 +4,12 @@
  * Bill Joy UCB June/August 1977
  */
 
-STATIC	int jcount, jnoop();
+STATIC int jnoop(void);
 
-join(c)
-	char c;
+STATIC	int jcount;
+
+void
+join(char c)
 {
 	register *a1;
 	register char *cp, *cp1;
@@ -38,7 +40,7 @@ join(c)
 }
 
 STATIC int
-jnoop()
+jnoop(void)
 {
 	return(--jcount);
 }

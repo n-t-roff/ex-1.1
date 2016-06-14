@@ -7,8 +7,8 @@
 #include "ex.h"
 #include "ex_glob.h"
 
-notable(i)
-	int i;
+static int
+notable(int i)
 {
 
 	return (value(HUSH) == 0 && !inglobal && i > value(NOTIFY));
@@ -32,8 +32,8 @@ killed(void)
 	putNFL();
 }
 
-netchHAD(cnt)
-	int cnt;
+void
+netchHAD(int cnt)
 {
 
 	netchange((dol - zero) - cnt);
@@ -66,7 +66,8 @@ snote(int total, int lines)
 	putNFL();
 }
 
-noteargs()
+void
+noteargs(void)
 {
 	if (argc > 1) {
 		ex_printf(mesg("%d files@to edit"), argc);

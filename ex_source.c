@@ -15,7 +15,7 @@ int	onintr();
 void
 source(char *file, int okfail)
 {
-	int osetexit[3], tty[3];
+	jmp_buf osetexit;
 	register int saveinp, ointty, oerrno;
 	char reenter;
 

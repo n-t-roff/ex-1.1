@@ -4,15 +4,11 @@
  * Bill Joy UCB June 1977
  */
 
-extern	getsub();
-extern	gettty();
-
-append(f, a)
-	int (*f)();
+int
+append(int (*f)(), int *a)
 {
 	register int *a1, *a2, *rdot;
 	int nline;
-	struct { int integer; };
 
 	nline = 0;
 	dot = a;
@@ -54,7 +50,8 @@ append(f, a)
 	return (nline);
 }
 
-appendnone()
+void
+appendnone(void)
 {
 	if (!inglobal) {
 		undkind = UNDCHANGE;

@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <termios.h>
+#include <unistd.h>
 #include "ex.h"
 #include "ex_tty.h"
 #include "ex_vis.h"
@@ -9,6 +11,9 @@
 
 static void putS(char *);
 static void plod(void);
+static void flush1(void);
+static void flush2(void);
+static int motion(void);
 
 STATIC	char line[66] = "Error message file not available\n/usr/lib/ex1.1strings";
 STATIC	char *linp = line + 33;
@@ -31,11 +36,11 @@ setnumb(int t))()
 /*
  * Indirect to current definition of putchar.
  */
-putchar(c)
-	int c;
+int
+putchar(int c)
 {
 
-	(*Putchar)(c);
+	return (*Putchar)(c);
 }
 
 void
@@ -55,15 +60,16 @@ termchar(int c)
 	}
 }
 
-
-flush()
+void
+flush(void)
 {
 
 	flush1();
 	flush2();
 }
 
-flush1()
+static void
+flush1(void)
 {
 	register char *lp, *cp;
 	register c;
@@ -147,7 +153,8 @@ putS(char *cp)
 }
 
 
-flush2()
+static void
+flush2(void)
 {
 
 	fgoto();
@@ -251,8 +258,8 @@ fgoto(void)
 		plod();
 }
 
-setcol(col)
-	int col;
+void
+setcol(int col)
 {
 	register int del;
 
@@ -289,7 +296,8 @@ setcol(col)
  * v is vertical distance, then cost with cr
  * h is horizontal distance, then direct move cost
  */
-motion()
+static int
+motion(void)
 {
 	register int v, h, c;
 
@@ -367,14 +375,16 @@ plod(void)
 	}
 }
 
-partinp()
+void
+partinp(void)
 {
 
 	putch('\n');
 	noteinp();
 }
 
-noteinp()
+void
+noteinp(void)
 {
 
 	outline++;
@@ -384,8 +394,8 @@ noteinp()
 	destcol = outcol = 0;
 }
 
-notech(i)
-	int i;
+void
+notech(int i)
 {
 
 	outcol += i;
@@ -401,7 +411,8 @@ notech(i)
 /*
  * Newline + flush.
  */
-putNFL()
+void
+putNFL(void)
 {
 
 	putnl();
@@ -446,7 +457,8 @@ pstop(void)
 	pfast = 0;
 }
 
-termreset()
+void
+termreset(void)
 {
 
 	destcol = 0;
@@ -461,13 +473,14 @@ termreset()
 		}
 }
 
-draino()
+void
+draino(void)
 {
 
 }
 
-
-ostart()
+void
+ostart(void)
 {
 
 	if (!intty)
@@ -488,7 +501,8 @@ ostart()
 	pfast = 2;
 }
 
-ostop()
+void
+ostop(void)
 {
 
 	pfast = 0;
@@ -496,26 +510,30 @@ ostop()
 	termreset();
 }
 
-flusho()
+void
+flusho(void)
 {
 
 	fflush(stdout);
 }
 
-putnl()
+void
+putnl(void)
 {
 
 	putchar('\n');
 }
 
-gTTY(i)
+int
+gTTY(int i)
 {
-	tcgetattr(i, &tty);
+	return tcgetattr(i, &tty);
 }
 
-sTTY(i)
+int
+sTTY(int i)
 {
-	tcsetattr(i, TCSAFLUSH, &tty);
+	return tcsetattr(i, TCSAFLUSH, &tty);
 }
 
 void

@@ -6,7 +6,8 @@
  */
 static	char bigmove;
 
-setdot()
+void
+setdot(void)
 {
 
 	setdot1();
@@ -14,7 +15,8 @@ setdot()
 		markDOT();
 }
 
-setdot1()
+void
+setdot1(void)
 {
 
 	if (addr2 == 0)
@@ -46,7 +48,8 @@ setcount(void)
 	nonzero();
 }
 
-getnum()
+int
+getnum(void)
 {
 	register int cnt;
 
@@ -54,21 +57,24 @@ getnum()
 		cnt = cnt * 10 + getchar() - '0';
 	return (cnt);
 }
-markDOT()
+
+void
+markDOT(void)
 {
 
 	markpr(dot);
 }
 
-markpr(dot)
-	int *dot;
+void
+markpr(int *dot)
 {
 
 	if ((inglobal == 0 || inopen) && dot <= endcore)
 		names[26] = *dot & ~01;
 }
 
-notempty()
+void
+notempty(void)
 {
 
 	if (dol == zero)
@@ -90,14 +96,16 @@ setall(void)
 	setdot1();
 }
 
-setnoaddr()
+void
+setnoaddr(void)
 {
 
 	if (addr2 != 0)
 		error("No address allowed@on this command");
 }
 
-nonzero()
+void
+nonzero(void)
 {
 
 	if (addr1 == zero) {
@@ -107,7 +115,7 @@ nonzero()
 }
 
 int *
-address()
+address(void)
 {
 	register int *addr, offset;
 	register c;
@@ -230,22 +238,24 @@ address()
  * Left over from squashing ex version 1.1 into
  * 11/34's and 11/40's.
  */
-setCNL()
+void
+setCNL(void)
 {
 
 	setcount();
 	ex_newline();
 }
 
-setNAEOL()
+void
+setNAEOL(void)
 {
 
 	setnoaddr();
 	eol();
 }
 
-scanfor(c)
-	char c;
+int *
+scanfor(int c)
 {
 	register int *addr;
 

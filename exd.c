@@ -1,10 +1,15 @@
+#include <signal.h>
 #include "ex.h"
 /*
  * Ex - a text editor
  * Bill Joy UCB June 1977
  */
 
-delete()
+static void deleted(void);
+static void deletem(void);
+
+void
+delete(void)
 {
 
 	nonzero();
@@ -16,7 +21,8 @@ delete()
 	killed();
 }
 
-deleted()
+static void
+deleted(void)
 {
 	register int *a1, *a2, *a3;
 
@@ -35,12 +41,13 @@ deleted()
 	dot = a1;
 }
 
-deletem()
+static void
+deletem(void)
 {
 	register int *a1, *a2, ra;
 	int dsavint;
 
-	dsavint = signal(INTR, 1);
+	dsavint = signal(INTR, SIG_IGN);
 	undkind = UNDCHANGE;
 	a1 = addr1;
 	unddol = dol;
@@ -58,7 +65,8 @@ deletem()
 	signal(INTR, dsavint);
 }
 
-deletenone()
+void
+deletenone(void)
 {
 	if (!inglobal) {
 		undkind = UNDCHANGE;

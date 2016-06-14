@@ -8,6 +8,8 @@
  * Bill Joy UCB September 1977
  */
 
+static void vshift(void);
+
 vmain(ic)
 	char *ic;
 {
@@ -17,8 +19,6 @@ vmain(ic)
 	flusho();
 	return (i);
 }
-
-int	delete(), join(), vshift();
 
 char	vscandir[3] = "/\n";
 
@@ -901,7 +901,8 @@ getDOT()
 	ex_getline(*dot);
 }
 
-vshift()
+static void
+vshift(void)
 {
 	shift(op, 1);
 }

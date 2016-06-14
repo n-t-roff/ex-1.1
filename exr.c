@@ -1,4 +1,9 @@
 #include <errno.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <sys/sysmacros.h>
 #include "ex.h"
 #include "ex_io.h"
 /*
@@ -6,11 +11,11 @@
  * Bill Joy UCB June 1977
  */
 
-rop(c)
-	char c;
+void
+rop(int c)
 {
 	register int i;
-	struct stb stbuf;
+	struct stat stbuf;
 	int magic;
 
 	io = open(file, 0);
@@ -22,18 +27,19 @@ rop(c)
 	if (value(EDITANY) == 0) {
 		if (fstat(io, &stbuf))
 			ioerror();
-		switch (stbuf.flags & FILETYP) {
-			case FBLSPEC:
+		switch (stbuf.st_mode & S_IFMT) {
+			case S_IFBLK:
 				error(" Block special file");
-			case FCHSPEC:
+			case S_IFCHR:
 				if (gTTY(io) == 0)
 					error(" Teletype");
-				if (stbuf.dmajor == DVNLMAJ && stbuf.dminor == DVNLMIN)
+				if (major(stbuf.st_dev) == DVNLMAJ
+				    && minor(stbuf.st_dev) == DVNLMIN)
 					break;
 				error(" Character special file");
-			case FDIRECT:
+			case S_IFDIR:
 				error(" Directory");
-			case FPLAIN:
+			case S_IFREG:
 				i = read(io, &magic, 2);
 				lseek(io, 0, 0);
 				if (i != 2)
@@ -68,7 +74,8 @@ rop(c)
 	rop3(c);
 }
 
-rop2()
+void
+rop2(void)
 {
 
 	deletenone();
@@ -76,8 +83,8 @@ rop2()
 	append(getfile, addr2);
 }
 
-rop3(c)
-	char c;
+void
+rop3(int c)
 {
 
 	if (iostats() == 0)

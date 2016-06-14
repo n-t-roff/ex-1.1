@@ -1,10 +1,12 @@
+#include <stdarg.h>
 #include "ex.h"
 /*
  * Ex - a text editor
  * Bill Joy UCB June 1977
  */
 
-helpinit()
+void
+helpinit(void)
 {
 
 	erfile = open(erpath, 0);
@@ -14,15 +16,11 @@ helpinit()
 		pstop();
 }
 
-error(str, i1, i2, i3)
-	register char *str;
+void
+error(char *fmt, ...)
 {
-	register c;
+	va_list ap;
 
-	lseek(erfile, str, 0);
-	str = linebuf;
-	if (read(erfile, str, 128) < 2)
-		str = "ERROR";
 	if (pfast)
 		pfast = 1;
 	flush();
@@ -38,7 +36,8 @@ error(str, i1, i2, i3)
 	}
 	inopen = 0;
 	inconf = 0;
-	lprintf(mesg(str), i1, i2, i3);
+	va_start(ap, fmt);
+	lvprintf(fmt, ap);
 	putNFL();
 	if (die)
 		exit(1);
@@ -49,7 +48,7 @@ error(str, i1, i2, i3)
 	inglobal = 0;
 	globp = 0;
 	while (lastchar() != '\n' && lastchar() != EOF)
-		c = getchar();
+		getchar();
 	ungetchar(0);
 	endline = 1;
 	if (io > 0) {
@@ -59,7 +58,8 @@ error(str, i1, i2, i3)
 	reset();
 }
 
-dingdong()
+void
+dingdong(void)
 {
 
 	if (value(ERRBELLS))
@@ -72,8 +72,8 @@ dingdong()
  *	'xxx|yyy' -> 'xxx' if terse, else 'yyy'
  * All others map to themselves.
  */
-mesg(str)
-	register char *str;
+char *
+mesg(char *str)
 {
 	register char *cp;
 
@@ -95,7 +95,8 @@ mesg(str)
 	return (str);
 }
 
-normal()
+void
+normal(void)
 {
 
 	if (normtty) {
@@ -106,7 +107,8 @@ normal()
 	normtty = 0;
 }
 
-helpthem()
+void
+helpthem(void)
 {
 	register char *cp, *icp;
 	char buff[513];

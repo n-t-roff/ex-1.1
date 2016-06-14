@@ -15,7 +15,7 @@ static void tail2of(char *);
 static void tailof(char *, int);
 static int exclam(void);
 
-char	*version;
+extern	char version[];
 
 char	CHANGE[]	= "change";
 char	PRINT[]		= "print";
@@ -556,7 +556,7 @@ dorecover:
 			continue;
 		case EOF:
 			/* onhup for chtty !?! */
-			if (exitoneof || gTTY(0) == -1)
+			if (exitoneof || !isatty(0))
 				return (0);
 			if (dol == zero) {
 				putnl();

@@ -6,6 +6,9 @@
  * This glob routine mercilessly stolen from the shell.
  */
 #include <errno.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 #include "ex.h"
 #include "ex_glob.h"
 #include "ex_io.h"
@@ -83,7 +86,7 @@ expand(as)
 		int	ino;
 		char	name[16];
 	} entry;
-	int stbuff[18];
+	struct stat stbuff;
 
 	sgpathp = gpathp;
 	cs = as;
@@ -154,7 +157,7 @@ amatch(as, ap)
 	register scc;
 	int c, cc, ok, lc;
 	char *sgpathp;
-	int stbuff[18];
+	struct stat stbuff;
 
 	s = as;
 	p = ap;
@@ -219,7 +222,7 @@ slash:
 				*gpathp++ = '/';
 				*gpathp = 0;
 				if (stat(file, &stbuff) == 0)
-					if ((stbuff[2] & 060000) == 040000)
+					if ((stbuff.st_mode & 060000) == 040000)
 						if (*p == 0) {
 							*av++ = cat(file, "");
 							ncoll++;

@@ -10,8 +10,8 @@ STATIC	char xflag;
 STATIC	char gflag;
 STATIC	int scount, slines, stotal;
 
-substitute(c)
-	char c;
+int
+substitute(char c)
 {
 	register int *addr, n, *markp;
 	char gsubf;

@@ -74,7 +74,7 @@ gettty()
 		if (value(AUTOINDENT) ^ (aiflag != 0)) {
 			setcol(lastin + offset);
 			while ((c = read(0, &genbuf, 512)) == 0) {
-				if (lastin == 0 && gTTY(0) == -1)
+				if (lastin == 0 && !isatty(0))
 					return (EOF);
 				lastin = backtab(lastin);
 				setcol(lastin + offset);

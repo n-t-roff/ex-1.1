@@ -20,13 +20,6 @@ char *_p_dconv();
 static void _p_emit(char *, char *);
 
 void
-ex_printf(const char *fmt, ...)
-{
-	va_list ap;
-	va_start(ap, fmt);
-}
-
-void
 ex_vprintf(char *fmt, va_list ap) {
 	char fcode;
 	int prec;
@@ -222,6 +215,14 @@ ex_vprintf(char *fmt, va_list ap) {
 				_p_emit(bptr,ptr);
 	}
 	va_end(ap);
+}
+
+void
+ex_printf(char *fmt, ...)
+{
+	va_list ap;
+	va_start(ap, fmt);
+	ex_vprintf(fmt, ap);
 }
 
 /* _p_dconv converts the unsigned long integer "value" to

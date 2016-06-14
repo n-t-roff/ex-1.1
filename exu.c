@@ -12,8 +12,8 @@
 
 static void somechange(void);
 
-undo(c)
-	char c;
+void
+undo(char c)
 {
 	register int i, *jp, *kp;
 	int *dolp1, *newdol, *newadot;

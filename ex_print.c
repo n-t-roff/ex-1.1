@@ -167,11 +167,18 @@ setoutt(void)
 void
 lprintf(char *fmt, ...)
 {
-	int (*P)();
 	va_list ap;
 
-	P = setlist();
 	va_start(ap, fmt);
+	lvprintf(fmt, ap);
+}
+
+void
+lvprintf(char *fmt, va_list ap)
+{
+	int (*P)();
+
+	P = setlist();
 	ex_vprintf(fmt, ap);
 	Putchar = P;
 }

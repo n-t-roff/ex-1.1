@@ -1,5 +1,7 @@
 #include <errno.h>
 #include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include "ex.h"
 #include "ex_re.h"
 #include "ex_io.h"
@@ -39,7 +41,7 @@ fileinit(void)
 {
 	register char *p;
 	register int i, j;
-	struct stb stbuf;
+	struct stat stbuf;
 	int serrno;
 	char dumbcnt;
 
@@ -67,7 +69,7 @@ dumbness:
 		}
 		exit(1);
 	}
-	if ((stbuf.flags & FILETYP) != FDIRECT) {
+	if (!S_ISDIR(stbuf.st_mode)) {
 		errno = ENOTDIR;
 		goto dumbness;
 	}

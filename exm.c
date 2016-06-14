@@ -4,9 +4,11 @@
  * Bill Joy UCB June/August 1977
  */
 
-int	getcopy();
+static int getcopy(void);
+static int getPUT(void);
 
-move()
+void
+move(void)
 {
 	register int *adt;
 
@@ -26,9 +28,8 @@ move()
 
 int	*tad1;
 
-move1(cflag, addrt)
-	char cflag;
-	int *addrt;
+void
+move1(char cflag, int *addrt)
 {
 	register int *adt, *ad1, *ad2;
 	int lines;
@@ -92,7 +93,8 @@ reverse(int *a1, int *a2)
 	}
 }
 
-getcopy()
+static int
+getcopy(void)
 {
 	if (tad1 > addr2)
 		return (EOF);
@@ -100,7 +102,8 @@ getcopy()
 	return (0);
 }
 
-getPUT()
+static int
+getPUT(void)
 {
 	if (tad1 > unddol)
 		return (EOF);
@@ -109,7 +112,8 @@ getPUT()
 	return (0);
 }
 
-yank()
+void
+yank(void)
 {
 
 	save12();
@@ -117,7 +121,8 @@ yank()
 	killed();
 }
 
-PUT()
+void
+PUT(void)
 {
 	register int cnt;
 

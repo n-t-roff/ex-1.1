@@ -50,5 +50,6 @@ filename(int comm)
 	} else
 		ex_printf("No file ");
 	if (comm == 'f')
-		ex_printf(mesg(" %d lin%c@in buffer"), dol - zero, dol == one ? 'e' : 'es');
+		ex_printf(mesg(" %d lin%s@in buffer"),
+		    dol - zero, dol == one ? "e" : "es");
 }
