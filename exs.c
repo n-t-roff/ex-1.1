@@ -6,6 +6,15 @@
  * Bill Joy UCB June 1977
  */
 
+static int compsub(int);
+static void comprhs(int);
+static int dosubcon(int, int *);
+static int confirmed(int *);
+static void ugo(int, int);
+static void dosub(void);
+static int fixcase(int);
+static char *place(char *, char *, char *);
+
 STATIC	char xflag;
 STATIC	char gflag;
 STATIC	int scount, slines, stotal;
@@ -16,7 +25,7 @@ substitute(char c)
 	register int *addr, n, *markp;
 	char gsubf;
 
-	gsubf = compsub(c, 0);
+	gsubf = compsub(c);
 	if (!inglobal)
 		save12(), undkind = UNDCHANGE;
 	stotal = 0;
@@ -44,7 +53,8 @@ substitute(char c)
 	return (stotal);
 }
 
-compsub(ch)
+static int
+compsub(int ch)
 {
 	register seof, c;
 	register char *p;
@@ -91,11 +101,11 @@ compsub(ch)
 	}
 }
 
-comprhs(seof)
-	char seof;
+static void
+comprhs(int seof)
 {
 	register char *rp, *orp;
-	register c;
+	int c;
 	char orhsbuf[LBSIZE / 2];
 
 	rp = rhsbuf;
@@ -154,7 +164,8 @@ endrhs:
 	*rp++ = 0;
 }
 
-getsub()
+int
+getsub(void)
 {
 	register char *p;
 
@@ -165,8 +176,8 @@ getsub()
 	return (0);
 }
 
-dosubcon(f, a)
-	int f, *a;
+static int
+dosubcon(int f, int *a)
 {
 
 	if (execute(f, a) == 0)
@@ -178,8 +189,8 @@ dosubcon(f, a)
 	return (1);
 }
 
-confirmed(a)
-	int *a;
+static int
+confirmed(int *a)
 {
 	register c, ch;
 
@@ -200,7 +211,8 @@ confirmed(a)
 	return (ch == 'y');
 }
 
-getch()
+int
+getch(void)
 {
 	char c;
 
@@ -209,9 +221,8 @@ getch()
 	return (c & 0177);
 }
 
-ugo(cnt, with)
-	char with;
-	int cnt;
+static void
+ugo(int cnt, int with)
 {
 
 	if (cnt > 0)
@@ -223,7 +234,8 @@ ugo(cnt, with)
 int	casecnt;
 int	destcase;
 
-dosub()
+static void
+dosub(void)
 {
 	register char *lp, *sp, *rp;
 	int c;
@@ -285,8 +297,8 @@ ovflo:
 	strcLIN(genbuf);
 }
 
-fixcase(c)
-	register char c;
+static int
+fixcase(int c)
 {
 	if (casecnt == 0 || !letter(c))
 		return (c);
@@ -298,8 +310,8 @@ fixcase(c)
 	return (c);
 }
 
-place(sp, l1, l2)
-	register char *sp, *l1, *l2;
+static char *
+place(char *sp, char *l1, char *l2)
 {
 
 	while (l1 < l2) {
@@ -310,16 +322,15 @@ place(sp, l1, l2)
 	return (sp);
 }
 
-putmark(addr)
-	int *addr;
+void
+putmark(int *addr)
 {
 
 	putmk1(addr, putline());
 }
 
-putmk1(addr, n)
-	register int *addr;
-	int n;
+void
+putmk1(int *addr, int n)
 {
 	register int *markp;
 

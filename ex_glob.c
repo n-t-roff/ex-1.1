@@ -9,13 +9,21 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <string.h>
 #include "ex.h"
 #include "ex_glob.h"
 #include "ex_io.h"
 
 static	int gflag;
 
-int	tglob(), trim();
+static void sort(char **);
+static void expand(char *);
+static int match(char *, char *);
+static int amatch(char *, char *);
+static char *cat(char *, char *);
+static void scan(char **, int (*)());
+static int tglob(int);
+static int trim(int);
 
 static	char **av;
 static	char *string, *strend;
@@ -30,9 +38,8 @@ struct	Glob *g;
 #define	ab	g->Ab
 #define	ava	g->Ava
 
-glob(v, g0)
-	register char *v[];
-	struct Glob *g0;
+void
+glob(char **v, struct Glob *g0)
 {
 	register char **oav;
 
@@ -58,8 +65,8 @@ glob(v, g0)
 	gargc = av - &ava[0];
 }
 
-sort(oav)
-	char **oav;
+static void
+sort(char **oav)
 {
 	register char **p1, **p2, **c;
 
@@ -77,8 +84,8 @@ sort(oav)
 	}
 }
 
-expand(as)
-	char *as;
+static void
+expand(char *as)
 {
 	register char *cs, *sgpathp;
 	register int dirf;
@@ -136,8 +143,8 @@ endit:
 	*gpathp = 0;
 }
 
-match(s, p)
-	char *s, *p;
+static int
+match(char *s, char *p)
 {
 	register c, sentp;
 
@@ -150,8 +157,8 @@ match(s, p)
 	return (c);
 }
 
-amatch(as, ap)
-	char *as, *ap;
+static int
+amatch(char *as, char *ap)
 {
 	register char *s, *p;
 	register scc;
@@ -235,8 +242,8 @@ slash:
 	}
 }
 
-cat(as1, as2)
-	char *as1, *as2;
+static char *
+cat(char *as1, char *as2)
 {
 	register char *s1, *s2;
 
@@ -256,11 +263,8 @@ toolong:
 	return (s1);
 }
 
-
-
-scan(t, f)
-	register int *t;
-	int (*f)();
+static void
+scan(char **t, int (*f)())
 {
 	register char *p, c;
 
@@ -269,25 +273,26 @@ scan(t, f)
 			*p++ = (*f)(c);
 }
 
-tglob(c)
-	register int c;
+static int
+tglob(int c)
 {
 	if (any(c, "[?*"))
 		gflag = 1;
 	return (c);
 }
 
-trim(c)
-	char c;
+static int
+trim(int c)
 {
 
 	return (c & 0177);
 }
 
-getone()
+void
+getone(void)
 {
 	register char *str;
-	int gv[2], *lp;
+	char *gv[2], *lp;
 	struct Glob G;
 
 	switch (getargs()) {
@@ -298,7 +303,7 @@ getone()
 		default:
 			error("Too many names|Multiple file names allowed only on next command");
 	}
-	gv[0] = (lp = genbuf)[0];
+	gv[0] = lp = genbuf;
 	gv[1] = 0;
 	glob(gv, &G);
 	str = G.Ava[0];
@@ -309,8 +314,8 @@ getone()
 	strcpy(file, str);
 }
 
-filioerr(cp)
-	char *cp;
+void
+filioerr(char *cp)
 {
 	register int oerrno;
 
@@ -320,13 +325,12 @@ filioerr(cp)
 	ioerror();
 }
 
-any(c, s)
-	int c;
-	register char *s;
+int
+any(int c, char *s)
 {
 	register int x;
 
-	while (x = *s++)
+	while ((x = *s++))
 		if (x == c)
 			return (1);
 	return (0);

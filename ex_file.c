@@ -1,4 +1,6 @@
+#include <string.h>
 #include "ex.h"
+#include "ex_glob.h"
 /*
  * Ex - a text editor
  * Bill Joy UCB September 1977
@@ -7,7 +9,7 @@
 void
 filename(int comm)
 {
-	register c;
+	int c;
 
 	c = getchar();
 	if (endcmd(c)) {
@@ -36,7 +38,7 @@ filename(int comm)
 				break;
 		}
 	}
-	if (value(HUSH) && comm != 'f' || comm == 'E')
+	if ((value(HUSH) && comm != 'f') || comm == 'E')
 		return;
 	if (file[0] != 0) {
 		lprintf("\"%s\"", file);

@@ -13,3 +13,8 @@ char	**xargv0, **xargv, **argv;
 int	xargc0, xargc, argc;
 
 int	gargc;
+
+void glob(char **, struct Glob *);
+void getone(void);
+void filioerr(char *);
+int any(int, char *);

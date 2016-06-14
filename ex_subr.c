@@ -5,7 +5,8 @@
 
 #include "ex.h"
 
-skipwh()
+int
+skipwh(void)
 {
 	register int wh;
 
@@ -17,7 +18,7 @@ skipwh()
 	return (wh);
 }
 
-
+#if 0
 strcmp(left, right)
 	register char *left, *right;
 {
@@ -27,9 +28,10 @@ strcmp(left, right)
 			return (0);
 	return (*left - *--right);
 }
+#endif
 
-letter(c)
-	register int c;
+int
+letter(int c)
 {
 
 	if (c >= 'a' && c <= 'z')
@@ -52,21 +54,21 @@ strlen(cp)
 }
 #endif
 
-white(c)
-	char c;
+int
+white(int c)
 {
 
 	return (c == ' ' || c == '\t');
 }
 
-digit(c)
-	char c;
+int
+digit(int c)
 {
 	return (c >= '0' && c <= '9');
 }
 
-ucletter(c)
-	char c;
+int
+ucletter(int c)
 {
 	return (c >= 'A' && c <= 'Z');
 }

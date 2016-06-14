@@ -63,8 +63,6 @@ char	home[30];
 char	*Command;
 
 int	getfile(void);
-int	gettty(), getchar(), getsub();
-
 
 #include "ex_vars.h"
 
@@ -89,7 +87,7 @@ struct {
 	int	Atime[2];
 	int	Auid;
 	int	Alines;
-	int	Afname[FNSIZE];
+	char	Afname[FNSIZE];
 	int	Ablocks[100];
 } header;
 
@@ -220,3 +218,18 @@ void ostart(void);
 void ostop(void);
 void flusho(void);
 void putnl(void);
+void wop(void);
+int skipwh(void);
+int letter(int);
+int white(int);
+int digit(int);
+int ucletter(int);
+int getchar(void);
+int peekchar(void);
+int gettty(void);
+int backtab(int);
+int *setin(int *);
+int getsub(void);
+int getch(void);
+void putmark(int *);
+void putmk1(int *, int);

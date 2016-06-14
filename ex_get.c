@@ -9,13 +9,18 @@
  * Think about when ai allowed more.
  */
 
+static int smunch(int, char *);
+static void spruce(char *);
+static void checkjunk(int);
+static int junk(int);
 
 static	junkbs;
 
 int	peekc;
 int	lastc	= '\n';
 
-getchar()
+int
+getchar(void)
 {
 	register c;
 
@@ -46,7 +51,8 @@ again:
 	return (EOF);
 }
 
-peekchar()
+int
+peekchar(void)
 {
 
 	if (peekc == 0)
@@ -57,7 +63,8 @@ peekchar()
 STATIC	int	lastin;
 extern	char	aiflag;
 
-gettty()
+int
+gettty(void)
 {
 	register c;
 	register char *lp, *gp;
@@ -168,8 +175,8 @@ toolong:
 	return (0);
 }
 
-backtab(i)
-	register int i;
+int
+backtab(int i)
 {
 	register int j;
 
@@ -182,9 +189,8 @@ backtab(i)
 	return (i);
 }
 
-smunch(col, ocp)
-	register int col;
-	char *ocp;
+static int
+smunch(int col, char *ocp)
 {
 	register char *cp;
 
@@ -204,8 +210,8 @@ smunch(col, ocp)
 		}
 }
 
-spruce(ocp)
-	register char *ocp;
+static void
+spruce(char *ocp)
 {
 	register char *cp;
 	register c;
@@ -224,8 +230,8 @@ spruce(ocp)
 
 char	cntrlhm[]	= "CTRL(H) discarded\n";
 
-checkjunk(c)
-	char c;
+static void
+checkjunk(int c)
 {
 
 	if (junkbs == 0 && c == '\b') {
@@ -234,8 +240,8 @@ checkjunk(c)
 	}
 }
 
-setin(addr)
-	int *addr;
+int *
+setin(int *addr)
 {
 
 	if (addr == zero)
@@ -245,8 +251,8 @@ setin(addr)
 	return (addr);
 }
 
-junk(c)
-	register int c;
+static int
+junk(int c)
 {
 	return (c == 0 || value(BEAUTIFY) && c < ' ' && c != '\t' && c != '\n' && c != '\f');
 }

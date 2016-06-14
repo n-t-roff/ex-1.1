@@ -1,3 +1,9 @@
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <string.h>
+#include <sys/sysmacros.h>
 #include "ex.h"
 #include "ex_io.h"
 /*
@@ -5,12 +11,13 @@
  * Bill Joy UCB June 1977
  */
 
-wop()
+void
+wop(void)
 {
-	register c;
-	register exclam;
+	int c;
+	int exclam;
 	register int bl;
-	struct stb stbuf;
+	struct stat stbuf;
 
 	c = 0;
 	exclam = 0;
@@ -40,16 +47,18 @@ wop()
 			}
 			if (stat(file, &stbuf))
 				goto cre;
-			if ((stbuf.flags & FILETYP) == FCHSPEC) {
-				if (stbuf.dmajor == DTTYMAJ && stbuf.dminor == DTTYMIN)
+			if (S_ISCHR(stbuf.st_mode)) {
+				if (major(stbuf.st_dev) == DTTYMAJ
+				    && minor(stbuf.st_dev) == DTTYMIN)
 					goto cre;
-				if (stbuf.dmajor == DVNLMAJ && stbuf.dminor == DVNLMIN)
+				if (major(stbuf.st_dev) == DVNLMAJ
+				    && minor(stbuf.st_dev) == DVNLMIN)
 					goto cre;
 			}
 			io = open(file, 1);
 			if (io < 0)
 				ioerror();
-			if (gTTY(io) != 0)
+			if (!isatty(io))
 				error(" File exists@- use \"write! %s\" if you really want to overwrite it", file);
 			close(io);
 cre:
