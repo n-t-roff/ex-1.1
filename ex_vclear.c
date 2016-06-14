@@ -57,7 +57,7 @@ vclrlin(l, tp)
 
 	vigoto(l, 0);
 	if (!holdat)
-		putchar(tp > dol ? '~' : '@');
+		ex_putchar(tp > dol ? '~' : '@');
 	vclreol();
 }
 

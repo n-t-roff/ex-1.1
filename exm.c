@@ -65,7 +65,7 @@ move1(char cflag, int *addrt)
 	} else
 		error("Move to a moved line");
 	change();
-	if (!inglobal)
+	if (!inglobal) {
 		if (cflag) {
 			undap1 = addrt + 1;
 			undap2 = undap1 + lines;
@@ -77,6 +77,7 @@ move1(char cflag, int *addrt)
 			unddel = addrt;
 			unddol = dol;
 		}
+	}
 }
 
 void

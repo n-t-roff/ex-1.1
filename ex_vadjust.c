@@ -138,7 +138,7 @@ vreopen(l, lineno)
 		error("Line too long@for open");
 	pline(lineno);
 	if (Putchar == &listchar)
-		putchar('$');
+		ex_putchar('$');
 	vclreol();
 	return (i);
 }

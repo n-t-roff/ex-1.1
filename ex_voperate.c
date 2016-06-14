@@ -16,7 +16,6 @@ operate(int c, int cnt)
 	register int i;
 	int (*moveop)(), (*deleteop)();
 	register int (*op)();
-	extern int (*Putchar)();
 	char subop;
 	static char lastFKND, lastFCHR;
 

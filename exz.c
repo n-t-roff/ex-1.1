@@ -6,11 +6,12 @@
  */
 
 static void zop2(int, int);
+static void splitit(void);
 
 char	znoclear, zhadpr, zweight;
 
-zop(hadpr)
-	char hadpr;
+void
+zop(char hadpr)
 {
 	register int c, lines, op;
 
@@ -121,10 +122,10 @@ zop2(int lines, int op)
 		pstart();
 	if (op == EOF && zhadpr) {
 		ex_getline(*addr1);
-		putchar('\r' | QUOTE);
+		ex_putchar('\r' | QUOTE);
 		shudclob = 1;
 	} else if (znoclear == 0 && CLEAR)
-		putchar('\032' | QUOTE);
+		ex_putchar('\032' | QUOTE);
 	if (split) {
 		plines(addr1, split - 1, 0);
 		splitit();
@@ -135,7 +136,8 @@ zop2(int lines, int op)
 	plines(addr1, addr2, 0);
 }
 
-splitit()
+static void
+splitit(void)
 {
 	register int l;
 	register char *lp;
@@ -146,8 +148,8 @@ splitit()
 	ex_printf("%s\n", linebuf);
 }
 
-zeq(cnt)
-	int cnt;
+void
+zeq(int cnt)
 {
 
 	znoclear = 0;

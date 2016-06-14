@@ -122,7 +122,7 @@ struct termios tty;
 char	allredraw, pfast;
 int	mask, vcntcol;
 
-extern int	(*Putchar)();
+extern void (*Putchar)();
 
 void listchar(int);
 void normchar(int);
@@ -205,7 +205,7 @@ void dingdong(void);
 char *mesg(char *);
 void normal(void);
 void helpthem(void);
-int putchar(int);
+void ex_putchar(int);
 void flush(void);
 void setcol(int);
 void partinp(void);
@@ -233,3 +233,9 @@ int getsub(void);
 int getch(void);
 void putmark(int *);
 void putmk1(int *, int);
+void xop(int (*)(), int);
+void global(int);
+void save12(void);
+void saveall(void);
+void zop(char);
+void zeq(int);

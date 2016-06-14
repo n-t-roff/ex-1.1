@@ -44,7 +44,7 @@ char vmovcol;
 #endif
 
 void	vdelete(int);
-extern int	(*Outchar)();
+extern void (*Outchar)();
 void	qcount(int);
 void	vputchar(int);
 void	vgoto(int, int);
@@ -76,7 +76,7 @@ int	vrestore(), vrescnt, vresCNT, vdelcnt, vrescurs, vyancnt;
 char	wdkind;
 int	vSCROLL;
 
-extern int	(*Pline)();
+extern void (*Pline)();
 void termchar(int);
 void numbline(int);
 void normline(void);

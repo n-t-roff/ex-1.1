@@ -26,8 +26,8 @@ killed(void)
 	if (value(TERSE) == 0) {
 		ex_printf(" %c%s", Command[0] | ' ', Command + 1);
 		if (Command[strlen(Command) - 1] != 'e')
-			putchar('e');
-		putchar('d');
+			ex_putchar('e');
+		ex_putchar('d');
 	}
 	putNFL();
 }

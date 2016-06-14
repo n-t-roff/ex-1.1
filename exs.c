@@ -227,7 +227,7 @@ ugo(int cnt, int with)
 
 	if (cnt > 0)
 		do
-			putchar(with);
+			ex_putchar(with);
 		while (--cnt > 0);
 }
 

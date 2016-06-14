@@ -133,7 +133,7 @@ normline(void)
 		}
 	}
 	if (!inopen && !inconf)
-		putchar('\n' | QUOTE);
+		ex_putchar('\n' | QUOTE);
 }
 
 static void

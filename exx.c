@@ -1,12 +1,12 @@
+#include <string.h>
 #include "ex.h"
 /*
  * Ex3a - a text editor
  * Bill Joy UCB July 1977
  */
 
-xop(f, c)
-	int (*f)();
-	char c;
+void
+xop(int (*f)(), int c)
 {
 	register int *dp;
 

@@ -103,7 +103,7 @@ vchange(void)
 	vfixcurs();
 	cp = cursor;
 	vsetcurs(wcursor - 1);
-	putchar('$');
+	ex_putchar('$');
 	cursor = cp;
 	setDEL();
 	strcpy(cursor, wcursor);
@@ -498,7 +498,7 @@ vbackup:
 					beep();
 					continue;
 				}
-				while (gcursor < cp) putchar(*gcursor++);
+				while (gcursor < cp) ex_putchar(*gcursor++);
 				*cp = 0;
 				vgotoCL(qcolumn(cursor - 1, genbuf));
 				gcursor = cp;
@@ -513,7 +513,7 @@ vbackup:
 			case '\\':
 				x = destcol;
 				y = destline;
-				putchar('\\');
+				ex_putchar('\\');
 				vcsync();
 				c = getkey();
 				switch (c) {
@@ -533,7 +533,7 @@ vbackup:
 						goto noput;
 				}
 			default:
-				putchar(c);
+				ex_putchar(c);
 noput:
 				if (gcursor > &genbuf[510])
 					error("Line too long");

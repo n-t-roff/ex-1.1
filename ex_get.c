@@ -70,7 +70,6 @@ gettty(void)
 	register char *lp, *gp;
 	char hadup, hadnl;
 	int offset;
-	extern int (*Pline)();
 
 	lp = linebuf;
 	hadnl = 0;
@@ -92,9 +91,9 @@ gettty(void)
 					lastin = 0;
 				if (!OS) {
 					notech(1);
-					putchar('\b');
-					putchar(' ' | QUOTE);
-					putchar('\b');
+					ex_putchar('\b');
+					ex_putchar(' ' | QUOTE);
+					ex_putchar('\b');
 				}
 				setcol(offset);
 				hadup = 1;

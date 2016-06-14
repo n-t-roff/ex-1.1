@@ -692,7 +692,7 @@ vundoit:
 				if (!visual && !CA)
 					vup1();
 				vgoto(LINES - 1, 0);
-				putchar(c);
+				ex_putchar(c);
 				if (CA) {
 					vclreol();
 					vgoto(LINES - 1, 1);
@@ -771,7 +771,7 @@ xtra:
 				splitw = 0;
 				addr = scanfor(genbuf[0]);
 				if (addr == NIL) {
-					putchar('F');
+					ex_putchar('F');
 					beep();
 #if 0
 					vraw();

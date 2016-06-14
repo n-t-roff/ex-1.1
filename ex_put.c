@@ -19,9 +19,9 @@ STATIC	char line[66] = "Error message file not available\n/usr/lib/ex1.1strings"
 STATIC	char *linp = line + 33;
 char *erpath = line + 33;
 STATIC	char phadnl;
-int	(*Outchar)() = termchar;
-int	(*Putchar)() = normchar;
-int	(*Pline)() = normline;
+void	(*Outchar)() = termchar;
+void	(*Putchar)() = normchar;
+void	(*Pline)() = normline;
 
 int (*
 setnumb(int t))()
@@ -36,11 +36,11 @@ setnumb(int t))()
 /*
  * Indirect to current definition of putchar.
  */
-int
-putchar(int c)
+void
+ex_putchar(int c)
 {
 
-	return (*Putchar)(c);
+	(*Putchar)(c);
 }
 
 void
@@ -521,7 +521,7 @@ void
 putnl(void)
 {
 
-	putchar('\n');
+	ex_putchar('\n');
 }
 
 int

@@ -235,7 +235,7 @@ pro(i)
 
 	if (i != 0)
 		pro((i >> 3) & 017777);
-	putchar((i & 7) | '0');
+	ex_putchar((i & 7) | '0');
 }
 
 REset()

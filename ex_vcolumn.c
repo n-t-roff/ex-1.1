@@ -37,7 +37,7 @@ qcolumn(lim, gp)
 		lim[1] = x;
 	if (gp)
 		while (*gp)
-			putchar(*gp++);
+			ex_putchar(*gp++);
 	Outchar = OO;
 	return (vcntcol);
 }

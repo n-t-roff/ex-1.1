@@ -68,7 +68,7 @@ commands(int noprompt, char exitoneof)
 			flush();
 			if (value(HUSH) == 0 && value(PROMPT) && globp == 0 &&
 			    noprompt == 0 && intty && endline) {
-				putchar(':');
+				ex_putchar(':');
 				hadpr = 1;
 				flush();
 			}
@@ -183,7 +183,7 @@ changdir:
 					if (peekchar() == 'p') {
 						tail2of("expand");
 						setCNL();
-						xop(&xpand);
+						xop(&xpand, 0);
 						continue;
 					}
 					tail2of("ex");
@@ -200,7 +200,7 @@ changdir:
 							case '\\':
 								c = getchar();
 							default:
-								putchar(c);
+								ex_putchar(c);
 						}
 					} while (!endcmd(c));
 					continue;
@@ -308,7 +308,7 @@ caseline:
 			nonzero();
 			ex_getline(*addr1);
 			if (c == '\013') {
-				putchar('\013' | QUOTE);	/* prototype UPLINE */
+				ex_putchar('\013' | QUOTE);	/* prototype UPLINE */
 				if (hadpr)
 					shudclob = 1;
 			}
@@ -360,7 +360,7 @@ numberit:
 print:
 			nonzero();
 			if (CLEAR && addr2 - addr1 >= LINES)
-				putchar('\032' | QUOTE);	/* proto */
+				ex_putchar('\032' | QUOTE);	/* proto */
 			plines(addr1, addr2, 1);
 			continue;
 		case 'n':
@@ -527,7 +527,7 @@ dorecover:
 		case 'x':
 			tail("xpand");
 			setCNL();
-			xop(&xpand);
+			xop(&xpand, 0);
 			continue;
 		case 'y':
 			tail("yank");
@@ -536,7 +536,7 @@ dorecover:
 			yank();
 			continue;
 		case 'z':
-			zop();
+			zop(0); /* CK: ??? */
 			pflag = 0;
 			continue;
 		case '=':

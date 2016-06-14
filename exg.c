@@ -9,8 +9,10 @@
 
 #define	GBSIZE	256
 
-global(k)
-	int k;
+static void save(int *, int *);
+
+void
+global(int k)
 {
 	register char *gp;
 	register c;
@@ -81,9 +83,8 @@ global(k)
 	setlastchar(EOF);
 }
 
-save(a1, a2)
-	int *a1;
-	register int *a2;
+static void
+save(int *a1, int *a2)
 {
 	register int *addr, *dest;
 	struct { int integer; };
@@ -105,13 +106,15 @@ save(a1, a2)
 	unddol = dest - 1;
 }
 
-save12()
+void
+save12(void)
 {
 
 	save(addr1, addr2);
 }
 
-saveall()
+void
+saveall(void)
 {
 
 	save(one, dol);

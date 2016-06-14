@@ -20,14 +20,14 @@ dographic()
 				if (c < ' ' || c == 0177)
 					c = '?';
 				else if (UPPERCASE && ucletter(c)) {
-					putchar('\\');
+					ex_putchar('\\');
 					c = letter(c);
 				}
 				break;
 			case '\t':
 				break;
 		}
-		putchar(c);
+		ex_putchar(c);
 	}
 }
 

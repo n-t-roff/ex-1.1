@@ -136,7 +136,7 @@ iostats(void)
 			}
 			if (cntodd)
 				ex_printf("%ld dirty", cntodd);
-			putchar(')');
+			ex_putchar(')');
 		}
 		putnl();
 	}
