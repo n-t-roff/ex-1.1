@@ -7,7 +7,8 @@
  * Bill Joy UCB June 1977
  */
 
-oop()
+void
+oop(void)
 {
 #ifndef VISUAL
 
@@ -78,8 +79,8 @@ oop()
 	netchHAD(lines);
 }
 
-vskipwh(cp)
-	register char *cp;
+char *
+vskipwh(char *cp)
 {
 
 	while (white(*cp) && cp[1])
@@ -87,7 +88,8 @@ vskipwh(cp)
 	return (cp);
 }
 
-voinit()
+void
+voinit(void)
 {
 	register int i;
 

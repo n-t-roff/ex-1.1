@@ -15,13 +15,13 @@
 #define	CCL	6
 #define	NCCL	8
 #define	CDOL	10
-#define	CEOF	11
+#define	EX_CEOF	11
 #define	CKET	12
 #define	CBRC	14
 #define	CLET	15
 
-#define	savere(a)	copy(a, &re, sizeof re)
-#define	resre(a)	copy(&re, a, sizeof re)
+#define	savere(a)	copy((char *)(a), (char *)&re, sizeof re)
+#define	resre(a)	copy((char *)&re, (char *)(a), sizeof re)
 
 struct savre {
 	char	sexpbuf[ESIZE + 4];

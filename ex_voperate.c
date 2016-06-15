@@ -1,3 +1,4 @@
+#include <string.h>
 #include <stdio.h>
 #include "ex.h"
 #ifdef VISUAL
@@ -10,12 +11,18 @@
 
 #define	blank()	white(wcursor[0])
 
+static int find(int);
+static void word(void (*)(), int);
+static void eend(void (*)(), int);
+static int edge(void);
+static int margin(void);
+
 void
 operate(int c, int cnt)
 {
 	register int i;
-	int (*moveop)(), (*deleteop)();
-	register int (*op)();
+	void (*moveop)(), (*deleteop)();
+	void (*op)();
 	char subop;
 	static char lastFKND, lastFCHR;
 
@@ -190,14 +197,14 @@ fixup:
 space:
 		case 'l':
 			op = moveop;
-			if (margin() || op == &vmove && edge())
+			if (margin() || (op == &vmove && edge()))
 				goto errlab;
 moveit:
 			while (cnt > 0 && !margin()) {
 				wcursor += dir;
 				cnt--;
 			}
-			if (margin() && op == &vmove || wcursor < linebuf)
+			if ((margin() && op == &vmove) || wcursor < linebuf)
 				wcursor -= dir;
 			break;
 		case 'D':
@@ -224,8 +231,8 @@ errlab:
 	(*op)(c);
 }
 
-find(c)
-	char c;
+static int
+find(int c)
 {
 
 	for(;;) {
@@ -237,9 +244,8 @@ find(c)
 	}
 }
 
-word(op, cnt)
-	register int (*op)();
-	int cnt;
+static void
+word(void (*op)(), int cnt)
 {
 	register int which;
 	register char *iwc;
@@ -291,9 +297,8 @@ word(op, cnt)
 }
 
 #ifdef UNIMP
-eend(op, cnt)
-	register int (*op)();
-	int cnt;
+static void
+eend(void (*op)(), int cnt)
 {
 	register int which;
 	register char *iwc;
@@ -322,8 +327,8 @@ eend(op, cnt)
 }
 #endif
 		
-wordof(which, wcursor)
-	char which, *wcursor;
+int
+wordof(char which, char *wcursor)
 {
 
 	if (white(*wcursor))
@@ -331,8 +336,8 @@ wordof(which, wcursor)
 	return (!wdkind || wordch(wcursor) == which);
 }
 
-wordch(wcursor)
-	char *wcursor;
+int
+wordch(char *wcursor)
 {
 	register int c;
 
@@ -340,7 +345,8 @@ wordch(wcursor)
 	return (letter(c) || digit(c) || c == '_');
 }
 
-edge()
+static int
+edge(void)
 {
 
 	if (linebuf[0] == 0)
@@ -351,7 +357,8 @@ edge()
 		return (wcursor == linebuf);
 }
 
-margin()
+static int
+margin(void)
 {
 
 	return (wcursor < linebuf || wcursor[0] == 0);

@@ -12,8 +12,8 @@
  * characters through position cp of the
  * current line.
  */
-column(cp)
-	register char *cp;
+int
+column(char *cp)
 {
 
 	if (cp == 0)
@@ -21,8 +21,8 @@ column(cp)
 	return (qcolumn(cp, 0));
 }
 
-qcolumn(lim, gp)
-	register char *lim, *gp;
+int
+qcolumn(char *lim, char *gp)
 {
 	register int x;
 	int (*OO)();

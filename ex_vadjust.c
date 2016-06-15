@@ -1,3 +1,4 @@
+#include <string.h>
 #include "ex.h"
 #ifdef VISUAL
 #include "ex_tty.h"
@@ -11,8 +12,8 @@
 static void vmoveitup(int);
 static void vscroll(int);
 
-vback(i)
-	register int i;
+int *
+vback(int i)
 {
 	register int j, *tp;
 
@@ -39,7 +40,8 @@ vback(i)
  * normally used; if the terminal does not have an addressible
  * cursor, then we use the last line but not the last column.
  */
-vdepth()
+int
+vdepth(void)
 {
 	register int i;
 
@@ -53,8 +55,8 @@ vdepth()
  * The caller is responsible for adjusting vcline as he/she sees fit.
  * We return the number of lines occupied by this line on the screen.
  */
-vopen(tp, l)
-	int *tp, l;
+int
+vopen(int *tp, int l)
 {
 	register int i, j;
 
@@ -106,8 +108,8 @@ vopen(tp, l)
 	return (i);
 }
 
-vfixopen(i)
-	register int i;
+void
+vfixopen(int i)
 {
 	register int need;
 
@@ -127,8 +129,8 @@ vfixopen(i)
  * characters of the line and clear to the end of
  * the line, returning the number of lines we used.
  */
-vreopen(l, lineno)
-	int l, lineno;
+int
+vreopen(int l, int lineno)
 {
 	register int i;
 
@@ -147,8 +149,8 @@ vreopen(l, lineno)
  * Return the number of new screen lines required
  * to make i lines starting at t fit on the screen.
  */
-vfit(i, t)
-	int i, *t;
+int
+vfit(int i, int *t)
 {
 	register int j;
 
@@ -171,8 +173,8 @@ vfit(i, t)
  * If more than one line is being rolled, switch to
  * cooked mode so that the user can stop or interrupt the output.
  */
-vroll(ocnt)
-	int ocnt;
+void
+vroll(int ocnt)
 {
 	register int cnt;
 
@@ -206,8 +208,8 @@ vroll(ocnt)
  * be changed to reflect this call.  We make the argument line
  * be the last line of the screen.
  */
-vrollup(ip)
-	int *ip;
+void
+vrollup(int *ip)
 {
 	register int i;
 
@@ -251,9 +253,11 @@ vscroll(int i)
 #endif
 	if (i == 0)
 		return;
-	copy(tlines, vtube, sizeof vtube);
-	copy(vtube, &tlines[i], sizeof vtube - i * sizeof vtube[0]);
-	copy(&vtube[TUBELINES - i], tlines, i * sizeof vtube[0]);
+	copy((char *)tlines, (char *)vtube, sizeof vtube);
+	copy((char *)vtube, (char *)&tlines[i],
+	    sizeof vtube - i * sizeof vtube[0]);
+	copy((char *)&vtube[TUBELINES - i], (char *)tlines,
+	    i * sizeof vtube[0]);
 	for (j = TUBELINES -  i; j < TUBELINES; j++)
 		vclrbyte(vtube[j], VCOLUMNS);
 	for (j = 0; j <= vcnt; j++)
@@ -264,7 +268,8 @@ vscroll(int i)
  * Discard logical lines due to physical
  * wandering off the screen.
  */
-vscrap()
+void
+vscrap(void)
 {
 	register int i, j;
 
@@ -294,8 +299,8 @@ vscrap()
 /*
  * Open blank lines on the screen
  */
-vopenup(i)
-	int i;
+void
+vopenup(int i)
 {
 	register int j, l;
 
@@ -319,8 +324,8 @@ vopenup(i)
  * Synchronize the screen.  Vredraw is more ambitious than vsync
  * but correspondingly may take more resources to do its deed.
  */
-vredraw(p)
-	register int p;
+void
+vredraw(int p)
 {
 	register int l, *tp;
 	char temp[LBSIZE];
@@ -396,8 +401,8 @@ vsync(int p)
  * starting with the line at vfirst as the
  * result of a delete or join.
  */
-velide(cnt, vfirst)
-	int cnt, vfirst;
+void
+velide(int cnt, int vfirst)
 {
 	register int i;
 
@@ -417,7 +422,8 @@ velide(cnt, vfirst)
 	vcnt -= cnt;
 }
 
-vup1()
+void
+vup1(void)
 {
 
 	vmoveitup(1);

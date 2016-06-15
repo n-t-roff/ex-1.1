@@ -11,7 +11,8 @@
 /*
  * Fix the cursor to be positioned in the correct place
  */
-vfixcurs()
+void
+vfixcurs(void)
 {
 
 	vsetcurs(cursor);
@@ -20,8 +21,8 @@ vfixcurs()
 /*
  * Set the cursor at nc
  */
-vsetcurs(nc)
-	register char *nc;
+void
+vsetcurs(char *nc)
 {
 	register int col;
 
@@ -35,8 +36,8 @@ vsetcurs(nc)
 /*
  * Invisible goto
  */
-vigoto(y, x)
-	int y, x;
+void
+vigoto(int y, int x)
 {
 
 	if (y < 0)
@@ -49,7 +50,8 @@ vigoto(y, x)
  * Sync the cursor... i.e. make the current invisible position
  * the current actual physical position.
  */
-vcsync()
+void
+vcsync(void)
 {
 
 	vgoto(destline, destcol);
@@ -60,7 +62,8 @@ vcsync()
  * X may be greater than VCOLUMNS and is folded here
  * the screen is rolled up if need be.
  */
-vgotoCL(x)
+void
+vgotoCL(int x)
 {
 
 	vgoto(vliny[vcline], x);

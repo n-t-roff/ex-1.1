@@ -26,7 +26,7 @@ static int tglob(int);
 static int trim(int);
 
 static	char **av;
-static	char *string, *strend;
+static	char *string, *str_end;
 static	int ncoll;
 
 static	char *gpathp;
@@ -46,7 +46,7 @@ glob(char **v, struct Glob *g0)
 	g = g0;
 	av = ava;
 	string = ab;
-	strend = ab + 511;
+	str_end = ab + 511;
 	ncoll = 0;
 	gpathp = file;
 	gflag = 0;
@@ -250,12 +250,12 @@ cat(char *as1, char *as2)
 	s2 = string;
 	s1 = as1;
 	while (*s2++ = (*s1++ & 0177))
-		if (s2 >= strend)
+		if (s2 >= str_end)
 			goto toolong;
 	s1 = as2;
 	s2--;
 	while (*s2++ = *s1++)
-		if (s2 > strend)
+		if (s2 > str_end)
 toolong:
 			error("Argument list too long@- editor limit 512 characters");
 	s1 = string;

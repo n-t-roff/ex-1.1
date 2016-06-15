@@ -1,3 +1,4 @@
+#include <string.h>
 #include "ex.h"
 #ifdef VISUAL
 #include "ex_vis.h"
@@ -38,8 +39,8 @@ setwork(char c)
 	*lastcp++ = c;
 }
 
-xtrey(c)
-	char c;
+void
+xtrey(char c)
 {
 
 	hadx = 2;
@@ -66,14 +67,15 @@ addtext(char *cp)
 		lastcmd[0] = 0;
 }
 
-setDEL()
+void
+setDEL(void)
 {
 
 	setBUF(DEL);
 }
 
-setBUF(BUF)
-	char *BUF;
+void
+setBUF(char *BUF)
 {
 	char c;
 

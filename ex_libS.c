@@ -7,6 +7,7 @@
  * we need a printf which prints through putchar().
  */
 
+#include <string.h>
 #include "ex.h"
 
 #if 0
@@ -31,8 +32,8 @@ strcat(to, from)
 }
 #endif
 
-strend(cp)
-	register char *cp;
+char *
+strend(char *cp)
 {
 
 	while (*cp)
@@ -40,8 +41,8 @@ strend(cp)
 	return (cp);
 }
 
-strcLIN(dp)
-	char *dp;
+char *
+strcLIN(char *dp)
 {
 
 	return (strcpy(linebuf, dp));

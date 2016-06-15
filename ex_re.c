@@ -5,11 +5,15 @@
  * Bill Joy UCB June/September 1977
  */
 
-compile(eof, oknl)
-	int eof;
-	char oknl;
+static char *cerror(char *);
+static int same(int, int);
+static int advance(char *, char *);
+static int cclass(char *, int, int);
+
+int
+compile(int eof, char oknl)
 {
-	register c;
+	int c;
 	register char *ep;
 	char *lastep;
 	char bracket[NBRA], *bracketp, *rhsp;
@@ -65,7 +69,7 @@ complex:
 		if (c == eof || c == EOF) {
 			if (bracketp != bracket)
 				cerror("Unmatched \\(|More \\('s than \\)'s in regular expression");
-			*ep++ = CEOF;
+			*ep++ = EX_CEOF;
 			return (eof);
 		}
 		if (value(MAGIC)) {
@@ -184,7 +188,7 @@ magic:
 		case '\n':
 			if (oknl) {
 				ungetchar(c);
-				*ep++ = CEOF;
+				*ep++ = EX_CEOF;
 				return (eof);
 			}
 			cerror("Badly formed re|Missing closing delimiter for regular expression");
@@ -211,23 +215,23 @@ defchar:
 	}
 }
 
-cerror(s)
-	char *s;
+static char *
+cerror(char *s)
 {
 
 	expbuf[0] = 0;
 	error(s);
 }
 
-same(a, b)
-	register int a, b;
+static int
+same(int a, int b)
 {
 
 	return (a == b || value(IGNORECASE) && (a ^ b) == ' ' && letter(a) == letter(b));
 }
 
-execute(gf, addr)
-	int *addr;
+int
+execute(int gf, int *addr)
 {
 	register char *p1, *p2;
 	register c;
@@ -273,8 +277,8 @@ execute(gf, addr)
 
 #define	uletter(c)	(letter(c) || c == '_')
 
-advance(lp, ep)
-	register char *lp, *ep;
+static int
+advance(char *lp, char *ep)
 {
 	register char *curlp;
 	char *nextep, *sp, *sp1, c;
@@ -308,7 +312,7 @@ advance(lp, ep)
 			continue;
 		return (0);
 
-	case CEOF:
+	case EX_CEOF:
 		loc2 = lp;
 		return (1);
 
@@ -382,10 +386,8 @@ star:
 	}
 }
 
-cclass(set, c, af)
-	register char *set;
-	register c;
-	int af;
+static int
+cclass(char *set, int c, int af)
 {
 	register n;
 
@@ -406,9 +408,8 @@ cclass(set, c, af)
 	return (!af);
 }
 
-copy(to, from, size)
-	register char *from, *to;
-	register int size;
+void
+copy(char *to, char *from, int size)
 {
 
 	if (size > 0)

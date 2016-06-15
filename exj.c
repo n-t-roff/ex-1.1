@@ -11,7 +11,7 @@ STATIC	int jcount;
 void
 join(char c)
 {
-	register *a1;
+	int *a1;
 	register char *cp, *cp1;
 
 	cp = genbuf;
@@ -25,14 +25,14 @@ join(char c)
 			if (*cp1 && cp > genbuf && cp[-1] != ' ' && cp[-1] != '\t')
 				*cp++ = ' ';
 		}
-		while (*cp++ = *cp1++)
+		while ((*cp++ = *cp1++))
 			if (cp > &genbuf[LBSIZE-2])
 				error("Line overflow|Result line of join would be longer than 510 characters");
 		cp--;
 	}
 	cp = genbuf;
 	cp1 = linebuf;
-	while (*cp1++ = *cp++)
+	while ((*cp1++ = *cp++))
 		continue;
 	delete();
 	jcount = 1;

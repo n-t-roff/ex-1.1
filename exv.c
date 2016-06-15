@@ -6,7 +6,10 @@
  * Bill Joy UCB June 1977
  */
 
-vop()
+static char *vinit(void);
+
+void
+vop(void)
 {
 #ifndef VISUAL
 	error("No visual in this version");
@@ -85,7 +88,8 @@ vop()
 	undiddle();
 }
 
-vinit()
+static char *
+vinit(void)
 {
 	register int *tp;
 	register int voy, vny;
@@ -155,8 +159,8 @@ vraw()
 }
 #endif
 
-vok(atube)
-	register char *atube;
+void
+vok(char *atube)
 {
 	register int i;
 
@@ -183,7 +187,8 @@ vok(atube)
 }
 
 #endif
-undiddle()
+void
+undiddle(void)
 {
 
 	if (diddle)

@@ -8,10 +8,16 @@
  * Bill Joy UCB September 1977
  */
 
+static int Vmain(char *);
 static void vshift(void);
+static void vyank(int);
+static void vremote(int, int (*)());
+static char *vundcurs(void);
+static int vrestore(void);
+static void vsyncCL(void);
 
-vmain(ic)
-	char *ic;
+int
+vmain(char *ic)
 {
 	register int i;
 
@@ -24,8 +30,8 @@ char	vscandir[3] = "/\n";
 
 static	char op;
 
-Vmain(ic)
-	char *ic;
+static int
+Vmain(char *ic)
 {
 	register int c, cnt, i;
 	char hadcnt, first, *oglobp;
@@ -484,7 +490,8 @@ yok:
 				vdoappend(genbuf);
 				if (!visual) {
 					holdat = 1;
-					vclrlin(c);
+					/* CK: 0 ok since holdat=1 */
+					vclrlin(c, 0);
 					holdat = 0;
 					voinit();
 				} else {
@@ -803,8 +810,8 @@ it:
 	}
 }
 
-vyank(cnt)
-	int cnt;
+static void
+vyank(int cnt)
 {
 
 	DEL[0] = OVERBUF;
@@ -812,7 +819,8 @@ vyank(cnt)
 	copy(vylines, dot, cnt * sizeof vylines[0]);
 }
 
-vgetcnt()
+int
+vgetcnt(void)
 {
 	register int c, cnt;
 
@@ -829,8 +837,8 @@ vgetcnt()
 	return(cnt);
 }
 
-vremote(cnt, f)
-	int cnt, (*f)();
+static void
+vremote(int cnt, int (*f)())
 {
 
 	addr1 = dot;
@@ -840,8 +848,8 @@ vremote(cnt, f)
 	inglobal--;
 }
 
-vfindcol(i)
-	int i;
+char *
+vfindcol(int i)
 {
 	register char *cp;
 
@@ -853,7 +861,8 @@ vfindcol(i)
 	return (cp);
 }
 
-vsave()
+int
+vsave(void)
 {
 	char genbuf[LBSIZE];
 
@@ -866,7 +875,8 @@ vsave()
 	return (1);
 }
 
-vundcurs()
+static char *
+vundcurs(void)
 {
 	register char *lp, *gp;
 
@@ -879,7 +889,8 @@ vundcurs()
 	return (vskipwh(linebuf));
 }
 
-vrestore()
+static int
+vrestore(void)
 {
 
 	if (vresCNT == vrescnt)
@@ -889,13 +900,15 @@ vrestore()
 	return (0);
 }
 
-vsyncCL()
+static void
+vsyncCL(void)
 {
 
 	vsync(vliny[vcline]);
 }
 
-getDOT()
+void
+getDOT(void)
 {
 
 	ex_getline(*dot);

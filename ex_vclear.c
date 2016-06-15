@@ -8,10 +8,13 @@
  * Bill Joy UCB September, 1977
  */
 
+static void vputs(char *);
+
 /*
  * Clear the entire (physical and logical) screen
  */
-vclear()
+void
+vclear(void)
 {
 	register int i, j;
 
@@ -26,8 +29,8 @@ vclear()
 /*
  * Put out a control sequence to the terminal.
  */
-vputs(cp)
-	register char *cp;
+static void
+vputs(char *cp)
 {
 
 	while (*cp)
@@ -37,9 +40,8 @@ vputs(cp)
 /*
  * Clear bytes logically
  */
-vclrbyte(cp, i)
-	register char *cp;
-	register int i;
+void
+vclrbyte(char *cp, int i)
 {
 
 	if (i > 0)
@@ -51,8 +53,8 @@ vclrbyte(cp, i)
 /*
  * Clear a physical line
  */
-vclrlin(l, tp)
-	int l, *tp;
+void
+vclrlin(int l, int *tp)
 {
 
 	vigoto(l, 0);

@@ -1,3 +1,4 @@
+#include <unistd.h>
 #include "ex.h"
 #ifdef VISUAL
 #include "ex_tty.h"
@@ -7,18 +8,21 @@
  * Bill Joy UCB September 1977
  */
 
+static int getbr(void);
+
 char	Peekkey;
 
-ungetkey(c)
-	char c;
+void
+ungetkey(int c)
 {
 
 	Peekkey = c;
 }
 
-getkey()
+int
+getkey(void)
 {
-	register char c;
+	int c;
 
 	do
 		c = getbr();
@@ -26,17 +30,19 @@ getkey()
 	return (c);
 }
 
-peekbr()
+int
+peekbr(void)
 {
-	register char c;
+	int c;
 
 	Peekkey = getbr();
 	return (Peekkey == 0);
 }
 
-getbr()
+static int
+getbr(void)
 {
-	char c;
+	int c;
 
 	if (Peekkey) {
 		c = Peekkey;
@@ -55,7 +61,8 @@ getbr()
 	return (c);
 }
 
-getesc()
+int
+getesc(void)
 {
 	register int c;
 
@@ -70,7 +77,8 @@ getesc()
 	return (c);
 }
 
-peekkey()
+int
+peekkey(void)
 {
 
 	Peekkey = getkey();

@@ -32,7 +32,9 @@ int tputs(const char *str, int affcnt, int (*putc)(int));
 #define	FNSIZE	64
 #define	LBSIZE	512
 
+#ifndef EOF
 #define	EOF	-1
+#endif
 
 char	ruptible, inglobal, inopen, inconf, listf, endline, laste, intty;
 char	shudclob, diddle, die;
@@ -120,7 +122,7 @@ char	aiflag;
 int	pid, rpid, status;
 struct termios tty;
 char	allredraw, pfast;
-int	mask, vcntcol;
+int	mask;
 
 extern void (*Putchar)();
 
@@ -239,3 +241,18 @@ void save12(void);
 void saveall(void);
 void zop(char);
 void zeq(int);
+void xtrey(char);
+void setDEL(void);
+void setBUF(char *);
+void oop(void);
+char *vskipwh(char *);
+void voinit(void);
+void vop(void);
+void undiddle(void);
+int compile(int, char);
+int execute(int, int *);
+void copy(char *, char *, int);
+char *strend(char *);
+char *strcLIN(char *);
+int column(char *);
+int qcolumn(char *, char *);
