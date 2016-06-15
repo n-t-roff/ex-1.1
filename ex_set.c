@@ -1,9 +1,15 @@
 #include <string.h>
 #include "ex.h"
+#include "ex_tty.h"
 /*
  * Ex - a text editor
  * Bill Joy UCB September 1977
  */
+
+static int setend(void);
+static void propts(char);
+static void propt(struct varbl *);
+static void pro(int);
 
 char	shellname[ONMSZ]		= "/bin/sh";
 char	direct[ONMSZ]		= "/tmp";
@@ -174,14 +180,15 @@ next:
 	eol();
 }
 
-setend()
+static int
+setend(void)
 {
 
 	return (white(peekchar()) || endcmd(peekchar()));
 }
 
-propts(all)
-	char all;
+static void
+propts(char all)
 {
 	register struct varbl *vp;
 
@@ -205,8 +212,8 @@ propts(all)
 	}
 }
 
-propt(vp)
-	register struct varbl *vp;
+static void
+propt(struct varbl *vp)
 {
 
 	switch (vp->vtype) {
@@ -229,8 +236,8 @@ propt(vp)
 	flush();
 }
 
-pro(i)
-	register int i;
+static void
+pro(int i)
 {
 
 	if (i != 0)
@@ -238,7 +245,8 @@ pro(i)
 	ex_putchar((i & 7) | '0');
 }
 
-REset()
+void
+REset(void)
 {
 	register struct varbl *vp;
 

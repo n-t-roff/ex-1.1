@@ -31,7 +31,7 @@ struct savre {
 	char	*sbraelist[NBRA];
 } re, scanre, subre;
 
-char	rhsbuf[LBSIZE / 2];
+char	rhsbuf[LBSIZE / 2 + 1];
 
 char	*loc1, *loc2, *locs;
 char	*linebp;

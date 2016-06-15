@@ -1,3 +1,4 @@
+#include <time.h>
 #include <stdarg.h>
 #include <setjmp.h>
 #include <termios.h>
@@ -81,12 +82,13 @@ int	getfile(void);
 
 char	normtty;
 struct termios	normf;
-int	oldhup;
+void	(*oldhup)(int);
 void	onhup(void);
-int	oldquit, onintr();
+void	(*oldquit)(int);
+void	onintr(int);
 
 struct {
-	int	Atime[2];
+	time_t	Atime;
 	int	Auid;
 	int	Alines;
 	char	Afname[FNSIZE];
@@ -106,12 +108,12 @@ int	TMODE;
 extern int	lastc;
 int	peekc;
 jmp_buf	resetlab;		/* For error throws to top level (cmd mode) */
-#define	getexit(a)	copy(a, resetlab, sizeof (jmp_buf))
+#define	getexit(a)	copy((char *)a, (char *)resetlab, sizeof (jmp_buf))
 #define	lastchar()	lastc
 #define	outchar(c)	(*Outchar)(c)
 #define	pline(no)	(*Pline)(no)
 #define	reset()		longjmp(resetlab,1)
-#define	resexit(a)	copy(resetlab, a, sizeof (jmp_buf))
+#define	resexit(a)	copy((char *)resetlab, (char *)a, sizeof (jmp_buf))
 #define	setexit()	setjmp(resetlab)
 #define	setlastchar(c)	lastc = c
 #define	ungetchar(c)	peekc = c
@@ -135,8 +137,8 @@ void lprintf(char *, ...);
 void lvprintf(char *, va_list);
 void ex_printf(char *, ...);
 void ex_vprintf(char *, va_list);
-int (*setlist(void))();
-int (*setnorm(void))();
+void (*setlist(void))();
+void (*setnorm(void))();
 void setoutt(void);
 void ex_newline(void);
 void pstop(void);
@@ -166,8 +168,8 @@ void fileinit(void);
 void cleanup(void);
 void clrstats(void);
 int iostats(void);
-int plural(int);
-int ex_getline(int);
+char *plural(int);
+char *ex_getline(int);
 int putline(void);
 void ioerror(void);
 void synctmp(void);
@@ -256,3 +258,21 @@ char *strend(char *);
 char *strcLIN(char *);
 int column(char *);
 int qcolumn(char *, char *);
+char *genindent(int);
+char *vpastwh(char *);
+int whitecnt(char *);
+char *vgetline(int, char *, char *);
+void vdoappend(char *);
+void shift(int, int);
+void dographic(void);
+void doulg(void);
+int getargs(void);
+char *unpack(char *);
+void pack(char *);
+void ex_unix(void);
+void unix2(char *, char, char *);
+void recover(void);
+void waitfor(void);
+void revocer(void);
+int preserve(void);
+void REset(void);

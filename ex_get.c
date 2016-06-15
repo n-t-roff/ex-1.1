@@ -1,3 +1,5 @@
+#include <string.h>
+#include <unistd.h>
 #include "ex.h"
 #include "ex_tty.h"
 #include "ex_vis.h"
@@ -14,7 +16,7 @@ static void spruce(char *);
 static void checkjunk(int);
 static int junk(int);
 
-static	junkbs;
+static	int junkbs;
 
 int	peekc;
 int	lastc	= '\n';
@@ -22,7 +24,7 @@ int	lastc	= '\n';
 int
 getchar(void)
 {
-	register c;
+	int c;
 
 	c = peekc;
 	if (c != 0) {
@@ -66,7 +68,7 @@ extern	char	aiflag;
 int
 gettty(void)
 {
-	register c;
+	int c;
 	register char *lp, *gp;
 	char hadup, hadnl;
 	int offset;
@@ -120,7 +122,7 @@ gettty(void)
 						*lp++ = ' ';
 				}
 				gp = genbuf;
-				while (*lp++ = *gp++)
+				while ((*lp++ = *gp++))
 					continue;
 				lp--;
 			}
@@ -213,10 +215,10 @@ static void
 spruce(char *ocp)
 {
 	register char *cp;
-	register c;
+	int c;
 
 	cp = ocp;
-	while (c = *ocp++) {
+	while ((c = *ocp++)) {
 		c &= 0177;
 		if (junk(c)) {
 			checkjunk(c);
@@ -253,5 +255,6 @@ setin(int *addr)
 static int
 junk(int c)
 {
-	return (c == 0 || value(BEAUTIFY) && c < ' ' && c != '\t' && c != '\n' && c != '\f');
+	return (c == 0 || (value(BEAUTIFY) && c < ' ' && c != '\t'
+	    && c != '\n' && c != '\f'));
 }

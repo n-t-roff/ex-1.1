@@ -11,20 +11,20 @@
 static void slobber(int);
 
 /* Put in assembly language to save space */
-int (*
+void (*
 setlist(void))()
 {
-	register int (*P)();
+	void (*P)();
 
 	P = Putchar;
 	Putchar = &listchar;
 	return (P);
 }
 
-int (*
+void (*
 setnorm(void))()
 {
-	register int (*P)();
+	void (*P)();
 
 	P = Putchar;
 	Putchar = &normchar;
@@ -56,7 +56,7 @@ escit:
 		default:
 			if (c & QUOTE)
 				break;
-			if (c < ' ' && c != '\n' || c == 0177) {
+			if ((c < ' ' && c != '\n') || c == 0177) {
 				outchar('\\');
 				if (c == 0177) {
 					outchar('1');
@@ -176,7 +176,7 @@ lprintf(char *fmt, ...)
 void
 lvprintf(char *fmt, va_list ap)
 {
-	int (*P)();
+	void (*P)();
 
 	P = setlist();
 	ex_vprintf(fmt, ap);

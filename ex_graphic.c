@@ -5,12 +5,13 @@
  * Bill Joy UCB September 1977
  */
 
-dographic()
+void
+dographic(void)
 {
 	register char *lp;
-	register c;
+	int c;
 
-	for (lp = linebuf; c = *lp++;) {
+	for (lp = linebuf; (c = *lp++);) {
 		switch (c) {
 			case '\b':
 				if (!OS)
@@ -31,11 +32,12 @@ dographic()
 	}
 }
 
-doulg()
+void
+doulg(void)
 {
 	register char *lp, *gp;
 	char *maxgp;
-	register c;
+	int c;
 	char csw;
 	int col;
 
@@ -43,7 +45,7 @@ doulg()
 	*gp = 0;
 	maxgp = gp;
 	col = 0;
-	for (lp = linebuf; c = *lp++;) {
+	for (lp = linebuf; (c = *lp++);) {
 		switch (c) {
 			case '\t':
 				while ((col & 7) != 7) {
@@ -81,7 +83,7 @@ ovflo:
 	}
 	*maxgp = 0;
 	strcLIN(genbuf);
-	for (lp = linebuf, gp = genbuf; c = *lp; gp++, lp++)
+	for (lp = linebuf, gp = genbuf; (c = *lp); gp++, lp++)
 		if (c & QUOTE) {
 			c &= 0177;
 			if (c == 0)

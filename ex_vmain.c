@@ -1,3 +1,4 @@
+#include <string.h>
 #include "ex.h"
 #ifdef VISUAL
 #include "ex_tty.h"
@@ -11,7 +12,7 @@
 static int Vmain(char *);
 static void vshift(void);
 static void vyank(int);
-static void vremote(int, int (*)());
+static void vremote(int, void (*)());
 static char *vundcurs(void);
 static int vrestore(void);
 static void vsyncCL(void);
@@ -36,7 +37,8 @@ Vmain(char *ic)
 	register int c, cnt, i;
 	char hadcnt, first, *oglobp;
 	extern char Peekkey, *genindent();
-	int (*OP)(), ind, vmunddot, *addr;
+	void (*OP)();
+	int ind, vmunddot, *addr;
 	extern char *loc1;
 
 	if (nextic) {
@@ -418,7 +420,7 @@ yok:
 				goto vmark;
 			case 'J':	/* join lines */
 				if (cnt > TUBELINES || dot == dol ||
-				    hadcnt && cnt == 1) {
+				    (hadcnt && cnt == 1)) {
 					beep();
 					continue;
 				}
@@ -429,13 +431,14 @@ yok:
 				if (cnt > dol - dot + 1)
 					cnt = dol - dot + 1;
 				vrescnt = cnt;
-				copy(vulines, dot, cnt * sizeof vulines[0]);
+				copy((char *)vulines, (char *)dot,
+				    cnt * sizeof vulines[0]);
 				vdelcnt = 1;
 				vresaddr = dot;
 				vrescurs = cursor;
 				vundkind = VMANY;
 				cursor = strend(linebuf);
-				vremote(cnt, join);
+				vremote(cnt, (void (*)())join);
 				vsave();
 				velide(cnt - 1, vcline + 1);
 				vsyncCL();
@@ -453,7 +456,8 @@ yok:
 				vsave();
 				setLAST();
 				vrescnt = cnt;
-				copy(vulines, dot, cnt * sizeof vulines[0]);
+				copy((char *)vulines, (char *)dot,
+				    cnt * sizeof vulines[0]);
 				vdelcnt = cnt;
 				vresaddr = dot;
 				vrescurs = cursor;
@@ -570,7 +574,7 @@ yok:
 					continue;
 			case FS:	/* quit gets you out like a q */
 				if (inglobal)
-					onintr();
+					onintr(0);
 			case 'q':	/* quit */
 				vch = 'q';
 				vsave();
@@ -608,7 +612,8 @@ yok:
 				vdelcnt = vyancnt;
 				vresaddr = dot + 1;
 				vrescurs = 0;
-				copy(vulines, vylines, vyancnt * sizeof vylines[0]);
+				copy((char *)vulines, (char *)vylines,
+				    vyancnt * sizeof vylines[0]);
 				vresCNT = 0;
 				vrescnt = vyancnt;
 				append(vrestore, dot);
@@ -630,7 +635,10 @@ yok:
 					}
 					if (vdelcnt > 0) {
 						dot = vresaddr + vrescnt;
-						copy(vulines, dot, vdelcnt * sizeof vulines[0]);
+						copy((char *)vulines,
+						    (char *)dot,
+						    vdelcnt *
+						    sizeof vulines[0]);
 						vremote(vdelcnt, delete);
 					}
 					c = vrescnt;
@@ -753,7 +761,7 @@ oops:
 				vch = -1;
 				if (globp && *globp) {
 					c = *globp++;
-					if (!visual || c != 'v' && c != 'z')
+					if (!visual || (c != 'v' && c != 'z'))
 xtra:
 						error("Extra chars|Extra characters after search pattern");
 					vch = *globp++;
@@ -816,7 +824,7 @@ vyank(int cnt)
 
 	DEL[0] = OVERBUF;
 	vyancnt = cnt;
-	copy(vylines, dot, cnt * sizeof vylines[0]);
+	copy((char *)vylines, (char *)dot, cnt * sizeof vylines[0]);
 }
 
 int
@@ -838,7 +846,7 @@ vgetcnt(void)
 }
 
 static void
-vremote(int cnt, int (*f)())
+vremote(int cnt, void (*f)())
 {
 
 	addr1 = dot;

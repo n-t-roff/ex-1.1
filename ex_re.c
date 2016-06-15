@@ -1,11 +1,12 @@
 #include "ex.h"
 #include "ex_re.h"
+#include "ex_glob.h"
 /*
  * Ex - a text editor
  * Bill Joy UCB June/September 1977
  */
 
-static char *cerror(char *);
+static void cerror(char *);
 static int same(int, int);
 static int advance(char *, char *);
 static int cclass(char *, int, int);
@@ -194,7 +195,8 @@ magic:
 			cerror("Badly formed re|Missing closing delimiter for regular expression");
 
 		case '$':
-			if (peekchar() == eof || peekchar() == EOF || oknl && peekchar() == '\n') {
+			if (peekchar() == eof || peekchar() == EOF
+			    || (oknl && peekchar() == '\n')) {
 				*ep++ = CDOL;
 				continue;
 			}
@@ -215,7 +217,7 @@ defchar:
 	}
 }
 
-static char *
+static void
 cerror(char *s)
 {
 
@@ -227,14 +229,15 @@ static int
 same(int a, int b)
 {
 
-	return (a == b || value(IGNORECASE) && (a ^ b) == ' ' && letter(a) == letter(b));
+	return (a == b || (value(IGNORECASE) && (a ^ b) == ' '
+	    && letter(a) == letter(b)));
 }
 
 int
 execute(int gf, int *addr)
 {
 	register char *p1, *p2;
-	register c;
+	int c;
 
 	if (gf) {
 		if (circfl)
@@ -389,7 +392,7 @@ star:
 static int
 cclass(char *set, int c, int af)
 {
-	register n;
+	int n;
 
 	if (c == 0)
 		return (0);

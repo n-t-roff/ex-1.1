@@ -15,7 +15,7 @@ void
 global(int k)
 {
 	register char *gp;
-	register c;
+	int c;
 	register int *a1;
 	char globuf[GBSIZE], *Cwas;
 	int i;
@@ -87,7 +87,6 @@ static void
 save(int *a1, int *a2)
 {
 	register int *addr, *dest;
-	struct { int integer; };
 
 	undkind = UNDNONE;
 	undadot = dot;

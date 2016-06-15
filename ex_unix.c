@@ -4,16 +4,21 @@
  * Bill Joy UCB September, 1977
  */
 
+#include <string.h>
+#include <unistd.h>
+#include <signal.h>
 #include "ex.h"
+#include "ex_glob.h"
 
 #define	UXBSZ	100
 
 char	uxb[UXBSZ + 2];
 
-ex_unix()
+void
+ex_unix(void)
 {
 	register char *up, *fp;
-	register c;
+	int c;
 	char printub, puxb[UXBSZ + 2];
 
 	setnoaddr();
@@ -78,10 +83,10 @@ uexp:
 	unix2("-c", printub, uxb);
 }
 
-unix2(opt, printub, up)
-	char *opt, printub, *up;
+void
+unix2(char *opt, char printub, char *up)
 {
-	register int savint;
+	void (*savint)(int);
 
 	if (chngflag && xchngflag != chngflag) {
 		xchngflag = chngflag;
@@ -97,7 +102,7 @@ unix2(opt, printub, up)
 		lprintf("!%s\n", uxb);
 		flush();
 	}
-	savint = signal(INTR, 1);
+	savint = signal(INTR, SIG_IGN);
 	pid = fork();
 	if (pid < 0) {
 		signal(INTR, savint);
@@ -123,5 +128,5 @@ unix2(opt, printub, up)
 		ex_printf("!\n");
 	flush();
 	termreset();
-	gettmode();
+	/* gettmode(); */
 }

@@ -4,9 +4,11 @@
  * Bill Joy UCB September, 1977
  */
 
-#include <unistd.h>
 #include <sys/types.h>
 #include <stdlib.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <unistd.h>
 #include "ex.h"
 #include "ex_tty.h"
 #include "ex_io.h"
@@ -27,10 +29,7 @@ initoptions(char f)
 
 	intty = isatty(0);
 	if (!intty && f == 0) {
-		char *cp;
 unknown:
-		if ((cp = getenv("TERM")))
-			setterm(cp);
 		return;
 	}
 	if (gTTY(1)) {
@@ -70,10 +69,12 @@ isetterm(type)
 }
 #endif
 
+#if 0
 gettmode()
 {
-	struct stb stbuf;
+	struct stat stbuf;
 
 	stat(TTYNAM, &stbuf);
 	TMODE = stbuf.flags & 0777;
 }
+#endif

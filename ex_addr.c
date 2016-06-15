@@ -118,7 +118,7 @@ int *
 address(void)
 {
 	register int *addr, offset;
-	register c;
+	int c;
 	int lastsign;
 
 	bigmove = 0;

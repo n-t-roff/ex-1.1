@@ -5,13 +5,14 @@
  */
 #include "ex.h"
 
-getargs()
+int
+getargs(void)
 {
-	register c;
+	int c;
 	register char *cp, *fp;
-	int *dp, *gp;
+	char **dp;
 
-	cp = linebuf, dp = genbuf;
+	cp = linebuf, dp = (char **)genbuf;
 	for (;;) {
 		c = getchar();
 		if (endcmd(c))
@@ -53,5 +54,5 @@ filexp:
 		dp++;
 	}
 	*dp = 0;
-	return (dp - (gp = genbuf));
+	return (dp - (char **)genbuf);
 }

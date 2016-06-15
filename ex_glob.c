@@ -10,6 +10,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <string.h>
+#include <fcntl.h>
 #include "ex.h"
 #include "ex_glob.h"
 #include "ex_io.h"
@@ -68,7 +69,7 @@ glob(char **v, struct Glob *g0)
 static void
 sort(char **oav)
 {
-	register char **p1, **p2, **c;
+	register char **p1, **p2, *c;
 
 	p1 = oav;
 	while (p1 < av-1) {
@@ -122,11 +123,12 @@ gpatherr:
 			*gpathp++ = *as++;
 	*gpathp = 0;
 	dirf = open(file, 0);
-	if (dirf < 0)
+	if (dirf < 0) {
 		if (globbed)
 			goto endit;
 		else
 			filioerr(file);
+	}
 	globbed++;
 	cs++;
 	while (read(dirf, &entry, 16) == 16) {
@@ -146,7 +148,8 @@ endit:
 static int
 match(char *s, char *p)
 {
-	register c, sentp;
+	int c;
+	char *sentp;
 
 	if (*s == '.' && *p != '.')
 		return (0);
@@ -161,7 +164,7 @@ static int
 amatch(char *as, char *ap)
 {
 	register char *s, *p;
-	register scc;
+	int scc;
 	int c, cc, ok, lc;
 	char *sgpathp;
 	struct stat stbuff;
@@ -169,14 +172,14 @@ amatch(char *as, char *ap)
 	s = as;
 	p = ap;
 nextc:
-	if (scc = *s++ & 0177)
+	if ((scc = *s++ & 0177))
 		if ((scc &= 0177) == 0)
 			scc = 0200;
 	switch (c = *p++) {
 		case '[':
 			ok = 0;
 			lc = 077777;
-			while (cc = *p++) {
+			while ((cc = *p++)) {
 				if (cc == ']') {
 					if (ok)
 						goto nextc;
@@ -221,7 +224,7 @@ nextc:
 slash:
 				s = entp;
 				sgpathp = gpathp;
-				while (*gpathp = *s++) {
+				while ((*gpathp = *s++)) {
 					if (gpathp >= &file[FNSIZE - 3])
 						error("Path name too long@- editor limit 64 characters");
 					gpathp++;
@@ -229,12 +232,14 @@ slash:
 				*gpathp++ = '/';
 				*gpathp = 0;
 				if (stat(file, &stbuff) == 0)
-					if ((stbuff.st_mode & 060000) == 040000)
+					if ((stbuff.st_mode & 060000)
+					    == 040000) {
 						if (*p == 0) {
 							*av++ = cat(file, "");
 							ncoll++;
 						} else
 							expand(p);
+					}
 				gpathp = sgpathp;
 				*gpathp = 0;
 			}
@@ -249,12 +254,12 @@ cat(char *as1, char *as2)
 
 	s2 = string;
 	s1 = as1;
-	while (*s2++ = (*s1++ & 0177))
+	while ((*s2++ = (*s1++ & 0177)))
 		if (s2 >= str_end)
 			goto toolong;
 	s1 = as2;
 	s2--;
-	while (*s2++ = *s1++)
+	while ((*s2++ = *s1++))
 		if (s2 > str_end)
 toolong:
 			error("Argument list too long@- editor limit 512 characters");
@@ -268,8 +273,8 @@ scan(char **t, int (*f)())
 {
 	register char *p, c;
 
-	while (p = *t++)
-		while (c = *p)
+	while ((p = *t++))
+		while ((c = *p))
 			*p++ = (*f)(c);
 }
 

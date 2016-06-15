@@ -1,3 +1,5 @@
+#include <unistd.h>
+#include <string.h>
 #include "ex.h"
 #include "ex_re.h"
 #include "ex_vis.h"
@@ -56,7 +58,7 @@ substitute(char c)
 static int
 compsub(int ch)
 {
-	register seof, c;
+	int seof, c;
 	register char *p;
 	int gsubf;
 
@@ -192,7 +194,7 @@ dosubcon(int f, int *a)
 static int
 confirmed(int *a)
 {
-	register c, ch;
+	int c, ch;
 
 	if (xflag == 0)
 		return (1);
@@ -246,7 +248,7 @@ dosub(void)
 	while (lp < loc1)
 		*sp++ = *lp++;
 	casecnt = 0;
-	while (c = *rp++) {
+	while ((c = *rp++)) {
 		if ((c & QUOTE))
 			switch (c & 0177) {
 				case '&':
@@ -291,7 +293,7 @@ ovflo:
 	}
 	lp = loc2;
 	loc2 = sp - genbuf + linebuf;
-	while (*sp++ = *lp++)
+	while ((*sp++ = *lp++))
 		if (sp >= &genbuf[LBSIZE])
 			goto ovflo;
 	strcLIN(genbuf);

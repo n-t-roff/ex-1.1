@@ -1,3 +1,6 @@
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
 #include "ex.h"
 /*
  * Ex - a text editor
@@ -7,7 +10,8 @@
 char	exrecover[]	= "/usr/lib/exrecover";
 char	expreserve[]	= "/usr/lib/expreserve";
 
-recover()
+void
+recover(void)
 {
 	int pvec[2];
 
@@ -35,7 +39,8 @@ recover()
 	close(pvec[1]);
 }
 
-waitfor()
+void
+waitfor(void)
 {
 
 	do
@@ -44,7 +49,8 @@ waitfor()
 	status = (status >> 8) & 0377;
 }
 
-revocer()
+void
+revocer(void)
 {
 
 	waitfor();
@@ -54,7 +60,8 @@ revocer()
 		change();
 }
 
-preserve()
+int
+preserve(void)
 {
 
 	if (savedfile[0] == 0)

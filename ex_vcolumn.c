@@ -25,7 +25,7 @@ int
 qcolumn(char *lim, char *gp)
 {
 	register int x;
-	int (*OO)();
+	void (*OO)();
 
 	OO = Outchar;
 	Outchar = &qcount;

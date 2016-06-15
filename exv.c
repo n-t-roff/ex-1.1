@@ -67,10 +67,12 @@ vop(void)
 	lines = dol - zero;
 	dot = addr2;
 	vmoving = 0;
+#if 0
 	if (!value(VISUALMESSAGE) && TMODE & 077) {
 		chmod(TTYNAM, TMODE &~ 077);
 		diddle++;
 	}
+#endif
 	ostart();
 	do {
 		ic = vinit();
@@ -191,7 +193,9 @@ void
 undiddle(void)
 {
 
+#if 0
 	if (diddle)
 		chmod(TTYNAM, TMODE);
 	diddle = 0;
+#endif
 }

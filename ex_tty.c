@@ -59,8 +59,10 @@ Setterm(char *type, int printerr)
 	CA = tgetflag("ca");
 	Tspace = tspace;
 	CM = Tgetstr("cm");
-	if (!*CM || cgoto()[0] == 'O')
+	if (cgoto()[0] == 'O')
 		CA = 0, CM = 0;
+	else
+		CA = 1;
 	AM = tgetflag("am");
 	BS = tgetflag("bs");
 	OS = tgetflag("os");
@@ -103,5 +105,5 @@ static char *
 Tgetstr(char *cp)
 {
 
-	tgetstr(cp, &Tspace);
+	return tgetstr(cp, &Tspace);
 }

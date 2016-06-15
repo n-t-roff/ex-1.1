@@ -1,5 +1,6 @@
 /* char printf_id[] = "@(#) printf.c:2.2 6/5/79";*/
 #include <stdarg.h>
+#include "ex.h"
 /*
  * This version of printf is compatible with the Version 7 C
  * printf. The differences are only minor except that this
@@ -157,7 +158,7 @@ ex_vprintf(char *fmt, va_list ap) {
 					*--bptr = ((int) num & mask1) + 060;
 				    else
 					*--bptr = ((int) num & mask1) + 0127;
-				while (num = (num >> nbits) & mask2);
+				while ((num = (num >> nbits) & mask2));
 				
 				if (fcode=='o') {
 					if (n)
@@ -193,7 +194,7 @@ ex_vprintf(char *fmt, va_list ap) {
 					else
 						num = (long) n;
 				}
-				if (n = (fcode != 'u' && num < 0))
+				if ((n = (fcode != 'u' && num < 0)))
 					num = -num;
 				/* now convert to digits */
 				bptr = _p_dconv(num, buf);

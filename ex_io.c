@@ -2,6 +2,10 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <time.h>
+#include <string.h>
+#include <fcntl.h>
+#include <stdlib.h>
 #include "ex.h"
 #include "ex_re.h"
 #include "ex_io.h"
@@ -17,7 +21,7 @@ int tfile = -1;
 
 static char *getblock(int, int);
 static void wrerror(void);
-static void blkio(off_t, void *, int (*)());
+static void blkio(off_t, void *, ssize_t (*)());
 
 STATIC	char ichanged;
 STATIC	int nleft;
@@ -143,25 +147,25 @@ iostats(void)
 	return (cntnull != 0 || cntodd != 0);
 }
 
-int
+char *
 plural(int i)
 {
 
 	return (i == 1 ? "" : "s");
 }
 
-int
+char *
 ex_getline(int tl)
 {
 	register char *bp, *lp;
-	register nl;
+	int nl;
 	char scratch[LBSIZE];
 
 	lp = scratch;
 	bp = getblock(tl, READ);
 	nl = nleft;
 	tl &= ~0177;
-	while (*lp++ = *bp++)
+	while ((*lp++ = *bp++))
 		if (--nl == 0) {
 			bp = getblock(tl += 0200, READ);
 			nl = nleft;
@@ -173,7 +177,7 @@ int
 putline(void)
 {
 	register char *bp, *lp;
-	register nl;
+	int nl;
 	int tl;
 	char scratch[LBSIZE];
 
@@ -185,7 +189,7 @@ putline(void)
 	bp = getblock(tl, WRITE);
 	nl = nleft;
 	tl &= ~0177;
-	while (*bp++ = *lp++) {
+	while ((*bp++ = *lp++)) {
 		if (--nl == 0) {
 			bp = getblock(tl += 0200, WRITE);
 			nl = nleft;
@@ -201,7 +205,7 @@ STATIC	char *nextip;
 int
 getfile(void)
 {
-	register c;
+	int c;
 	register char *lp, *fp;
 
 	lp = linebuf;
@@ -258,7 +262,8 @@ putfile(void)
 		lp = ex_getline(*a1++);
 		for (;;) {
 			if (--nib < 0) {
-				if (write(io, genbuf, nib = fp-genbuf) != nib)
+				nib = fp-genbuf;
+				if (write(io, genbuf, nib) != nib)
 					wrerror();
 				cntch += nib;
 				nib = 511;
@@ -270,7 +275,8 @@ putfile(void)
 			}
 		}
 	} while (a1 <= addr2);
-	if (write(io, genbuf, nib = fp-genbuf) != nib)
+	nib = fp-genbuf;
+	if (write(io, genbuf, nib) != nib)
 		wrerror();
 	cntch += nib;
 }
@@ -343,7 +349,7 @@ getblock(int atl, int iof)
 }
 
 static void
-blkio(off_t b, void *buf, int (*iofcn)())
+blkio(off_t b, void *buf, ssize_t (*iofcn)())
 {
 
 	lseek(tfile, b, 3);
@@ -363,7 +369,7 @@ synctmp(void)
 		blkio(oblock, obuff, write);
 	time(&header.Atime);
 	header.Auid = getuid() & mask;
-	*zero = header.Atime[1];
+	*zero = (int)header.Atime;
 	for (a = zero, bp = blocks; a <= dol; a += 256, bp++) {
 		if (*bp < 0) {
 			tline = (tline + 0177) &~ 0177;

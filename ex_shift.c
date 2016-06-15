@@ -3,11 +3,11 @@
  * Ex - a text editor
  * Bill Joy UCB October 1977
  */
+#include <string.h>
 #include "ex.h"
 
-shift(c, cnt)
-	char c;
-	int cnt;
+void
+shift(int c, int cnt)
 {
 	register int *addr;
 	register char *cp;

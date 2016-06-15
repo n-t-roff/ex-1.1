@@ -16,8 +16,7 @@ static void flush2(void);
 static int motion(void);
 
 STATIC	char line[66] = "Error message file not available\n/usr/lib/ex1.1strings";
-STATIC	char *linp = line + 33;
-char *erpath = line + 33;
+STATIC	char *linp = line;
 STATIC	char phadnl;
 void	(*Outchar)() = termchar;
 void	(*Putchar)() = normchar;

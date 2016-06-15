@@ -1,4 +1,10 @@
+#include <string.h>
 #include <stdarg.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 #include "ex.h"
 /*
  * Ex - a text editor
@@ -9,11 +15,13 @@ void
 helpinit(void)
 {
 
+#if 0
 	erfile = open(erpath, 0);
 	if (erfile < 0)
 		flush();
 	else
 		pstop();
+#endif
 }
 
 void
@@ -36,6 +44,7 @@ error(char *fmt, ...)
 	}
 	inopen = 0;
 	inconf = 0;
+	fmt = mesg(fmt);
 	va_start(ap, fmt);
 	lvprintf(fmt, ap);
 	putNFL();

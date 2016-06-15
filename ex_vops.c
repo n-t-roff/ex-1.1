@@ -1,3 +1,4 @@
+#include <string.h>
 #include "ex.h"
 #ifdef VISUAL
 #include "ex_tty.h"
@@ -8,6 +9,10 @@
  */
 
 static void takeout(char *);
+static void vdcMID(void);
+static int fixindent(int);
+static int vgetsplit(void);
+static int vmaxrep(int, int);
 
 void
 vdelete(int c)
@@ -38,7 +43,8 @@ vdelete(int c)
 	vsetcurs(cp);
 }
 
-vdcMID()
+static void
+vdcMID(void)
 {
 	register char *cp;
 
@@ -347,8 +353,8 @@ vappend(int ch, int cnt, int indent)
 }
 
 #endif
-genindent(indent)
-	register int indent;
+char *
+genindent(int indent)
 {
 	register char *cp;
 
@@ -360,8 +366,8 @@ genindent(indent)
 }
 
 #ifdef VISUAL
-fixindent(indent)
-	int indent;
+static int
+fixindent(int indent)
 {
 	register int i;
 	register char *cp;
@@ -377,8 +383,8 @@ fixindent(indent)
 }
 #endif
 
-vpastwh(cp)
-	register char *cp;
+char *
+vpastwh(char *cp)
 {
 
 	while (white(*cp))
@@ -386,8 +392,8 @@ vpastwh(cp)
 	return (cp);
 }
 
-whitecnt(cp)
-	register char *cp;
+int
+whitecnt(char *cp)
 {
 	register int i;
 
@@ -407,10 +413,8 @@ whitecnt(cp)
 }
 
 #ifdef VISUAL
-vgetline(cnt, gcursor, aescaped)
-	int cnt;
-	register char *gcursor;
-	char *aescaped;
+char *
+vgetline(int cnt, char *gcursor, char *aescaped)
 {
 	register int c;
 	register char *cp;
@@ -453,7 +457,7 @@ vgetline(cnt, gcursor, aescaped)
 					goto vbackup;
 				}
 #ifdef UNIMP
-				if (c == iwhite && c != 0)
+				if (c == iwhite && c != 0) {
 					if (cp == gcursor) {
 						iwhite = backtab(c);
 						CDCNT++;
@@ -467,6 +471,7 @@ vgetline(cnt, gcursor, aescaped)
 						CDCNT = 1;
 						goto vbackup;
 					}
+				}
 				if (vglobp && vglobp - iglobp >= 2 &&
 				    (vglobp[-2] == '^' || vglobp[-2] == '0')
 				    && gcursor == ogcursor + 1)
@@ -547,11 +552,10 @@ vadone:
 	return (gcursor);
 }
 
-int	vgetsplit();
 char	*vsplitpt;
 
-vdoappend(lp)
-	char *lp;
+void
+vdoappend(char *lp)
 {
 
 	vsplitpt = lp;
@@ -560,7 +564,8 @@ vdoappend(lp)
 	inglobal--;
 }
 
-vgetsplit()
+static int
+vgetsplit(void)
 {
 
 	if (vsplitpt == 0)
@@ -570,9 +575,8 @@ vgetsplit()
 	return(0);
 }
 
-vmaxrep(ch, cnt)
-	char ch;
-	register int cnt;
+static int
+vmaxrep(int ch, int cnt)
 {
 	register int len, replen;
 

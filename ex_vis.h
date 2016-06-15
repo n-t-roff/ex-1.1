@@ -72,7 +72,8 @@ char	holdat, splitw, hadup, *nextic;
 
 char	vundkind, *vutmp;
 int	vulines[TUBELINES], vylines[TUBELINES], *vresaddr;
-int	vrescnt, vresCNT, vdelcnt, vrescurs, vyancnt;
+int	vrescnt, vresCNT, vdelcnt, vyancnt;
+char	*vrescurs;
 char	wdkind;
 int	vSCROLL;
 

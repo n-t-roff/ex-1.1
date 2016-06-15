@@ -5,12 +5,16 @@
  */
 
 #include <errno.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <signal.h>
 #include "ex.h"
 #include "ex_io.h"
+#include "ex_glob.h"
 
 STATIC	int slevel;
-
-int	onintr();
 
 void
 source(char *file, int okfail)
@@ -19,7 +23,7 @@ source(char *file, int okfail)
 	register int saveinp, ointty, oerrno;
 	char reenter;
 
-	signal(INTR, 1);
+	signal(INTR, SIG_IGN);
 	saveinp = dup(0);
 	if (saveinp < 0)
 		error("Too many nested sources");

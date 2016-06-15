@@ -97,7 +97,7 @@ main(int xargc0, char **xargv0)
 			signal(INTR, onintr);
 		if (nop == 0)
 			initoptions(oop);
-		else {
+		{
 			char *cp;
 			if ((cp = getenv("TERM")))
 				setterm(cp);
@@ -159,9 +159,11 @@ nofiles:
 	return 0;
 }
 
-onintr()
+void
+onintr(int i)
 {
 
+	(void)i;
 	signal(INTR, onintr);
 	pstop();
 	setlastchar('\n');

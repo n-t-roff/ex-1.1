@@ -8,14 +8,14 @@
 /*
  * Unpack into linebuf
  */
-unpack(sp)
-	register char *sp;
+char *
+unpack(char *sp)
 {
 	register char *lp;
 	register int c;
 	int i;
 
-	for (lp = linebuf; c = *sp++;) {
+	for (lp = linebuf; (c = *sp++);) {
 		if ((c & 0200) != 0) {
 			c &= 0177;
 			switch (c) {
@@ -44,19 +44,20 @@ gosh:
 	return (linebuf);
 }
 
-pack(sp)
-	register char *sp;
+void
+pack(char *sp)
 {
 	register char *lp;
 	register int c;
 	int i;
 
-	for (lp = linebuf; c = *lp++;) {
+	for (lp = linebuf; (c = *lp++);) {
 		if (c == '\n') {
 			linebp = lp;
 			break;
 		}
-		if (c != ' ' && c != '\t' || *lp == 0 || c == '\t' && *lp != '\t') {
+		if ((c != ' ' && c != '\t') || *lp == 0 || (c == '\t'
+		    && *lp != '\t')) {
 			*sp++ = c;
 			continue;
 		}
