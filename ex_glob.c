@@ -24,7 +24,6 @@ static int amatch(char *, char *);
 static char *cat(char *, char *);
 static void scan(char **, int (*)());
 static int tglob(int);
-static int trim(int);
 
 static	char **av;
 static	char *string, *str_end;
@@ -286,12 +285,14 @@ tglob(int c)
 	return (c);
 }
 
+#if 0
 static int
 trim(int c)
 {
 
 	return (c & 0177);
 }
+#endif
 
 void
 getone(void)

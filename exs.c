@@ -18,13 +18,12 @@ static int fixcase(int);
 static char *place(char *, char *, char *);
 
 STATIC	char xflag;
-STATIC	char gflag;
 STATIC	int scount, slines, stotal;
 
 int
 substitute(char c)
 {
-	register int *addr, n, *markp;
+	register int *addr, n;
 	char gsubf;
 
 	gsubf = compsub(c);
@@ -59,7 +58,6 @@ static int
 compsub(int ch)
 {
 	int seof, c;
-	register char *p;
 	int gsubf;
 
 	gsubf = 0;

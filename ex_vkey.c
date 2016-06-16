@@ -33,7 +33,6 @@ getkey(void)
 int
 peekbr(void)
 {
-	int c;
 
 	Peekkey = getbr();
 	return (Peekkey == 0);

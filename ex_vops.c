@@ -97,7 +97,6 @@ void
 vchange(void)
 {
 	register char *cp;
-	register int i;
 
 	if (wcursor < linebuf)
 		wcursor = linebuf;

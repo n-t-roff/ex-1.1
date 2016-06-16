@@ -23,7 +23,6 @@ char	TTYNAM[]	= "/dev/ttyx";
 void
 initoptions(char f)
 {
-	int ttyno, rcio;
 	char Home[40];
 	register char *H;
 

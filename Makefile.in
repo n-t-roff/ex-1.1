@@ -5,7 +5,7 @@ OBJ=	ex.o ex_cmds.o exd.o ex_put.o ex_print.o exv.o ex_vmain.o exs.o \
 	ex_note.o exa.o exg.o ex_shift.o ex_vops.o ex_vcurs.o ex_vadjust.o \
 	ex_vclear.o ex_vkey.o ex_voperate.o exo.o ex_vset.o exj.o exz.o exm.o \
 	exx.o exw.o ex_file.o exu.o exr.o Version.o
-_CFLAGS=-DUNIMP \
+_CFLAGS=-DUNIMP -Wall \
 	-g -O0 -fno-omit-frame-pointer -fno-optimize-sibling-calls \
 	-fsanitize=undefined \
 	-fsanitize=integer \

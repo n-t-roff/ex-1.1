@@ -1,3 +1,4 @@
+#include <unistd.h>
 #include "ex.h"
 #include "ex_glob.h"
 #include "ex_tty.h"
@@ -30,7 +31,7 @@ int
 commands(int noprompt, char exitoneof)
 {
 	register int *addr;
-	register c;
+	int c;
 	register char *p;
 	int lchngflag, cnt;
 	char hadpr;
@@ -49,8 +50,8 @@ commands(int noprompt, char exitoneof)
 	}
 	for (;;) {
 		shudclob = 0;
-		if (pflag || lchngflag != chngflag && value(AUTOPRINT) &&
-		    !inglobal && endline) {
+		if (pflag || (lchngflag != chngflag && value(AUTOPRINT) &&
+		    !inglobal && endline)) {
 			pflag = 0;
 			lchngflag = chngflag;
 			if (dol != zero) {
@@ -79,7 +80,7 @@ commands(int noprompt, char exitoneof)
 			addr1 = addr2;
 			addr = address();
 			c = getchar();
-			if (addr == 0)
+			if (addr == 0) {
 				if (c == ',')
 					addr = dot;
 				else if (addr1 != 0) {
@@ -87,6 +88,7 @@ commands(int noprompt, char exitoneof)
 					break;
 				} else
 					break;
+			}
 			addr2 = addr;
 			if (c == ';') {
 				c = ',';
@@ -375,10 +377,10 @@ print:
 				ungetchar(lastchar());
 				return (1);
 			}
-			glob(genbuf, G);
+			glob((char **)genbuf, G);
 			xargc0 = gargc;
 			xargv0 = &G->Ava[0];
-			rewind();
+			ex_rewind();
 			return (2);
 		case 'q':
 			tail("quit");
@@ -398,7 +400,7 @@ print:
 					setnoaddr();
 					quickly();
 					ex_newline();
-					rewind();
+					ex_rewind();
 					return (2);
 
 				case 's':
@@ -483,7 +485,7 @@ dorecover:
 				tail("tabulate");
 				c = exclam();
 				setCNL();
-				xop(&tabulate, c);
+				xop((void (*)())tabulate, c);
 				continue;
 			}
 			tail("Transcribe");
@@ -627,7 +629,7 @@ plines(int *adr1, int *adr2, char movedot)
 void
 ex_newline(void)
 {
-	register c;
+	int c;
 
 	resetflav();
 	for (;;) {
@@ -692,12 +694,12 @@ static void
 setflav(void)
 {
 
-	if (nflag || kflag == 0 && value(NUMBER))
+	if (nflag || (kflag == 0 && value(NUMBER)))
 		setnumb();
 	else
 	     /* setnonumb(); */
 		Pline = &normline;
-	if (listf || kflag == 0 && value(LIST))
+	if (listf || (kflag == 0 && value(LIST)))
 		setlist();
 	else
 		setnorm();

@@ -101,9 +101,10 @@ cleanup(void)
 }
 
 void
-onhup(void)
+onhup(int i)
 {
 
+	(void)i;
 	if (chngflag == 0 || preserve())
 		cleanup();
 	exit(1);

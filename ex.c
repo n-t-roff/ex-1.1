@@ -5,9 +5,12 @@
  * Version 1.0 September, 1977
  */
 
+#include <string.h>
 #include <stdlib.h>
+#include <signal.h>
 #include "ex.h"
 #include "ex_glob.h"
+#include "ex_tty.h"
 
 int	vyancnt;
 char	endline = 1;
@@ -41,8 +44,8 @@ main(int xargc0, char **xargv0)
 	draino();
 	helpinit();
 	oldhup = signal(HUP, onhup);
-	oldquit = signal(QUIT, 1);
-	ruptible = (signal(INTR, 1) & 01) == 0;
+	oldquit = signal(QUIT, SIG_IGN);
+	ruptible = signal(INTR, SIG_IGN) != SIG_IGN;
 #ifdef UNIX_SBRK
 	fendcore = sbrk(0);
 #endif
@@ -88,7 +91,7 @@ main(int xargc0, char **xargv0)
 		recov = 0;
 	}
 	xargv0 = axargv0;
-	rewind();
+	ex_rewind();
 	reenter = 0;
 	setexit();
 	if (reenter == 0) {
@@ -171,14 +174,16 @@ onintr(int i)
 	error("\nInterrupt");
 }
 
-rewind()
+void
+ex_rewind(void)
 {
 
 	xargc = argc = xargc0;
 	xargv = xargv0;
 }
 
-init()
+void
+init(void)
 {
 	register int i;
 	extern int vyancnt;

@@ -2,7 +2,7 @@
  * Ex - a text editor
  * Bill Joy UCB June 1977
  */
-#define	ONMSZ	30
+#define	ONMSZ	256
 
 struct varbl {
 	char	*vname[2];

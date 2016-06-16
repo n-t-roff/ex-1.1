@@ -16,7 +16,6 @@ static void vputs(char *);
 void
 vclear(void)
 {
-	register int i, j;
 
 	vputs(CLEAR);
 	destcol = 0;

@@ -30,14 +30,12 @@ compile(int eof, char oknl)
 		case '/':
 		case '?':
 			if (scanre.sexpbuf[0] == 0)
-noscanre:
 				error("No previous scan re|No previous scanning regular expression");
 			resre(&scanre);
 			return (c);
 
 		case '&':
 			if (subre.sexpbuf[0] == 0)
-nosubre:
 				error("No previous substitute re|No previous substitute regular expression");
 			resre(&subre);
 			return (c);
@@ -284,15 +282,15 @@ static int
 advance(char *lp, char *ep)
 {
 	register char *curlp;
-	char *nextep, *sp, *sp1, c;
+	char *sp, *sp1, c;
 
 	for (;;) switch (*ep++) {
 
 	case CCHR:
 		if (*ep & QUOTE) {
 			c = *ep++ & 0177;
-			sp = braslist[c];
-			sp1 = braelist[c];
+			sp = braslist[(int)c];
+			sp1 = braelist[(int)c];
 			while (sp < sp1) {
 				if (!same(*sp, *lp))
 					return (0);
@@ -334,11 +332,11 @@ advance(char *lp, char *ep)
 		return (0);
 
 	case CBRA:
-		braslist[*ep++] = lp;
+		braslist[(int)*ep++] = lp;
 		continue;
 
 	case CKET:
-		braelist[*ep++] = lp;
+		braelist[(int)*ep++] = lp;
 		continue;
 
 	case CDOT|STAR:

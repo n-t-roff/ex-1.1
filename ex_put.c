@@ -22,14 +22,10 @@ void	(*Outchar)() = termchar;
 void	(*Putchar)() = normchar;
 void	(*Pline)() = normline;
 
-int (*
-setnumb(int t))()
+void
+setnumb(void)
 {
-	register int (*P)();
-
-	P = Pline;
-	Pline = t ? numbline : normline;
-	return (P);
+	Pline = numbline;
 }
 
 /*
@@ -70,8 +66,8 @@ flush(void)
 static void
 flush1(void)
 {
-	register char *lp, *cp;
-	register c;
+	register char *lp;
+	int c;
 
 	*linp = 0;
 	lp = line;
@@ -298,16 +294,17 @@ setcol(int col)
 static int
 motion(void)
 {
-	register int v, h, c;
+	register int v, h;
 
 	if (!BS)
 		return (0);
 	v = destline - outline;
-	if (v < 0)
+	if (v < 0) {
 		if (CA || UPLINE)
 			v = -v;
 		else
 			destline = outline;
+	}
 	h = destcol;
 	if (!v || pfast) {
 		h -= outcol;
@@ -338,7 +335,8 @@ plod(void)
 		if (NOCR || pfast == 0)
 			outcol = 0;
 	}
-	if (!NOCR && (outcol - destcol > destcol + 1 || outcol > destcol && !BS)) {
+	if (!NOCR && (outcol - destcol > destcol + 1
+	    || (outcol > destcol && !BS))) {
 		putch('\r');
 		outcol = 0;
 	}
@@ -462,7 +460,7 @@ termreset(void)
 
 	destcol = 0;
 	destline = LINES - 1;
-	if (!value(PRINTALL))
+	if (!value(PRINTALL)) {
 		if (CA) {
 			outcol = -20;
 			outline = -20;
@@ -470,6 +468,7 @@ termreset(void)
 			outcol = destcol;
 			outline = destline;
 		}
+	}
 }
 
 void

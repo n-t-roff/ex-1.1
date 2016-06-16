@@ -44,8 +44,8 @@ deleted(void)
 static void
 deletem(void)
 {
-	register int *a1, *a2, ra;
-	int dsavint;
+	register int *a1, *a2;
+	void (*dsavint)(int);
 
 	dsavint = signal(INTR, SIG_IGN);
 	undkind = UNDCHANGE;

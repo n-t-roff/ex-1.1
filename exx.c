@@ -6,7 +6,7 @@
  */
 
 void
-xop(int (*f)(), int c)
+xop(void (*f)(), int c)
 {
 	register int *dp;
 

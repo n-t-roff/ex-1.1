@@ -38,7 +38,6 @@ doulg(void)
 	register char *lp, *gp;
 	char *maxgp;
 	int c;
-	char csw;
 	int col;
 
 	gp = genbuf;

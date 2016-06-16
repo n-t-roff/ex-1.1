@@ -25,37 +25,37 @@ char	NONAME[]		= "@";
 char	NOTify[]	= "notify";
 
 struct varbl varbls[] = {
-	{ "autoindent",	"ai",	ONOFF,		0,	0,	0 },
-	{ "autoprint",	"ap",	ONOFF,		1,	1,	0 },
-	{ "beautify",	NONAME,	ONOFF,		0,	0,	0 },
-	{ "directory",	"dir",	STRING,		0,	0,	direct },
-	{ "editany",	"ea",	ONOFF,		0,	0,	0 },
-	{ "edited",	NONAME,	ONOFF,		1,	0,	0 },
-	{ "errorbells",	"eb",	ONOFF,		1,	1,	0 },
-	{ "fork",	NONAME,	ONOFF,		1,	1,	0 },
-	{ "home",	NONAME,	STRING,		0,	0,	home },
-	{ "hush",	NONAME,	ONOFF,		0,	0,	0 },
-	{ "ignorecase",	"ic",	ONOFF,		0,	0,	0 },
-	{ "indicateul",	"iu",	ONOFF,		0,	0,	0 },
-	{ "list",	NONAME,	ONOFF,		0,	0,	0 },
-	{ "magic",	NONAME,	ONOFF,		1,	1,	0 },
-	{ "mode",	NONAME,	NUMERIC,	0644,	0644,	0 },
-	{ NOTify,	NONAME,	NUMERIC,	5,	5,	0 },
-	{ "number",	NONAME,	ONOFF,		0,	0,	0 },
-	{ "open",	NONAME,	ONOFF,		1,	1,	0 },
-	{ "optimize",	NONAME,	ONOFF,		1,	1,	0 },
-	{ "printall",	"pa",	ONOFF,		0,	0,	0 },
-	{ "prompt",	NONAME,	ONOFF,		1,	1,	0 },
-	{ "scroll",	NONAME,	NUMERIC,	12,	12,	0 },
-	{ "shell",	"sh",	STRING,		0,	0,	shellname },
-	{ "shiftwidth",	"sw",	NUMERIC,	8,	8,	0 },
-	{ "sticky",	NONAME,	ONOFF,		0,	0,	0 },
-	{ "ttytype",	"tty",	TERM,		0,	0,	ttytype },
-	{ "terse",	NONAME,	ONOFF,		0,	0,	0 },
-	{ "visualmessage","vm",	ONOFF,		0,	0,	0 },
-	{ "window",	NONAME,	NUMERIC,	23,	23,	0 },
-	{ "wrap",	NONAME,	ONOFF,		1,	1,	0 },
-	{ 0,		0,	0,		0,	0,	0 }
+	{ { "autoindent",	"ai"   }, ONOFF,   0,    0,	0 },
+	{ { "autoprint",	"ap"   }, ONOFF,   1,    1,	0 },
+	{ { "beautify",		NONAME }, ONOFF,   0,    0,	0 },
+	{ { "directory",	"dir"  }, STRING,  0,    0,	direct },
+	{ { "editany",		"ea"   }, ONOFF,   0,    0,	0 },
+	{ { "edited",		NONAME }, ONOFF,   1,    0,	0 },
+	{ { "errorbells",	"eb"   }, ONOFF,   1,    1,	0 },
+	{ { "fork",		NONAME }, ONOFF,   1,    1,	0 },
+	{ { "home",		NONAME }, STRING,  0,    0,	home },
+	{ { "hush",		NONAME }, ONOFF,   0,    0,	0 },
+	{ { "ignorecase",	"ic"   }, ONOFF,   0,    0,	0 },
+	{ { "indicateul",	"iu"   }, ONOFF,   0,    0,	0 },
+	{ { "list",		NONAME }, ONOFF,   0,    0,	0 },
+	{ { "magic",		NONAME }, ONOFF,   1,    1,	0 },
+	{ { "mode",		NONAME }, NUMERIC, 0644, 0644,	0 },
+	{ { NOTify,		NONAME }, NUMERIC, 5,    5,	0 },
+	{ { "number",		NONAME }, ONOFF,   0,    0,	0 },
+	{ { "open",		NONAME }, ONOFF,   1,    1,	0 },
+	{ { "optimize",		NONAME }, ONOFF,   1,    1,	0 },
+	{ { "printall",		"pa"   }, ONOFF,   0,    0,	0 },
+	{ { "prompt",		NONAME }, ONOFF,   1,    1,	0 },
+	{ { "scroll",		NONAME }, NUMERIC, 12,   12,	0 },
+	{ { "shell",		"sh"   }, STRING,  0,    0,	shellname },
+	{ { "shiftwidth",	"sw"   }, NUMERIC, 8,    8,	0 },
+	{ { "sticky",		NONAME }, ONOFF,   0,    0,	0 },
+	{ { "ttytype",		"tty"  }, TERM,    0,    0,	ttytype },
+	{ { "terse",		NONAME }, ONOFF,   0,    0,	0 },
+	{ { "visualmessage",	"vm"   }, ONOFF,   0,    0,	0 },
+	{ { "window",		NONAME }, NUMERIC, 23,   23,	0 },
+	{ { "wrap",		NONAME }, ONOFF,   1,    1,	0 },
+	{ { 0,			0      }, 0,       0,    0,	0 }
 };
 
 void
@@ -64,7 +64,7 @@ set(int c)
 	register char *op;
 	register struct varbl *vp;
 	char no, optname[ONMSZ];
-	int column, base;
+	int base;
 	extern char uxb[];
 
 	setnoaddr();

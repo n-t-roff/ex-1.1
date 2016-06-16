@@ -199,7 +199,6 @@ space:
 			op = moveop;
 			if (margin() || (op == &vmove && edge()))
 				goto errlab;
-moveit:
 			while (cnt > 0 && !margin()) {
 				wcursor += dir;
 				cnt--;
@@ -301,7 +300,6 @@ static void
 eend(void (*op)(), int cnt)
 {
 	register int which;
-	register char *iwc;
 
 	if (dir == 1) {
 		if (!margin())
