@@ -229,7 +229,7 @@ int letter(int);
 int white(int);
 int digit(int);
 int ucletter(int);
-int getchar(void);
+int ex_getchar(void);
 int peekchar(void);
 int gettty(void);
 int backtab(int);

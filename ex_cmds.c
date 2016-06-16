@@ -79,7 +79,7 @@ commands(int noprompt, char exitoneof)
 		do {
 			addr1 = addr2;
 			addr = address();
-			c = getchar();
+			c = ex_getchar();
 			if (addr == 0) {
 				if (c == ',')
 					addr = dot;
@@ -123,11 +123,11 @@ commands(int noprompt, char exitoneof)
 		case 'c':
 			switch (peekchar()) {
 				case 'o':
-					getchar();
+					ex_getchar();
 					if (peekchar() == 'm') {
 						tail2of("comment");
 						do
-							c = getchar();
+							c = ex_getchar();
 						while (c == '|' || !endcmd(c));
 						continue;
 					}
@@ -138,7 +138,7 @@ commands(int noprompt, char exitoneof)
 					tail("cd");
 					goto changdir;
 				case 'h':
-					getchar();
+					ex_getchar();
 					if (peekchar() == 'd') {
 						tail2of("chdir");
 changdir:
@@ -181,7 +181,7 @@ changdir:
 		case 'e':
 			switch (peekchar()) {
 				case 'x':
-					getchar();
+					ex_getchar();
 					if (peekchar() == 'p') {
 						tail2of("expand");
 						setCNL();
@@ -194,13 +194,13 @@ changdir:
 					tail("echo");
 					skipwh();
 					do {
-						c = getchar();
+						c = ex_getchar();
 						switch (c) {
 							case '|':
 								putnl();
 								break;
 							case '\\':
-								c = getchar();
+								c = ex_getchar();
 							default:
 								ex_putchar(c);
 						}
@@ -267,7 +267,7 @@ doecmd:
 		case 'k':
 casek:
 			skipwh();
-			c = getchar();
+			c = ex_getchar();
 			if (endcmd(c))
 				error("Mark what?|%s requires following letter", Command);
 			ex_newline();
@@ -344,7 +344,7 @@ numberit:
 				PUT();
 				continue;
 			case 'r':
-				getchar();
+				ex_getchar();
 				if (peekchar() == 'e') {
 					tail2of(PRESERVE);
 					eol();
@@ -392,7 +392,7 @@ print:
 			return (0);
 		case 'r':
 			if (peekchar() == 'e') {
-				getchar();
+				ex_getchar();
 				switch (peekchar()) {
 
 				case 'w':
@@ -552,7 +552,7 @@ dorecover:
 		case '<':
 		case '>':
 			for (cnt = 1; peekchar() == c; cnt++)
-				getchar();
+				ex_getchar();
 			setCNL();
 			shift(c, cnt);
 			continue;
@@ -633,7 +633,7 @@ ex_newline(void)
 
 	resetflav();
 	for (;;) {
-		c = getchar();
+		c = ex_getchar();
 		switch (c) {
 			case '^':
 			case '-':
@@ -674,7 +674,7 @@ eol(void)
 {
 
 	skipwh();
-	if (!endcmd(getchar()))
+	if (!endcmd(ex_getchar()))
 		error("Extra chars|Extra characters at end of command");
 }
 
@@ -755,11 +755,11 @@ tailof(char *comm, int i)
 	for (cp = command; i > 0; i--)
 		*cp++ = *comm++;
 	while (*comm && peekchar() == *comm)
-		*cp++ = getchar(), comm++;
+		*cp++ = ex_getchar(), comm++;
 	c = peekchar();
 	if (letter(c) && c != 'l' && c != 'p') {
 		do
-			*cp++ = getchar();
+			*cp++ = ex_getchar();
 		while (cp < &command[19] && letter(peekchar()));
 		*cp = 0;
 		error("What?|%s: Not an editor command", command);
@@ -772,7 +772,7 @@ exclam(void)
 
 	skipwh();
 	if (peekchar() == '!') {
-		getchar();
+		ex_getchar();
 		return (1);
 	}
 	return (0);

@@ -13,7 +13,7 @@ skipwh(void)
 	wh = 0;
 	while (white(peekchar())) {
 		wh++;
-		getchar();
+		ex_getchar();
 	}
 	return (wh);
 }

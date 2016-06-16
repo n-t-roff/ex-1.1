@@ -54,7 +54,7 @@ getnum(void)
 	register int cnt;
 
 	for (cnt = 0; digit(peekchar());)
-		cnt = cnt * 10 + getchar() - '0';
+		cnt = cnt * 10 + ex_getchar() - '0';
 	return (cnt);
 }
 
@@ -140,7 +140,7 @@ address(void)
 			lastsign = 0;
 			offset = 0;
 		}
-		switch (c = getchar()) {
+		switch (c = ex_getchar()) {
 
 		case '?':
 		case '/':
@@ -178,7 +178,7 @@ address(void)
 		case '/':
 			c = compile(c, 1);
 			if (c == '&') {
-				c = getchar();
+				c = ex_getchar();
 				if (c != '?' && c != '/')
 					error("\\& needs / or ? in address");
 			}
@@ -197,7 +197,7 @@ address(void)
 			continue;
 
 		case '\'':
-			c = getchar();
+			c = ex_getchar();
 			if (c == '\'')
 				c = 'z' + 1;
 			else if (c < 'a' || c > 'z')

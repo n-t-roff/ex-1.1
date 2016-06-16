@@ -30,7 +30,7 @@ recover(void)
 		dup(pvec[1]);
 	     /* close(pvec[1]); */
 	     /* execl(exrecover+4, exrecover+10, value(DIRECTORY), file, 0); */
-		execl(exrecover, exrecover+10, svalue(DIRECTORY), file, 0);
+		execl(exrecover, exrecover+10, svalue(DIRECTORY), file, NULL);
 		die++;
 		close(1);
 		dup(2);
@@ -74,7 +74,7 @@ preserve(void)
 		close(0);
 		dup(tfile);
 	     /* execl(expreserve+4, expreserve+10, 0); */
-		execl(expreserve, expreserve+10, 0);
+		execl(expreserve, expreserve+10, NULL);
 		die++;
 		error("No preservation routine");
 	}

@@ -3,7 +3,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <string.h>
-#include <sys/sysmacros.h>
+//#include <sys/sysmacros.h>
 #include "ex.h"
 #include "ex_io.h"
 /*
@@ -23,11 +23,11 @@ wop(void)
 	exclam = 0;
 	if (peekchar() == '!') {
 		exclam++;
-		getchar();
+		ex_getchar();
 	}
 	bl = skipwh();
 	while (peekchar() == '>') {
-		getchar();
+		ex_getchar();
 		c++;
 		skipwh();
 	}

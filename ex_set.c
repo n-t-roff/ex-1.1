@@ -69,14 +69,14 @@ set(int c)
 
 	setnoaddr();
 	if (endcmd(peekchar())) {
-		getchar();
+		ex_getchar();
 		propts(0);
 		return;
 	}
 	if (c == 0)
 		error("Blank required@before options in set");
 	do {
-		switch (c = getchar()) {
+		switch (c = ex_getchar()) {
 			case '!':
 				op = uxb;
 				if (!*op)
@@ -104,7 +104,7 @@ pfile:
 			if (op >= &optname[ONMSZ])
 				error("No such option|Ridiculously long option name");
 			*op++ = letter(c);
-			c = getchar();
+			c = ex_getchar();
 		} while (letter(c));
 		ungetchar(c);
 		*op = 0;
@@ -125,7 +125,7 @@ pfile:
 			error("%s: No such option@- 'set all' gives all option values", op);
 		c = skipwh();
 		if (peekchar() == '?') {
-			getchar();
+			ex_getchar();
 printone:
 			propt(vp);
 			goto next;
@@ -139,7 +139,7 @@ printone:
 			case NUMERIC:
 				if (c != 0 || setend())
 					goto printone;
-				if (getchar() != '=')
+				if (ex_getchar() != '=')
 					error("= expected@before number for numeric option %s", vp->vname[0]);
 				if (!digit(peekchar()))
 					error("Digits required@after = when assigning numeric option");
@@ -148,7 +148,7 @@ printone:
 				if (peekchar() == '0' || vp == &varbls[MODE])
 					base = 8;
 				do
-					c = c * base + getchar() - '0';
+					c = c * base + ex_getchar() - '0';
 				while (digit(peekchar()));
 				vp->vvalue = c;
 				break;
@@ -156,13 +156,13 @@ printone:
 			case TERM:
 				if (c != 0 || setend())
 					goto printone;
-				if (getchar() != '=')
+				if (ex_getchar() != '=')
 					error("Missing =@in assignment to option %s", vp->vname[0]);
 				op = optname;
 				while (!setend()) {
 					if (op >= &optname[ONMSZ])
 						error("String too long@in option assignment");
-					*op++ = getchar();
+					*op++ = ex_getchar();
 				}
 				*op = 0;
 				if (vp->vtype == TERM)

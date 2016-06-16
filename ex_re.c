@@ -23,7 +23,7 @@ compile(int eof, char oknl)
 	if (letter(eof) || digit(eof))
 		error("Re delimiter must not be letter or digit|Regular expressions cannot be delimited by letters or digits");
 	ep = expbuf;
-	c = getchar();
+	c = ex_getchar();
 	if (eof == '\\')
 		switch (c) {
 
@@ -56,7 +56,7 @@ compile(int eof, char oknl)
 	nbra = 0;
 	circfl = 0;
 	if (c == '^') {
-		c = getchar();
+		c = ex_getchar();
 		circfl++;
 	}
 	ungetchar(c);
@@ -64,7 +64,7 @@ compile(int eof, char oknl)
 		if (ep >= &expbuf[ESIZE - 2])
 complex:
 			cerror("Re too complex|Regular expression too complicated");
-		c = getchar();
+		c = ex_getchar();
 		if (c == eof || c == EOF) {
 			if (bracketp != bracket)
 				cerror("Unmatched \\(|More \\('s than \\)'s in regular expression");
@@ -80,7 +80,7 @@ complex:
 		switch (c) {
 
 		case '\\':
-			c = getchar();
+			c = ex_getchar();
 			switch (c) {
 
 			case '(':
@@ -145,23 +145,23 @@ magic:
 				*ep++ = CCL;
 				*ep++ = 0;
 				cclcnt = 1;
-				c = getchar();
+				c = ex_getchar();
 				if (c == '^') {
-					c = getchar();
+					c = ex_getchar();
 					ep[-2] = NCCL;
 				}
 				if (c == ']')
 					cerror("Bad character class|Empty character class '[]' or '[^]' cannot match");
 				while (c != ']') {
 					if (c == '\\' && any(peekchar(), "]-^\\"))
-						c = getchar() | QUOTE;
+						c = ex_getchar() | QUOTE;
 					if (c == '\n' || c == EOF)
 						cerror("Missing ]");
 					*ep++ = c;
 					cclcnt++;
 					if (ep >= &expbuf[ESIZE])
 						goto complex;
-					c = getchar();
+					c = ex_getchar();
 				}
 				lastep[1] = cclcnt;
 				continue;

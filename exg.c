@@ -28,18 +28,18 @@ global(int k)
 	setall();
 	nonzero();
 	skipwh();
-	c = getchar();
+	c = ex_getchar();
 	if (endcmd(c))
 		error("Global needs re|Missing regular expression for global");
 	compile(c, 0);
 	savere(&scanre);
 	gp = globuf;
-	while ((c = getchar()) != '\n') {
+	while ((c = ex_getchar()) != '\n') {
 		switch (c) {
 			case EOF:
 				error("EOF reading global");
 			case '\\':
-				c = getchar();
+				c = ex_getchar();
 				switch (c) {
 					case '\\':
 						ungetchar(c);

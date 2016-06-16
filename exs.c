@@ -65,7 +65,7 @@ compsub(int ch)
 	switch (ch) {
 		case 's':
 			skipwh();
-			seof = getchar();
+			seof = ex_getchar();
 			if (endcmd(seof))
 				error("Substitute needs re|Missing regular expression for substitute");
 			seof = compile(seof, 0);
@@ -84,7 +84,7 @@ compsub(int ch)
 			break;
 	}
 	for (;;) {
-		c = getchar();
+		c = ex_getchar();
 		switch (c) {
 			case 'g':
 				gsubf++;
@@ -111,13 +111,13 @@ comprhs(int seof)
 	rp = rhsbuf;
 	strcpy(orhsbuf, rp);
 	for (;;) {
-		c = getchar();
+		c = ex_getchar();
 		if (c == seof)
 			break;
 		switch (c) {
 
 		case '\\':
-			c = getchar();
+			c = ex_getchar();
 			if (value(MAGIC)) {
 				/*
 				 * When "magic", \& turns into a plain &,

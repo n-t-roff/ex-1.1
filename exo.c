@@ -34,7 +34,7 @@ oop(void)
 		saveall();
 	lines = dol - zero;
 	if (peekchar() == '/') {
-		compile(getchar(), 1);
+		compile(ex_getchar(), 1);
 		savere(&scanre);
 		if (execute(0, addr1) == 0)
 			error("Fail|Pattern not found on addressed line");

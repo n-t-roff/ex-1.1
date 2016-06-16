@@ -24,7 +24,7 @@ ex_unix(void)
 	setnoaddr();
 	printub = 0;
 	strcpy(puxb, uxb);
-	c = getchar();
+	c = ex_getchar();
 	if (c == '\n' || c == EOF)
 		error("Incomplete shell escape command@- use 'shell' to get a shell");
 	up = uxb;
@@ -32,7 +32,7 @@ ex_unix(void)
 		switch (c) {
 			case '\\':
 				if (any(peekchar(), "%`!"))
-					c = getchar();
+					c = ex_getchar();
 			default:
 				if (up >= &uxb[UXBSZ]) {
 tunix:
@@ -76,7 +76,7 @@ uexp:
 				}
 				break;
 		}
-		c = getchar();
+		c = ex_getchar();
 	} while (c == '|' || !endcmd(c));
 	*up = 0;
 	up = uxb;
@@ -118,7 +118,7 @@ unix2(char *opt, char printub, char *up)
 */
 		signal(HUP, oldhup);
 		signal(QUIT, oldquit);
-		execl(svalue(SHELL), "sh", opt, up, 0);
+		execl(svalue(SHELL), "sh", opt, up, NULL);
 		die++;
 		error("No %s!\n", svalue(SHELL));
 	}

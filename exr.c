@@ -3,7 +3,7 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <sys/sysmacros.h>
+//#include <sys/sysmacros.h>
 #include "ex.h"
 #include "ex_io.h"
 /*

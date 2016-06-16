@@ -57,7 +57,7 @@ error(char *fmt, ...)
 	inglobal = 0;
 	globp = 0;
 	while (lastchar() != '\n' && lastchar() != EOF)
-		getchar();
+		ex_getchar();
 	ungetchar(0);
 	endline = 1;
 	if (io > 0) {
@@ -131,7 +131,7 @@ helpthem(void)
 	else {
 		cp = icp;
 		while (!white(peekchar()) && !endcmd(peekchar()))
-			*cp++ = getchar();
+			*cp++ = ex_getchar();
 		*cp++ = 0;
 		skipwh();
 		if (!endcmd(peekchar()))

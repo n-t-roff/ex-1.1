@@ -11,7 +11,7 @@ filename(int comm)
 {
 	int c;
 
-	c = getchar();
+	c = ex_getchar();
 	if (endcmd(c)) {
 		if (savedfile[0] == 0 && comm != 'f')
 			error("No file|No current filename");

@@ -34,7 +34,7 @@ vop(void)
 	if (addr2 == zero && dol > zero)
 		addr1 = one, addr2 = one;
 	nonzero();
-	c = getchar();
+	c = ex_getchar();
 	switch (c) {
 		case '^':
 			if (addr2 == one)

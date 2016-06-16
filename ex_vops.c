@@ -31,7 +31,7 @@ vdelete(int c)
 	vdcMID();
 	setDEL();
 	cp = cursor;
-	strcpy(cp, wcursor);
+	memmove(cp, wcursor, strlen(wcursor) + 1);
 	if (cp > linebuf && (cp[0] == 0 || c == '#'))
 		cp--;
 	i = vliny[vcline];

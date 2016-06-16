@@ -19,18 +19,18 @@ zop(char hadpr)
 	notempty();
 	znoclear = 0;
 	zweight = 0;
-	switch(c = op = getchar()) {
+	switch(c = op = ex_getchar()) {
 		case '^':
 			zweight = 1;
 		case '-':
 		case '+':
 			while (peekchar() == op) {
-				getchar();
+				ex_getchar();
 				zweight++;
 			}
 		case '=':
 		case '.':
-			c = getchar();
+			c = ex_getchar();
 			break;
 		case EOF:
 			znoclear++;
@@ -42,7 +42,7 @@ zop(char hadpr)
 	if (digit(c)) {
 		lines = c - '0';
 		for(;;) {
-			c = getchar();
+			c = ex_getchar();
 			if (!digit(c))
 				break;
 			lines *= 10;

@@ -22,7 +22,7 @@ int	peekc;
 int	lastc	= '\n';
 
 int
-getchar(void)
+ex_getchar(void)
 {
 	int c;
 
@@ -58,7 +58,7 @@ peekchar(void)
 {
 
 	if (peekc == 0)
-		peekc = getchar();
+		peekc = ex_getchar();
 	return (peekc);
 }
 
@@ -156,7 +156,7 @@ gettty(void)
 		}
 		noteinp();
 	} else {
-		while ((c = getchar()) != '\n') {
+		while ((c = ex_getchar()) != '\n') {
 			if (c == EOF) {
 				if (inglobal)
 					ungetchar(EOF);

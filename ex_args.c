@@ -14,7 +14,7 @@ getargs(void)
 
 	cp = linebuf, dp = (char **)genbuf;
 	for (;;) {
-		c = getchar();
+		c = ex_getchar();
 		if (endcmd(c))
 			break;
 		if (white(c))
@@ -23,7 +23,7 @@ getargs(void)
 		do {
 			switch (c) {
 				case '\\':
-					c = getchar() | 0200;
+					c = ex_getchar() | 0200;
 				default:
 					if (cp > &linebuf[LBSIZE - 2])
 flong:
@@ -47,7 +47,7 @@ filexp:
 					}
 					break;
 			}
-			c = getchar();
+			c = ex_getchar();
 		} while (!white(c) && !endcmd(c));
 		ungetchar(c);
 		*cp++ = 0;
