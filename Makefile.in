@@ -1,3 +1,5 @@
+PREFIX=	${DESTDIR}/usr/local
+BINDIR=	${PREFIX}/bin
 OBJ=	ex.o ex_cmds.o exd.o ex_put.o ex_print.o exv.o ex_vmain.o exs.o \
 	3printf.o ex_io.o ex_pack.o ex_recover.o ex_set.o ex_get.o ex_subr.o \
 	ex_tty.o ex_ca.o ex_unix.o ex_init.o ex_re.o ex_source.o ex_glob.o \
@@ -5,11 +7,13 @@ OBJ=	ex.o ex_cmds.o exd.o ex_put.o ex_print.o exv.o ex_vmain.o exs.o \
 	ex_note.o exa.o exg.o ex_shift.o ex_vops.o ex_vcurs.o ex_vadjust.o \
 	ex_vclear.o ex_vkey.o ex_voperate.o exo.o ex_vset.o exj.o exz.o exm.o \
 	exx.o exw.o ex_file.o exu.o exr.o Version.o
-_CFLAGS=-DUNIMP -Wall \
+_CFLAGS=-DUNIMP -Wall -Wextra \
 	-g -O0 -fno-omit-frame-pointer -fno-optimize-sibling-calls \
 	-fsanitize=undefined \
 	-fsanitize=integer \
 	-fsanitize=address
+
+.PHONY: install
 
 all: a.out
 
@@ -18,6 +22,17 @@ clean:
 
 distclean: clean
 	rm -f Makefile config.log
+
+install: ${BINDIR} ${LIBDIR}
+	install a.out ${BINDIR}/ex
+	for i in vi view edit; do \
+		ln -sf ${BINDIR}/ex ${BINDIR}/$$i; \
+	done
+
+uninstall:
+	for i in ex vi view edit; do \
+		rm -f ${BINDIR}/$$i; \
+	done
 
 a.out: $(OBJ)
 	$(CC) $(CFLAGS) $(_CFLAGS) $(LDFLAGS) $(OBJ) $(TERMLIB)

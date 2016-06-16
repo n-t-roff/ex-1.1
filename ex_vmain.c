@@ -860,8 +860,10 @@ char *
 vfindcol(int i)
 {
 	register char *cp;
+	char *s;
 
-	qcolumn(linebuf - 1, 0);
+	s = linebuf;
+	qcolumn(s - 1, 0);
 	for (cp = linebuf; *cp && vcntcol < i; cp++)
 		qcount(*cp);
 	if (cp != linebuf)

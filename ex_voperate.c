@@ -59,7 +59,7 @@ operate(int c, int cnt)
 			deleteop = beep;
 			break;
 		case 'r':
-			if (cnt > strlen(cursor))
+			if (cnt > (ssize_t)strlen(cursor))
 				goto errlab;
 			if (*cursor == '\t' || Putchar == &listchar)
 				vgotoCL(column(cursor - 1));

@@ -23,12 +23,14 @@ char	endline = 1;
  * xargc0 are also initialized to point to the arguments.
  */
 int
-main(int xargc0, char **xargv0)
+main(int ac, char **av)
 {
 	char oop, nop, inite, reenter;
 	register char **axargv0;
 	register int c;
 
+	xargc0 = ac;
+	xargv0 = av;
 	axargv0 = xargv0;
 #if 0
 	if (axargv0[0][0] == 'a')
