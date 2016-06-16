@@ -11,6 +11,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <fcntl.h>
+#include <dirent.h>
 #include "ex.h"
 #include "ex_glob.h"
 #include "ex_io.h"
@@ -22,7 +23,7 @@ static void expand(char *);
 static int match(char *, char *);
 static int amatch(char *, char *);
 static char *cat(char *, char *);
-static void scan(char **, int (*)());
+static void scan(char **, int (*)(int));
 static int tglob(int);
 
 static	char **av;
@@ -88,11 +89,8 @@ static void
 expand(char *as)
 {
 	register char *cs, *sgpathp;
-	register int dirf;
-	static struct {
-		int	ino;
-		char	name[16];
-	} entry;
+	DIR *dirf;
+	struct dirent *entry;
 	struct stat stbuff;
 
 	sgpathp = gpathp;
@@ -121,7 +119,7 @@ gpatherr:
 		else
 			*gpathp++ = *as++;
 	*gpathp = 0;
-	dirf = open(file, 0);
+	dirf = opendir(file);
 	if (dirf < 0) {
 		if (globbed)
 			goto endit;
@@ -130,15 +128,13 @@ gpatherr:
 	}
 	globbed++;
 	cs++;
-	while (read(dirf, &entry, 16) == 16) {
-		if (entry.ino==0)
-			continue;
-		if (match(entry.name, cs)) {
-			*av++ = cat(file, entry.name);
+	while ((entry = readdir(dirf))) {
+		if (match(entry->d_name, cs)) {
+			*av++ = cat(file, entry->d_name);
 			ncoll++;
 		}
 	}
-	close(dirf);
+	closedir(dirf);
 endit:
 	gpathp = sgpathp;
 	*gpathp = 0;
@@ -268,7 +264,7 @@ toolong:
 }
 
 static void
-scan(char **t, int (*f)())
+scan(char **t, int (*f)(int))
 {
 	register char *p, c;
 
@@ -298,7 +294,7 @@ void
 getone(void)
 {
 	register char *str;
-	char *gv[2], *lp;
+	char *gv[2];
 	struct Glob G;
 
 	switch (getargs()) {
@@ -309,7 +305,7 @@ getone(void)
 		default:
 			error("Too many names|Multiple file names allowed only on next command");
 	}
-	gv[0] = lp = genbuf;
+	gv[0] = *(char **)genbuf;
 	gv[1] = 0;
 	glob(gv, &G);
 	str = G.Ava[0];
