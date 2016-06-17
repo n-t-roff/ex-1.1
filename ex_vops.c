@@ -31,7 +31,7 @@ vdelete(int c)
 	vdcMID();
 	setDEL();
 	cp = cursor;
-	memmove(cp, wcursor, strlen(wcursor) + 1);
+	CP(cp, wcursor);
 	if (cp > linebuf && (cp[0] == 0 || c == '#'))
 		cp--;
 	i = vliny[vcline];
@@ -111,7 +111,7 @@ vchange(void)
 	ex_putchar('$');
 	cursor = cp;
 	setDEL();
-	strcpy(cursor, wcursor);
+	CP(cursor, wcursor);
 	if (*cursor == 0)
 		vgotoCL(column(cursor));
 	else if (*cursor == '\t')
@@ -377,7 +377,7 @@ fixindent(int indent)
 		genbuf[0] = 0;
 		return (i);
 	}
-	strcpy(genindent(i), cp);
+	CP(genindent(i), cp);
 	return (i);
 }
 #endif

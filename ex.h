@@ -108,6 +108,8 @@ int	TMODE;
 extern int	lastc;
 int	peekc;
 jmp_buf	resetlab;		/* For error throws to top level (cmd mode) */
+
+#define	CP(a, b)	memmove(a, b, strlen(b) + 1)
 #define	getexit(a)	copy((char *)a, (char *)resetlab, sizeof (jmp_buf))
 #define	lastchar()	lastc
 #define	outchar(c)	(*Outchar)(c)

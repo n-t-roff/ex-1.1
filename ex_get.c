@@ -206,7 +206,7 @@ smunch(int col, char *ocp)
 				continue;
 			default:
 				cp--;
-				memmove(ocp, cp, strlen(cp) + 1);
+				CP(ocp, cp);
 				return (col);
 		}
 }

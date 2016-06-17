@@ -73,7 +73,7 @@ operate(int c, int cnt)
 			vundkind = VCHNG;
 			wcursor = cursor + cnt;
 			setLAST();
-			strcpy(cursor, wcursor);
+			CP(cursor, wcursor);
 			vappend('r', cnt, 0);
 			*lastcp++ = c;
 			setLAST();
