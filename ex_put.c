@@ -514,15 +514,10 @@ ttcharoff(void)
 	tty.c_cc[VDSUSP] = vdisable;
 #endif
 #ifdef VSTART
-	/*
-	 * The following is sample code if USG ever lets people change
-	 * their start/stop chars.  As long as they can't we can't get
-	 * into trouble so we just leave them alone.
-	 */
-	if (tty.c_cc[VSTART] != CTRL('q'))
-		tty.c_cc[VSTART] = vdisable;
-	if (tty.c_cc[VSTOP] != CTRL('s'))
-		tty.c_cc[VSTOP] = vdisable;
+	tty.c_cc[VSTART] = vdisable;
+#endif
+#ifdef VSTOP
+	tty.c_cc[VSTOP] = vdisable;
 #endif
 }
 

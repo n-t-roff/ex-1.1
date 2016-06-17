@@ -1,4 +1,4 @@
-'so /usr/lib/tmac.s
+.\"'so /usr/lib/tmac.s
 .if t .tr \(rh-
 .bd S B 3
 .de SM
