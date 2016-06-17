@@ -256,10 +256,8 @@ fgoto(void)
 void
 setcol(int col)
 {
-	register int del;
 
 	flush1();
-	del = col - outcol;
 	destcol = col;
 	if (destcol < 0)
 		destcol = 0;

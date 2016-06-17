@@ -3,7 +3,6 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-//#include <sys/sysmacros.h>
 #include "ex.h"
 #include "ex_io.h"
 /*
@@ -20,7 +19,7 @@ rop(int c)
 
 	io = open(file, 0);
 	if (io < 0) {
-		if (c == 'e' & errno == ENOENT)
+		if (c == 'e' && errno == ENOENT)
 			value(EDITED)++;
 		ioerror();
 	}

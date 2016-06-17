@@ -38,7 +38,7 @@ Vmain(char *ic)
 	char hadcnt, first, *oglobp;
 	extern char Peekkey, *genindent();
 	void (*OP)();
-	int ind, vmunddot, *addr;
+	int ind, *addr;
 	extern char *loc1;
 
 	if (nextic) {
@@ -50,7 +50,6 @@ vnline:
 	if (vundkind != VMANY)
 		vundkind = VNONE;
 	getDOT();
-	vmunddot = *dot;
 vmark:
 	if (vmoving)
 		wcursor = vfindcol(vmovcol);

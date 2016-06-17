@@ -89,7 +89,9 @@ dumbness:
 	tfile = open(tfname, 2);
 	if (tfile < 0)
 		goto dumbness;
+#ifdef UNIX_SBRK
 	brk(fendcore);
+#endif
 }
 
 void
@@ -353,7 +355,7 @@ static void
 blkio(off_t b, void *buf, ssize_t (*iofcn)())
 {
 
-	lseek(tfile, b, 3);
+	lseek(tfile, b * 512, 0);
 	if ((*iofcn)(tfile, buf, 512) != 512)
 		ioerror();
 }
@@ -379,7 +381,7 @@ synctmp(void)
 			oblock = *bp + 1;
 			bp[1] = -1;
 		}
-		lseek(tfile, *bp, 3);
+		lseek(tfile, *bp * 512, 0);
 		cnt = (dol - a + 2) << 1;
 		if (cnt > 512)
 			cnt = 512;
@@ -392,7 +394,7 @@ oops:
 		*zero = 0;
 	}
 	header.Alines = dol - zero;
-	lseek(tfile, 0, 3);
+	lseek(tfile, 0, 0);
 	if (write(tfile, &header, sizeof header) != sizeof header)
 		goto oops;
 /*

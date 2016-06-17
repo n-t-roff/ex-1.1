@@ -25,7 +25,7 @@ char	endline = 1;
 int
 main(int ac, char **av)
 {
-	char oop, nop, inite, reenter;
+	char oop, nop, inite = 0, reenter;
 	register char **axargv0;
 	register int c;
 

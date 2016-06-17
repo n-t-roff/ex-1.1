@@ -120,7 +120,7 @@ gpatherr:
 			*gpathp++ = *as++;
 	*gpathp = 0;
 	dirf = opendir(file);
-	if (dirf < 0) {
+	if (dirf == NULL) {
 		if (globbed)
 			goto endit;
 		else

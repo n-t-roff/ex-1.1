@@ -17,7 +17,7 @@
 
 static int width, sign, fill;
 
-char *_p_dconv();
+static char *_p_dconv(long, char *);
 static void _p_emit(char *, char *);
 
 void
@@ -236,10 +236,8 @@ ex_printf(char *fmt, ...)
  * This program assumes it is running on 2's complement machine
  * with reasonable overflow treatment.
  */
-char *
-_p_dconv(value, buffer)
-	long value;
-	char *buffer;
+static char *
+_p_dconv(long value, char *buffer)
 {
 	register char *bp;
 	register int svalue;

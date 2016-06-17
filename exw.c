@@ -3,7 +3,6 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <string.h>
-//#include <sys/sysmacros.h>
 #include "ex.h"
 #include "ex_io.h"
 /*
