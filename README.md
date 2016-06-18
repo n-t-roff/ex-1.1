@@ -46,12 +46,12 @@ In this case you need to issue the `a` command (*append*) to type
 some text.
 After that you put a `.` (*dot*) on a line by itself to quit
 append mode.
-With the added text command `vi` will work.
+With the added text, command `vi` will work.
 Note that ex-1.1 places the cursor at the last line of the file.
 Use `1G` or `-` or `k` to move upwards.
 The most significant differences for visual mode are:
-* **Don't use unescaped `@` in the input, type `\@` instead.**
-  `@` in input deletes the current line.
+* **Don't use unescaped `@` in input mode, type `\@` instead.**
+  `@` in input mode deletes the current line.
   This is an intended feature and not a bug.
 * Use `q` (instead of `:`) to enter a `ex` command.
   After that you stay in `ex` mode.
@@ -60,11 +60,12 @@ The most significant differences for visual mode are:
   `^B`, `^U` and `^Y` did not exist.
 * `^F` did not exist, use `^D`
 * Use `^Z` instead of `^L`
+  (Job control had been added in version 3.4)
 * Use `\\` instead of `dd`.
   After deleting lines a `@` appears at that position.
   This is intended and not a bug.
 * Use `Y` instead of `yy`
-* In input mode use `^H` instead of <BACKSPACE>
+* In input mode use `^H` instead of &lt;BACKSPACE&gt;
 
 **Attention**:
 The original `vi` had not been 8-bit clean!
