@@ -68,7 +68,7 @@ The most significant differences for visual mode are:
   (You may ignore these lines or type `^Z` to remove them.)
 * Use `Y` instead of `yy`.
 * In input mode use `^H` instead of &lt;BACKSPACE&gt;
-* Use ``:e``` instead of `:e#` to address the alternate
+* Use `` :e` `` instead of `:e#` to address the alternate
   file name.
 * Neither `ZZ` nor `:wq` nor `:x` had been implemented.
   Use the sequence `qw`&lt;ENTER&gt; `q`&lt;ENTER&gt;
