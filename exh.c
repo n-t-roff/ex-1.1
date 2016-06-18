@@ -123,7 +123,7 @@ helpthem(void)
 	char buff[513];
 	register int buffcnt;
 
-	strcpy(buff, "/usr/lib/how_ex/");
+	strcpy(buff, SHAREDIR "/how_ex/");
 	icp = strend(buff);
 	skipwh();
 	if (endcmd(peekchar()))

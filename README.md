@@ -60,16 +60,20 @@ The most significant differences for visual mode are:
   `^B`, `^U` and `^Y` did not exist.
   (`H-` can be used instead of `^U`.)
 * `^F` did not exist, use `^D`
-* Use `^Z` instead of `^L`
-  (Job control had been added in version 3.4)
+* Use `^Z` instead of `^L`.
+  (Job control had been added in version 3.4.)
 * Use `\\` instead of `dd`.
   After deleting lines a `@` appears at that position.
   This is intended and not a bug.
-* Use `Y` instead of `yy`
+  (You may ignore these lines or type `^Z` to remove them.)
+* Use `Y` instead of `yy`.
 * In input mode use `^H` instead of &lt;BACKSPACE&gt;
+* Use ``:e``` instead of `:e#` to address the alternate
+  file name.
 * Neither `ZZ` nor `:wq` nor `:x` had been implemented.
   Use the sequence `qw`&lt;ENTER&gt; `q`&lt;ENTER&gt;
   to write and quit.
+* Use `K`*letter* instead of `m`*letter* to set marks.
 
 **Attention**:
 The original `vi` had not been 8-bit clean!
