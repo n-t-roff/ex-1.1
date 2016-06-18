@@ -1,3 +1,3 @@
 char	version[] = "Version 1.1, February 1, 1978"
     "  (1BSD)  git "
-    "160617 22:40";
+    "160618 9:55";

@@ -67,6 +67,9 @@ The most significant differences for visual mode are:
   This is intended and not a bug.
 * Use `Y` instead of `yy`
 * In input mode use `^H` instead of &lt;BACKSPACE&gt;
+* Neither `ZZ` nor `:wq` nor `:x` had been implemented.
+  Use the sequence `qw`&lt;ENTER&gt; `q`&lt;ENTER$gt;
+  to write and quit.
 
 **Attention**:
 The original `vi` had not been 8-bit clean!

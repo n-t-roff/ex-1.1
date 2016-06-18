@@ -196,8 +196,10 @@ init(void)
 	endcore = fendcore - 2;
 #else
 # define LINELIMIT 0x8000
-	fendcore = malloc(LINELIMIT * sizeof(int *));
-	endcore = fendcore + LINELIMIT - 1;
+	if (!fendcore) {
+		fendcore = malloc(LINELIMIT * sizeof(int *));
+		endcore = fendcore + LINELIMIT - 1;
+	}
 #endif
 	dot = zero = dol = fendcore;
 	one = zero+1;
