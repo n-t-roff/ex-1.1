@@ -35,12 +35,12 @@ main(int ac, char **av)
 #if 0
 	if (axargv0[0][0] == 'a')
 		erpath += 9;
+#endif
 	if (axargv0[0][1] == 'd' || axargv0[0][2] == 'd') {
 		value(OPEN) = 0;
 		value(NOTIFY) = 1;
 		value(MAGIC) = 0;
 	}
-#endif
 	axargv0++;
 	xargc0--;
 	draino();

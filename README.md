@@ -53,11 +53,12 @@ The most significant differences for visual mode are:
 * **Don't use unescaped `@` in input mode, type `\@` instead.**
   `@` in input mode deletes the current line.
   This is an intended feature and not a bug.
-* Use `q` (instead of `:`) to enter a `ex` command.
+* Use `q` (instead of `:`) to enter an `ex` command.
   After that you stay in `ex` mode.
   Use command `vi` to go back to visual mode.
 * Only *n*`G`, `-`, `k` can be used to move upwards.
   `^B`, `^U` and `^Y` did not exist.
+  (`H-` can be used instead of `^U`.)
 * `^F` did not exist, use `^D`
 * Use `^Z` instead of `^L`
   (Job control had been added in version 3.4)
