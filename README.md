@@ -34,7 +34,7 @@ $ make distclean
 While `vi` version 2.2 behaves quite similar to later versions,
 `vi` version 1.1 is rather different.
 Please study the manual
-[exrefm.pdf](https://github.com/n-t-roff/ex-1.1/blob/master/exrefm/exrefm.pdf)
+[exrefm.pdf](http://n-t-roff.github.io/ex/1.1/exrefm.pdf)
 carefully.
 This version doesn't start in visual mode even if installed with
 name `vi`.
