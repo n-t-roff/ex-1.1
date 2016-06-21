@@ -17,7 +17,7 @@ rop(int c)
 	struct stat stbuf;
 	int magic;
 
-	io = open(file, 0);
+	io = open(file, O_RDONLY);
 	if (io < 0) {
 		if (c == 'e' && errno == ENOENT)
 			value(EDITED)++;
@@ -40,7 +40,7 @@ rop(int c)
 				error(" Directory");
 			case S_IFREG:
 				i = read(io, &magic, 2);
-				lseek(io, 0, 0);
+				lseek(io, 0, SEEK_SET);
 				if (i != 2)
 					break;
 				switch (magic) {

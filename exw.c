@@ -54,7 +54,7 @@ wop(void)
 				    && minor(stbuf.st_dev) == DVNLMIN)
 					goto cre;
 			}
-			io = open(file, 1);
+			io = open(file, O_WRONLY);
 			if (io < 0)
 				ioerror();
 			if (!isatty(io))

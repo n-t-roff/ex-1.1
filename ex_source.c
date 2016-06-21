@@ -28,7 +28,7 @@ source(char *file, int okfail)
 	if (saveinp < 0)
 		error("Too many nested sources");
 	close(0);
-	if (open(file, 0) < 0) {
+	if (open(file, O_RDONLY) < 0) {
 		oerrno = errno;
 		if (ruptible)
 			signal(INTR, onintr);

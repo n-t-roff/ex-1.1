@@ -51,7 +51,7 @@ error(char *fmt, ...)
 	if (die)
 		exit(1);
 	undiddle();
-	lseek(0, 0, 2);
+	lseek(0, 0, SEEK_END);
 	if (inglobal)
 		setlastchar('\n');
 	inglobal = 0;
@@ -138,7 +138,7 @@ helpthem(void)
 			error("Help takes one keyword only as argument@- \"help index\" gives a list of keywords");
 	}
 	eol();
-	io = open(buff, 0);
+	io = open(buff, O_RDONLY);
 	if (io < 0)
 		error("Don't know anything about %s@- \"help index\" gives a list of known subjects", icp);
 	setnorm();
