@@ -1,6 +1,7 @@
+VERSION=1.1
 PREFIX=	${DESTDIR}/usr/local
 BINDIR=	${PREFIX}/bin
-SHAREDIR=${PREFIX}/share/ex-1.1
+SHAREDIR=${PREFIX}/share/ex/${VERSION}
 DBG_CFLAGS=-DDEBUG \
 	-g -O0 -fno-omit-frame-pointer -fno-optimize-sibling-calls \
 	-fsanitize=undefined \
@@ -35,6 +36,8 @@ install: ${BINDIR} ${LIBDIR} ${SHAREDIR}
 	cp -R how_ex ${SHAREDIR}/
 	chmod 755 ${SHAREDIR}/how_ex
 	chmod 644 ${SHAREDIR}/how_ex/*
+	cp exrefm/exrefm.pdf ${SHAREDIR}/
+	chmod 644 ${SHAREDIR}/exrefm.pdf
 
 uninstall:
 	for i in ex vi view edit; do \

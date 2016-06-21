@@ -302,7 +302,7 @@ ioerror(void)
 			error(" No such file or directory");
 		case EIO:
 			error(" Physical I/O error");
-		case EACCESS:
+		case EACCES:
 			error(" Permission denied");
 		case ENOTDIR:
 			error(" Not a directory");
@@ -312,12 +312,12 @@ ioerror(void)
 			error(" File table overflow");
 		case ENOSPC:
 			error(" No space left on device");
-		case EQUOT:
+		case EDQUOT:
 			error(" Quota exceeded");
 		case EROFS:
 			error(" Read-only file system");
 		default:
-			error(" I/O error %d", errno);
+			error(" %s", strerror(errno));
 	}
 }
 

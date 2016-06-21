@@ -1,5 +1,5 @@
 # ex-1.1 (from 1BSD release)
-This is `vi` version 1.1 taken from 1BSD.
+This is the very first `vi` version (1.1) taken from 1BSD.
 It had been released on January 1, 1978.
 ## Installation notes
 The software is downloaded with
@@ -70,6 +70,7 @@ The most significant differences for visual mode are:
 * In input mode use `^H` instead of &lt;BACKSPACE&gt;
 * Use `` :e` `` instead of `:e#` to address the alternate
   file name.
+  (Also `^6` did not exist.)
 * Neither `ZZ` nor `:wq` nor `:x` had been implemented.
   Use the sequence `qw`&lt;ENTER&gt; `q`&lt;ENTER&gt;
   to write and quit.
