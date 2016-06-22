@@ -584,7 +584,7 @@ vmaxrep(int ch, int cnt)
 	replen = strlen(genbuf);
 	if (ch == 'R') {
 		len = strlen(cursor);
-		strcpy(cursor, cursor + (replen > len ? len : replen));
+		CP(cursor, cursor + (replen > len ? len : replen));
 	}
 	len = strlen(linebuf);
 	if (len + cnt * replen <= 510)
