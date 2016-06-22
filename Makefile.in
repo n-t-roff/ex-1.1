@@ -30,9 +30,7 @@ distclean: clean
 
 install: ${BINDIR} ${LIBDIR} ${SHAREDIR}
 	install a.out ${BINDIR}/ex
-	for i in vi view edit; do \
-		ln -sf ${BINDIR}/ex ${BINDIR}/$$i; \
-	done
+	ln -sf ${BINDIR}/ex ${BINDIR}/edit
 	cp -R how_ex ${SHAREDIR}/
 	chmod 755 ${SHAREDIR}/how_ex
 	chmod 644 ${SHAREDIR}/how_ex/*
@@ -40,7 +38,7 @@ install: ${BINDIR} ${LIBDIR} ${SHAREDIR}
 	chmod 644 ${SHAREDIR}/exrefm.pdf
 
 uninstall:
-	for i in ex vi view edit; do \
+	for i in ex edit; do \
 		rm -f ${BINDIR}/$$i; \
 	done
 	rm -rf ${SHAREDIR}

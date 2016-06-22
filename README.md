@@ -36,9 +36,9 @@ While `vi` version 2.2 behaves quite similar to later versions,
 Please study the manual
 [exrefm.pdf](http://n-t-roff.github.io/ex/1.1/exrefm.pdf)
 carefully.
-This version doesn't start in visual mode even if installed with
-name `vi`.
+This version does not start in visual mode.
 There is no `-v` option.
+Program names `vi` and `view` did not exist.
 So you have to enter the command `vi` at the `ex` prompt `:`.
 If the file is empty (or no file is loaded), command `vi` won't
 work.
