@@ -31,7 +31,9 @@ All generated files are removed with
 $ make distclean
 ```
 ## Usage notes
-While `vi` version 2.2 behaves quite similar to later versions,
+While `vi`
+[version 2.2](https://github.com/n-t-roff/ex-2.2)
+behaves quite similar to later versions,
 `vi` version 1.1 is rather different.
 Please study the manual
 [exrefm.pdf](http://n-t-roff.github.io/ex/1.1/exrefm.pdf)
