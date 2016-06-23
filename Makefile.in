@@ -34,8 +34,8 @@ install: ${BINDIR} ${LIBDIR} ${SHAREDIR}
 	cp -R how_ex ${SHAREDIR}/
 	chmod 755 ${SHAREDIR}/how_ex
 	chmod 644 ${SHAREDIR}/how_ex/*
-	cp exrefm/exrefm.pdf ${SHAREDIR}/
-	chmod 644 ${SHAREDIR}/exrefm.pdf
+	cp exrefm/exrefm.pdf exrefm/exrefm.more ${SHAREDIR}/
+	chmod 644 ${SHAREDIR}/exrefm.*
 
 uninstall:
 	for i in ex edit; do \

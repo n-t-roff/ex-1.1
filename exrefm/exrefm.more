@@ -1,0 +1,2838 @@
+
+
+
+
+
+
+
+
+
+                              [1mEx Reference Manual[0m
+                          [1mVersion 1.1 − November, 1977[0m
+
+
+                                 [4mWilliam[24m [4mN.[24m [4mJoy[0m
+                           Computer Science Division
+           Department of Electrical Engineering and Computer Science
+                       University of California, Berkeley
+                          Berkeley, California  94720
+
+
+
+                                    [4mABSTRACT[0m
+
+            [4mEx[24m  is  a  UNIX  text editor, based on and largely compatible
+       with the standard UNIX editor [4med[24m.  [4mEx[24m is a  line  oriented  editor
+       and  has  a  [4mcommand[24m mode similar to [4med[24m.  [4mEx[24m also has an [4mopen[24m mode
+       which allows intraline editing on video terminals,  and  a  [4mvisual[0m
+       mode  for  screen oriented editing on cursor‐addressible terminals
+       such as the LSI ADM‐3A and HP 2645.  [4mEx[24m  gives  a  great  deal  of
+       feedback  to  the user prompting for command input, indicating the
+       scope of changes performed by commands, and giving diagnostics for
+       all  error conditions.  For more experienced users, [4mex[24m can be made
+       more [4mterse[24m.  The [4mex[24m user is protected against accidental  loss  of
+       work by the [4mundo[24m command, which can reverse the effect of the last
+       buffer modifying command, and by sensibility restrictions  on  the
+       [4mwrite[24m  command,  which  prevent  loss  of the current file and the
+       accidental overwriting of other files.  [4mEx[24m has a  recovery  mecha‐
+       nism  which  allows  work  to  be  saved  to within a few lines of
+       changes after system or editor crashes.
+
+            The [4mReference[24m [4mManual[24m provides a concise  description  of  all
+       features  of  [4mex[24m,  summarizing commands, command variants, options
+       and [4mopen[24m and [4mvisual[24m modes.
+
+
+
+23 June 2016
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                              [1mEx Reference Manual[0m
+                          [1mVersion 1.1 − November, 1977[0m
+
+
+                                 [4mWilliam[24m [4mN.[24m [4mJoy[0m
+                           Computer Science Division
+           Department of Electrical Engineering and Computer Science
+                       University of California, Berkeley
+                          Berkeley, California  94720
+
+
+
+[1mIntroduction[0m
+
+     The reference manual summarizes, in a concise form,  the  features  of  the
+text editor [4mex.[0m
+
+[1mHistory of the editor[0m
+
+     [4mEx[24m  is  heavily based on the text editor [4med[24m.  The first versions of [4mex[24m were
+modifications of a text editor [4mem[24m developed at Queen Mary’s College in  England.
+[4mEm[24m  was  a  modified [4med[24m which had some added features which were useful on high‐
+speed terminals.  The earlier versions of [4mex[24m also  included  features  from  the
+modified  [4med[24m  in  use  at  UCLA, and the ideas of the present author and Charles
+Haley, who implemented most of the modifications to [4mem[24m which resulted  in  these
+early  versions  of  [4mex[24m.  Versions of [4mex[24m have been in use since September, 1976.
+Version 1.1 of [4mex[24m results from a redesign  of  [4mex[24m  implemented  by  the  present
+author in the summer and fall of 1977.
+
+[1mAcknowledgements[0m
+
+     The author would like to thank Chuck Haley, who collaborated on the earlier
+versions of [4mex[24m and acted as mentor for the design of this version; Bruce Englar,
+who  stimulated  the redesign of [4mex[24m and convinced the author of the worth of the
+intraline editing facilities; and his faculty advisor Susan L. Graham.  In addi‐
+tion,  a large number of people have contributed ideas to the development of [4mex[24m,
+aided in its debugging and in the  preparation  of  documentation.   The  author
+would like to thank Eric Allman, Ricki Blau, Rich Blomseth, Clint Gilliam, Steve
+Glanville, Ed Gould, Mike Harrison, James Joyce,  Howard  Katseff,  Ivan  Maltz,
+Doug  Merritt,  David  Mosher,  Dick  Peters,  Bill  Rowan, Genji Schmeder, Eric
+Schmidt, Jeff Schriebman, Kurt Shoens, Bob Tidd,  Bob  Toxen,  Mike  Ubell,  and
+Vance Vaughan.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                       ‐2‐
+
+
+[1mOptions[0m
+
+     Each  instance of the editor has a set of options, which can be set to tai‐
+lor it to your liking.  The command [4medit[24m invokes a version of  [4mex[24m  designed  for
+more casual or beginning users by changing the default settings of some of these
+options.
+
+     There are three kinds of options: Boolean,  numeric,  and  string  options.
+Options  are  controlled by the [4mset[24m command which can be used to show their cur‐
+rent values or to assign new values.  The options, their defaults, and  a  short
+description  of each are given in the following table.  A more complete descrip‐
+tion of each option will be given near the end of this reference manual.
+
+┌──────────────────────────────────────────────────────────────────────────────────────────┐
+│                                   Editor options                                         │
+├──────────────┬──────┬───────────────┬────────────────────────────────────────────────────┤
+│    Name      │ Abbr │ Default       │ Description                                        │
+├──────────────┼──────┼───────────────┼────────────────────────────────────────────────────┤
+│[4mautoindent[24m    │ [4mai[24m   │ [4mnoai[24m          │ Automatic indentation                              │
+│[4mautoprint[24m     │ [4map[24m   │ [4map[24m            │ Automatic print after change                       │
+│[4mbeautify[24m      │ ‐    │ [4mnobeautify[24m    │ Discard most non‐graphic characters                │
+│[4mdirectory[24m     │ [4mdir[24m  │ [4mdir[24m=/tmp      │ Directory for editor buffer file                   │
+│[4meditany[24m       │ [4mea[24m   │ [4mnoea[24m          │ Allow editing of any file                          │
+│[4medited[24m        │ ‐    │ ‐             │ Current file is [4medited[24m                             │
+│[4merrorbells[24m    │ [4meb[24m   │ [4meb[24m            │ Ring terminal bell on errors                       │
+│[4mfork[24m          │ ‐    │ [4mfork[24m          │ Allow shell escape without write                   │
+│[4mhome[24m          │ ‐    │ [4mhome[24m=homedir† │ Home directory                                     │
+│[4mhush[24m          │ ‐    │ [4mnohush[24m        │ Inhibit all feedback                               │
+│[4mignorecase[24m    │ [4mic[24m   │ [4mnoic[24m          │ Ignore upper/lower case in matching                │
+│[4mindicateul[24m    │ [4miu[24m   │ [4mnoiu[24m          │ Indicate underlining on CRT’s                      │
+│[4mlist[24m          │ ‐    │ [4mnolist[24m        │ Print lines (more) unambiguously                   │
+│[4mmagic[24m         │ ‐    │ [4mmagic[24m‡        │ More magic characters in regular expressions       │
+│[4mde[24m            │ ‐    │ [4mmode[24m=644*     │ Default create mode for files                      │
+│[4mnotify[24m        │ ‐    │ [4mnotify[24m=5‡     │ Feedback threshold on changes                      │
+│[4mnumber[24m        │ ‐    │ [4mnonumber[24m      │ Number all (input and output) lines                │
+│[4mopen[24m          │ ‐    │ [4mopen[24m‡         │ Allow open and visual commands                     │
+│[4moptimize[24m      │ ‐    │ [4moptimize[24m      │ Enhance throughput (but lose some typeahead)       │
+│[4mprintall[24m      │ [4mpa[24m   │ [4mprintall[24m      │ Print all characters                               │
+│[4mprompt[24m        │ ‐    │ [4mprompt[24m        │ Prompt for input                                   │
+│[4mscroll[24m        │ ‐    │ [4mscroll[24m=12     │ Number of logical lines in a scroll                │
+│[4mshell[24m         │ [4msh[24m   │ [4msh[24m=/bin/sh    │ Shell for UNIX escape                              │
+│[4mshiftwidth[24m    │ [4msw[24m   │ [4msw[24m=8          │ Shift width (tab stop for [4mautoindent[24m)              │
+│[4msticky[24m        │ ‐    │ [4mnosticky[24m      │ Post command flags stick around                    │
+│[4mterse[24m         │ ‐    │ [4mnoterse[24m       │ Shorter error diagnostics                          │
+│[4mttytype[24m       │ [4mtty[24m  │ [4mtty[24m=unknown†  │ Terminal type                                      │
+│[4mvisualmessage[24m │ [4mvm[24m   │ [4mnovm[24m          │ Interconsole message inhibition during [4mvisual[24m      │
+│[4mwindow[24m        │ ‐    │ [4mwindow[24m=23     │ Window size for [4mz[24m command                          │
+│[4mwrap[24m          │ ‐    │ [4mwrap[24m          │ Context addressing searches go past top/bottom     │
+├──────────────┴──────┴───────────────┴────────────────────────────────────────────────────┤
+│† User‐dependent (from [4mhtmp[24m data base)                                                    │
+│‡ [4mNomagic[24m, [4mnotify[24m=1, [4mnoopen[24m if invoked as [4medit[24m                                            │
+│* Always set and given in octal                                                           │
+└──────────────────────────────────────────────────────────────────────────────────────────┘
+
+
+
+
+
+
+
+
+
+
+                                       ‐3‐
+
+
+[1mInitialization[0m
+
+     When it is first invoked, [4mex[24m will use the home directory data base [4mhtmp[24m  to
+set the [4mhome[24m directory option and to set the [4mttytype[24m option, reflecting the kind
+of terminal in use.  If there is a file [1m.exrc [22min the user’s home directory, then
+[4mex[24m will [4msource[24m to that file.  Options setting commands placed there will thus be
+executed before each editor session.
+
+[1mEntering the editor[0m
+
+     [4mEx[24m is entered by a command of the form
+
+     [1mex [22m[ [1m− [22m] [ [1m−o [22m] [ [1m−n [22m] [ [1m−p [22m] [ [ [1m−r [22m] [4mname[24m ... ]
+
+Brackets here indicate optional arguments.  The [1m− [22moption suppresses all interac‐
+tive‐user  feedback and is useful in processing editor scripts in command files.
+The [1m−p [22moption suppresses the [4mprompt[24m.  The [1m−n [22moption is implied by the  [1m−  [22moption
+and  causes  the  editor to do no [1m.exrc [22mor terminal‐type dependent start‐up pro‐
+cessing.  The [1m−o [22moption causes [4mex[24m to set the  terminal  type  dependent  options
+based  on the characteristics of the diagnostic output if the standard output is
+not a terminal.  Finally, the [1m−r [22moption is used in recovering after an editor or
+system crash.  See the section on crash recovery below.
+
+[1mFile manipulation[0m
+
+     [4mEx[24m  is  normally  editing  the  contents  of  a  single file, whose name is
+recorded in the [4mcurrent[24m file name.  [4mEx[24m performs all editing actions in a  buffer
+(actually  a  temporary file) into which the text of the file is initially read.
+Changes made to the buffer have no effect on the file being  edited  unless  and
+until  the  buffer  contents  are  written out to the file with a [4mwrite[24m command.
+After the buffer contents are written, the previous contents of the written file
+are no longer accessible.
+
+     A  file  argument  on  the  command  line  causes that file to be initially
+edited.  Its name becomes the current file name, and its contents are read  into
+the buffer.
+
+[1mEdited file notion[0m
+
+     Most  of  the time the current file is considered to be [4medited[24m.  This means
+that the contents of the buffer are logically connected with  the  current  file
+name,  so  that  writing  the current buffer contents onto that file, even if it
+exists, is a reasonable action.  If the current file is not [4medited[24m then [4mex[24m  will
+not  normally  write on it if it already exists.  This protects the user against
+accidental destruction of files.  In all normal editing  patterns,  the  current
+file is considered [4medited[24m.
+
+[1mAlternate file[0m
+
+     Each  time  a  new value is given to the current file, the previous current
+file is saved as the [4malternate[24m file.  Similarly if a file is mentioned but  does
+not  become  the current file, it is saved as the alternate file.  The character
+‘`’ substitutes for the alternate file in forming new filenames.  This makes  it
+
+
+
+
+
+
+
+
+
+
+                                       ‐4‐
+
+
+easy to deal alternately with two files and eliminates the need for retyping the
+name supplied on an [4medit[24m command after a ‘‘No write since last change’’ diagnos‐
+tic is received.
+
+[1mFilename formation[0m
+
+     Filenames  within  the editor may be specified using the normal UNIX expan‐
+sion conventions: ‘*’ matches any sequence of characters in  a  file  name,  ‘?’
+matches any single character, and ‘[[4mclass[24m]’ matches the set of characters in the
+class, with single characters specifying themselves,  and  ranges  of  the  form
+‘a−z’ permitted, this example matching all letters.†
+
+     In addition to these metacharacters, the  character  ‘%’  in  filenames  is
+replaced  by  the  [4mcurrent[24m file name and the character ‘`’ by the [4malternate[24m file
+name.  If it is necessary for one of the characters ‘*’, ‘?’ ‘[’ ‘%’, ‘`’ or ‘\’
+to appear in a filename, it may be escaped by preceding it with a ‘\’.
+
+[1mMultiple files[0m
+
+     If  more than one file is given on the command line, then the first file is
+edited as described above.  The remaining arguments are placed  with  the  first
+file  in the [4margument[24m [4mlist[24m.  The current argument list may be displayed with the
+[4margs[24m command.  The next file in the argument list may be edited  with  the  [4mnext[0m
+command.   The  argument  list  may  also be respecified by specifying a list of
+names to the [4mnext[24m command.  These names are  expanded,  the  resulting  list  of
+names becomes the new argument list, and [4mex[24m edits the first file on the list.
+
+[1mErrors[0m
+
+     When  errors  occur [4mex[24m normally rings the terminal bell and prints an error
+diagnostic.  If the primary input is from a file, editor processing will  termi‐
+nate.
+
+[1mInterrupts[0m
+
+     If  [4mex[24m receives an interrupt signal (ASCII DEL) it prints ‘‘Interrupt’’ and
+returns to its command level.  If the primary input is a file, then [4mex[24m will exit
+when this occurs.
+
+[1mHangups[0m
+
+     If  a  hangup  signal is received and the buffer has been modified since it
+was last written out [4mex[24m attempts a [4mpreserve[24m command.  If this command fails then
+[4mex[24m  will  not unlink the editor buffer in the directory where it was being kept.
+In either case a [4mrecover[24m command can be used to continue the work where it  left
+off.
+
+
+
+
+───────────
+†  Note  that an initial character ‘.’ in a filename must always be
+specified explicitly, as must all ‘/’s in path names.
+
+
+
+
+
+
+
+
+
+
+                                       ‐5‐
+
+
+[1mCrash recovery[0m
+
+     If  the  editor or system crashes, or if the phone is hung up accidentally,
+then you should be able to recover the work you were  doing,  to  within  a  few
+(maximum of 15) lines of changes of the place where you were.  To recover a file
+you can use the [4mrecover[24m command, or the [1m−r [22moption, as in
+
+     [1mex −r resume[0m
+
+if you were editing the file [4mresume[24m.  In order to recover you must  have  had  a
+current  file  name  when  the  crash  occurred, and respecify this name.  After
+recovering the file you should check that it is indeed ok before writing it over
+its  previous  contents.   If an error occurs during the recovery operation this
+means that the buffer was not in a consistent state at the time of the crash and
+that you will not be able to recover in this way.
+
+[1mModes[0m
+
+     [4mEx[24m  has  five  distinct modes.  The primary mode is [4mcommand[24m mode.  Commands
+are entered in command mode when a ‘:’ prompt is present, and are executed  each
+time  a  complete  line  is sent.  In [4mtext[24m [4minput[24m mode [4mex[24m gathers input lines and
+places them in the file.  The [4mappend[24m, [4minsert[24m, and [4mchange[24m commands use text input
+mode.   No prompt is printed when you are in text input mode.  This mode is left
+by typing a ‘.’ alone at the beginning of a line, or by  typing  an  end‐of‐file
+(CTRL(D) at the beginning of a line.)
+
+     The last three related modes are [4mopen[24m and [4mvisual[24m modes, entered by the com‐
+mands of the same name, and, within [4mopen[24m and [4mvisual[24m, [4mtext[24m [4minsertion[24m mode.   [4mOpen[0m
+and  [4mvisual[24m mode allow local editing operations to be performed on the text of a
+line.  [4mOpen[24m deals with one line at a time on soft‐copy  terminals  while  [4mvisual[0m
+works  on  (unintelligent) soft‐copy terminals with full‐screen addressible cur‐
+sors.  [4mVisual[24m uses the entire screen as  a  (single)  window  for  file  editing
+changes.
+
+[1mCommand structure[0m
+
+     Most  commands have alphabetic names, and initial prefixes of the names are
+accepted.  The ambiguity of short names is resolved in favor of  the  more  com‐
+monly  used commands, always those of the editor [4med[24m.  Thus the command [4mprint[24m can
+be abbreviated ‘p’ while the shortest available abbreviation  for  the  [4mpreserve[0m
+command is ‘pre’.
+
+     Most commands accept prefix addresses specifying the lines in the file upon
+which they are to have effect.  The forms of these addresses will  be  discussed
+below.   A number of commands also may take a trailing [4mcount[24m specifying the num‐
+ber of lines to be involved in the command.  Thus the command ‘10p’  will  print
+the  tenth  line  in the buffer while ‘delete 5’ will delete five lines from the
+buffer, starting with the current line.
+
+     Some commands take other information or parameters, this information always
+being  given  after  the  command name.  Examples would be option names in a [4mset[0m
+command i.e. ‘set number’, a file name in an [4medit[24m command, a regular  expression
+in  a [4msubstitute[24m command, or a target address for a [4mcopy[24m command, i.e. ‘1,5 copy
+
+
+
+
+
+
+
+
+
+
+                                       ‐6‐
+
+
+25’.
+
+[1mFeedback[0m
+
+     Most commands which change the contents of the editor buffer give  feedback
+if the scope of the change exceeds a threshold given by the [4mnotify[24m option.† This
+feedback  helps  to detect undesirably large changes so that they may be quickly
+and easily reversed with an [4mundo[24m.  Thus if a [4mdelete[24m command eliminates 100 lines
+you will be informed by a message of the form ‘‘100 lines deleted.’’  Similarly,
+after commands with more global effect such as [4mglobal[24m or  [4mvisual[24m,  you  will  be
+informed if the net change in the number of lines in the buffer during this com‐
+mand exceeds this threshold.
+
+[1mCommand variants[0m
+
+     A number of commands have two distinct variants.  The variant form  of  the
+command  is invoked by placing an ‘!’ character after the command name.  Some of
+the default variants may be controlled by options; in this case, the ‘!’  serves
+to  toggle the default.  Useful variants are ‘quit !’  which suppresses warnings
+about the buffer not having been written out, and ‘write !’  which allows  over‐
+writing of an existing file which is not the edited file.
+
+[1mCommand flags[0m
+
+     The characters ‘#’ and ‘:’, and the letters ‘p’ and ‘l’ may be placed after
+many commands in any combination.  In this  case,  the  command  abbreviated  by
+these  characters is executed after the command completes.  Any number of ‘+’ or
+‘−’ characters may also be given with the option flags.   If  they  appear,  the
+specified  offset  is applied to the current line value before the printing com‐
+mand is executed.  The option [4mautoprint[24m makes most trailing ‘p’ characters  sup‐
+plied  by  [4med[24m  users  superfluous; as [4mautoprint[24m is suppressed during [4mglobal[24m com‐
+mands, these flags are still often necessary.
+
+[1mMultiple commands on a line[0m
+
+     More than one command may be placed on a line by separating  each  pair  of
+commands  by a ‘|’ character.  However the [4mglobal[24m commands, and the shell escape
+‘!’  must be the last command on a line, as they are not terminated  by  a  ‘|’.
+Thus the command form ‘write | next’, which can be abbreviated ‘w|n’, will [4mwrite[0m
+the current file and then edit the [4mnext[24m file in the argument list.
+
+
+
+
+
+
+
+
+
+
+───────────
+†  Current  notable  exceptions are [4mtabulate[24m, [4mexpand[24m, and the shift
+commands ‘<’ and ‘>’.
+
+
+
+
+
+
+
+
+
+
+                                       ‐7‐
+
+
+[1mCommand addressing[0m
+
+     As previously mentioned, many commands accept address specifications before
+the  command  itself  is  given.  These consist of a series of addressing primi‐
+tives, described below, separated by ‘,’ or ‘;’.  Such address lists are  evalu‐
+ated  left‐to‐right.   When  addresses are separated by ‘;’ the current line ‘.’
+is set to the value of  the  previous  addressing  expression  before  the  next
+address  is interpreted.  If more addresses are given than the command requires,
+then all but the last one  or  two  are  ignored.   If  the  command  takes  two
+addresses, the first addressed line must precede the second in the buffer.  Null
+address specifications are permitted in a list of addresses, the default in this
+case  is the current line ‘.’; thus ‘,$’ is equivalent to ‘[1m.[22m,$’.  It is an error
+to give a prefix address to a command which expects none.
+
+     A simple example of command addressing  is  the  command  ‘1,$print’  which
+prints  all the lines in the buffer, the first ‘1’ to the last ‘$’.  The command
+‘/^Thesis/;/Example’ will search forward to the first line  beginning  with  the
+string  ‘Thesis’,  set the current line to be this line, and then search forward
+from this line for the string ‘Example’.   If  such  a  line  is  found,  it  is
+printed.
+
+[1mAddressing primitives[0m
+
+     [1mCurrent  and  last  lines.   [22mThe current line is refered to symbolically by
+‘[1m.[22m’, the last line by ‘$’.  The default address for most commands is the current
+line, thus ‘[1m.[22m’ is rarely used alone as an address.  Most commands leave the cur‐
+rent line as the last line which they affect.
+
+     [1mLine numbers.  [22mThe lines in the editing buffer  are  numbered  sequentially
+from 1; the last line in the buffer may be referred symbolically to as ‘$’.  The
+most primitive form of addressing refers to lines by their line numbers  in  the
+file.   Some commands also allow reference to a hypothetical line 0.  These com‐
+mands operate before the first line of the buffer.  Thus ‘0 read header’  places
+a copy of the contents of the file [4mheader[24m before the first buffer line.
+
+     [1mRelative  addresses.   [22mAddresses may also be specified relative to the cur‐
+rent buffer line.  Thus ‘−5’ refers to the fifth line preceding the current line
+while  ‘+5’ refers to the fifth line after it.  Similarly a single ‘−’ addresses
+the line before the current line while ‘++’ addresses the second following line.
+Note that the forms ‘[1m.[22m+2’, ‘+2’ and ‘++’ are all equivalent; if the current line
+is line 100 they all address line 102.
+
+     [1mContext searching.  [22mOne of the most convenient ways of addressing the lines
+in  the  buffer is via ‘‘content addressing’’ or ‘‘context searching.’’  Here we
+pick out a pattern in the line we wish to refer  to  and  specify  that  pattern
+after  the  search  delimiter ‘/’ to search forwards or ‘?’ to search backwards.
+If we are simply looking for this pattern, then this  is  all  we  need  to  do;
+‘/Thesis’ will search forward in the file and then print the first line, if any,
+containing the string ‘Thesis’.  If we wish to give a command to be executed  at
+this  line  we must close off the search string with a matching delimiter.  Thus
+the command ‘/Thesis/delete’ will delete the next  line  containing  the  string
+‘Thesis’.   The pattern here may actually be a regular expression.  This allows,
+e.g. searching for a string at the beginning or end of a line.  It  is  possible
+
+
+
+
+
+
+
+
+
+
+                                       ‐8‐
+
+
+to  search  again for the same pattern by giving a null regular expression; that
+is either a form such as ‘//’, or a single ‘/’ or ‘?’ immediately followed by  a
+newline  character.   Context  searches normally wrap around past the end of the
+file if necessary to continue the search.†
+
+     [1mMarks.  [22mThe final way of specifying a line in the buffer is  with  a  [4mmark[24m.
+The [4mmark[24m command may be used to give a line a mark, which is denoted by a single
+lower case letter.  Thus ‘mark a’ will mark the current line with tag  [4ma[24m.   This
+line may be subsequently referred to in addressing as ‘´[4ma[24m’.
+
+     [1mPrevious  context mark.  [22mOne mark is automatically set by the editor.  This
+is the previous context mark, referred to in addressing  expressions  via  ‘´´’.
+Before  each  non‐relative  motion of the current line ‘[1m.[22m’, the previous current
+line is marked with this special tag.‡
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+───────────
+† It is also possible to use the previous  scanning  or  substitute
+regular  expression  for  the scan; the forms are ‘\/’ and ‘\&/’ to
+scan forwards, ‘\?’ and ‘\&?’ to scan backwards respectively.
+‡ This makes it easy to refer or return to this  previous  context.
+Thus  if  you  specify  a  context search which leads you to a line
+other than you intended, you may return  to  the  previous  current
+line via ‘´´’.
+
+
+
+
+
+
+
+
+
+
+                                       ‐9‐
+
+
+[1mCommand summary[0m
+
+     Summarizing the discussion above, the general form of an [4mex[24m command is:
+
+     [4maddress[24m [1mcommand [4m[22m![24m [4mparameters[24m [4mcount[24m [4mflags[0m
+
+All  parts  are  optional; the degenerate case is the empty command which prints
+the next line in the file.
+
+     The following table summarizes [4mex[24m command formats and the  shortest  allow‐
+able  abbreviations  for  commands.   Except  as  noted, all commands which take
+addresses assume the current line as default if no addresses  are  given.   Each
+command will be discussed in more detail in the next section.
+
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│                                    Command summary                                     │
+├────────────────────────────────────┬───────┬───────────────────────────────────────────┤
+│ Prototype                          │ Abbr. │ Description                               │
+└────────────────────────────────────┴───────┴───────────────────────────────────────────┘
+│ [1mappend [4m[22m![24m                           │ [1ma     [22m│ Append text after addressed lines         │
+│ [1margs [4m[22m![24m                             │ [1mar    [22m│ Print argument list                       │
+│ [1mcd [4m[22mdir[24m                             │ [1mcd    [22m│ Synonym for [4mchdir[24m                         │
+│ [1mchange [4m[22m![24m                           │ [1mc     [22m│ Change text of specified lines            │
+│ [1mchdir [4m[22mdir[24m                          │ [1mchd   [22m│ Change working directory                  │
+│ [1mcopy [4m[22maddr[24m                          │ [1mco    [22m│ Make a copy of specified lines after [4maddr[24m │
+│ [1mdelete [4m[22mcount[24m                       │ [1md     [22m│ Delete specified lines                    │
+│ [1mecho [4m[22mtext[24m                          │ [1mec    [22m│ Echo [4mtext[24m to output                       │
+│ [1medit [4m[22mfile[24m                          │ [1med    [22m│ Synonym for [4mex[24m                            │
+│ [1mex [4m[22mfile[24m                            │ [1me     [22m│ Edit specified file                       │
+│ [1mexpand [4m[22mcount[24m                       │ [1mexp   [22m│ Expand tabs to spaces                     │
+│ [1mfile [4m[22mfile[24m                          │ [1mf     [22m│ Display/change current file               │
+│ [1mglobal [4m[22m/pat[24m/ [4mcmds[24m†‡                │ [1mg     [22m│ Execute [4mcmds[24m on lines matching [4mpat[24m        │
+│ [1mhelp [4m[22mtopic[24m                         │ [1mh     [22m│ Provide information on [4mtopic[24m              │
+│ [1minsert [4m[22m![24m                           │ [1mi     [22m│ Insert text before addressed line         │
+│ [1mjoin [4m[22m![24m [4mcount[24m                       │ [1mj     [22m│ Join lines together                       │
+│ [1mk [4m[22mx[24m                                │ [1mk     [22m│ Synonym for [4mmark[24m                          │
+│ [1mlist [4m[22mcount[24m                         │ [1ml     [22m│ Print lines more unambiguously            │
+│ [1mmark [4m[22mx[24m                             │ [1mma    [22m│ Mark addressed line with letter [4mx[24m         │
+│ [1mmove [4m[22maddr[24m                          │ [1mm     [22m│ Move specified lines after [4maddr[24m           │
+│ [1mnext [4m[22m![24m                             │ [1mn     [22m│ Edit next file in argument list           │
+│ [1mnext [4m[22m![24m [4mfilelist[24m                    │ [1mn     [22m│ Respecify argument list; edit first file  │
+│ [1mopen [4m[22m/pat[24m/                         │ [1mo     [22m│ Intraline edit of specified line          │
+│ [1mpreserve                           [22m│ [1mpre   [22m│ Save buffer when disaster strikes         │
+│ [1mprint [4m[22mcount[24m                        │ [1mp     [22m│ Print addressed lines                     │
+│ [1mput                                [22m│ [1mpu    [22m│ Restore lines                             │
+│ [1mquit [4m[22m![24m                             │ [1mq     [22m│ Terminate editor session                  │
+│ [1mread [4m[22mfile[24m                          │ [1mr     [22m│ Read [4mfile[24m into buffer after current line  │
+│ [1mrecover [4m[22mfile[24m                       │ [1mrec   [22m│ Recover editing buffer after disaster     │
+│ [1mreset                              [22m│ [1mres   [22m│ Restore option default values             │
+│ [1mrewind                             [22m│ [1mrew   [22m│ Rewind argument list; edit first file     │
+│ [1mset [4m[22mparams[24m                         │ [1mse    [22m│ Set/interrogate options                   │
+│ [1mshell                              [22m│ [1msh    [22m│ Invoke another, interactive, shell        │
+└────────────────────────────────────┴───────┴───────────────────────────────────────────┘
+
+
+
+
+
+
+
+
+
+
+                                      ‐10‐
+
+
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│                                    Command summary                                     │
+├────────────────────────────────────┬───────┬───────────────────────────────────────────┤
+│ Prototype                          │ Abbr. │ Description                               │
+└────────────────────────────────────┴───────┴───────────────────────────────────────────┘
+│ [1msource [4m[22mfile[24m                        │ [1mso    [22m│ Read editor commands from [4mfile[24m            │
+│ [1msubstitute[4m[22m/pat[24m/[4mrepl[24m/ [4mflags[24m [4mcount[24m†  │ [1msu    [22m│ Substitute [4mrepl[24m for [4mpat[24m                   │
+│ [1msync                               [22m│ [1msy    [22m│ Synchronize the temporary file            │
+│ [1mtabulate [4m[22mcount[24m                     │ [1mta    [22m│ Convert (leading) blanks to tabs          │
+│ [1mtranscribe [4m[22maddr[24m                    │ [1mt     [22m│ Synonym for [4mcopy[24m                          │
+│ [1mundo [4m[22m![24m                             │ [1mu     [22m│ Reverse effect of last command            │
+│ [1mv†                                 [22m│ [1mv     [22m│ Synonym for ‘‘[4mglobal![24m’’ variant           │
+│ [1mversion                            [22m│ [1mve    [22m│ Print current version information         │
+│ [1mvisual [4m[22mtype[24m                        │ [1mvi    [22m│ Enter visual mode                         │
+│ [1mwrite [4m[22m![24m [4mfile[24m‡                      │ [1mw     [22m│ Write specified lines to [4mfile[24m             │
+│ [1mwrite [4m[22m![24m >> [4mfile[24m‡                   │ [1mw     [22m│ Write addressed lines at end of [4mfile[24m      │
+│ [1mxpand [4m[22mcount[24m                        │ [1mx     [22m│ Synonym for [4mexpand[24m                        │
+│ [1myank [4m[22mcount[24m                         │ [1mya    [22m│ Define lines to be [4mput[24m                    │
+│ [1mz [4m[22mtype[24m [4mcount[24m                       │ [1mz     [22m│ Context display                           │
+│ [1m! [4m[22mcommand[24m                          │ [1m‐     [22m│ Send [4mcommand[24m to a shell                   │
+│ [1m=[22m‡                                 │ [1m‐     [22m│ Show line number in buffer                │
+│ [1m> [4m[22mcount[24m                            │ [1m‐     [22m│ Right shift                               │
+│ [1m< [4m[22mcount[24m                            │ [1m‐     [22m│ Left shift                                │
+│ [1mEOF                                [22m│ [1m‐     [22m│ Scroll (EOF is generated by CTRL(D))      │
+│ [1mCR [22mor [1mNL                           [22m│ [1m‐     [22m│ Null command prints addressed (next) line │
+│ [1m# [4m[22mcount[24m                            │ [1m‐     [22m│ Synonym for [4mnumber[24m                        │
+│ [1m: [4m[22mcount[24m                            │ [1m‐     [22m│ Print inhibiting [4mlist[24m and [4mnumber[24m options. │
+│ [1m& [4m[22mflags[24m [4mcount[24m                      │ [1m‐     [22m│ Repeat last [4msubstitute[24m command            │
+│ [1m~ [4m[22mflags[24m [4mcount[24m                      │ [1m‐     [22m│ Substitute last [4mrepl[24m for last pattern     │
+│ [1m|                                  [22m│ [1m‐     [22m│ Multiple command per line separator       │
+├────────────────────────────────────┴───────┴───────────────────────────────────────────┤
+│†  [4mPat[24m  may  be  delimited by other characters; ‘\/’ and ‘\&/’ are also permitted as in │
+│address formation, and with these forms [4mrepl[24m is terminated by ‘/’ in a [4msubstitute[24m.      │
+│‡ Default address is entire buffer (last line for ‘=’).                                 │
+└────────────────────────────────────────────────────────────────────────────────────────┘
+
+[1mCommand variants[0m
+
+     A number of command have variants, introduced by following the command name
+with a ‘!’.  These variants are summarized in the following table.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                      ‐11‐
+
+
+ ┌────────────────────────────────────────────────────────────────────────────┐
+ │                             Command variants                               │
+ ├──────────────────────┬─────────────────────────────────────────────────────┤
+ │Variant               │ Description                                         │
+ ├──────────────────────┼─────────────────────────────────────────────────────┤
+ │ [1mappend [4m[22m![24m             │ Toggle [4mautoindent[24m during [4mappend[24m                     │
+ │ [1margs [4m[22m![24m               │ Print all arguments, not just those remaining       │
+ │ [1mchange [4m[22m![24m [4mcount[24m       │ Like [4mappend![24m                                        │
+ │ [1mex [4m[22m![24m [4mfile[24m            │ Suppress ‘‘No write’’ complaint before executing    │
+ │ [1medit [4m[22m![24m [4mfile[24m          │ Like [4mex![24m                                            │
+ │ [1mglobal [4m[22m![24m /[4mpat[24m/ [4mcmds[24m  │ Execute [4mcmds[24m on lines not matching [4mpat[24m              │
+ │ [1minsert [4m[22m![24m             │ Like [4mappend![24m                                        │
+ │ [1mjoin [4m[22m![24m [4mcount[24m         │ Join lines without massaging blank space            │
+ │ [1mnext [4m[22m![24m               │ Like [4mex![24m                                            │
+ │ [1mquit [4m[22m![24m               │ Suppress ‘‘More files’’ and ‘‘No write’’ complaints │
+ │ [1mtabulate [4m[22m![24m [4mcount[24m     │ Convert all blanks to tabs, not just initial        │
+ │ [1mundo [4m[22m![24m               │ No error if ‘‘Nothing to undo’’ or ‘‘No change’’    │
+ │ [1mwrite [4m[22m![24m [4mfile[24m         │ Suppress [4mwrite[24m checks (i.e. overwrite file)         │
+ │ [1mwrite [4m[22m![24m >> [4mfile[24m      │ Like [4mwrite![24m ([4mfile[24m can be non‐existent)              │
+ └──────────────────────┴─────────────────────────────────────────────────────┘
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                      ‐12‐
+
+
+[1mCommand descriptions[0m
+
+     In  the  following command descriptions, the default addresses are shown in
+parentheses, which are [4mnot[24m, however, part of the command.  The variant flags  [4m![24m,
+[4mcounts[24m and [4mflags[24m are always optional.
+
+( [1m. [22m) [1mappend [4m[22m![0m
+[4mtext[0m
+[1m.[0m
+     The  [4mappend[24m  command reads the input text and places it after the specified
+     line.  After the command, ‘[1m.[22m’  addresses the last line input or the  speci‐
+     fied  line if no lines were input.  If address ‘0’ is given, text is placed
+     at the beginning of the buffer.  The variant flag toggles the  setting  for
+     [4mautoindent[24m during the input of [4mtext[24m.
+
+[1margs [4m[22m![0m
+     The  members  of  the argument list are given starting with the current one
+     or, if the variant is given, starting with the beginning  of  the  argument
+     list.
+
+[1mcd [4m[22mdirectory[0m
+     The [4mcd[24m command is a synonym for [4mchdir[24m.
+
+( [1m. [22m, [1m. [22m) [1mchange [4m[22m![24m [4mcount[0m
+[4mtext[0m
+[1m.[0m
+     The  [4mchange[24m  command replaces the specified lines with the input [4mtext[24m.  The
+     current line becomes the last line input; if no lines were input it is left
+     as for a [4mdelete[24m.  The variant toggles [4mautoindent[24m as in a [4mappend[24m.
+
+[1mchdir [4m[22mdirectory[0m
+     The  specified [4mdirectory[24m becomes the current directory.  If no directory is
+     specified, the current value of the [4mhome[24m  option  is  used  as  the  target
+     directory.   After  a [4mchdir[24m the current file is not considered to have been
+     [4medited[24m so that write restrictions on pre‐existing files apply.
+
+( [1m. [22m, [1m. [22m)[1mcopy [4m[22maddr[24m [4mflags[0m
+     A [4mcopy[24m of the specified lines is placed after [4maddr[24m, which may be ‘0’.   The
+     current  line  ‘[1m.[22m’  addresses the last line of the copy.  The command [4mtran‐[0m
+     [4mscribe[24m, ‘t’, is a synonym for [4mcopy[24m.
+
+( [1m. [22m, [1m. [22m)[1mdelete [4m[22mcount[24m [4mflags[0m
+     The [4mdelete[24m command removes the specified lines from the buffer.   The  line
+     after  the last line deleted becomes the current line; if the lines deleted
+     were originally at the end, the new last line becomes the current line.
+
+[1mecho [4m[22mtext[0m
+     [4mText[24m is echoed onto the standard output up to a ‘|’ or  newline  character.
+     These (and any) characters may be included in [4mtext[24m by preceding them with a
+     ‘\’.  Initial blanks are stripped from [4mtext[24m.
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                      ‐13‐
+
+
+[1medit [4m[22m![24m [4mfilename[0m
+[1mex [4m[22m![24m [4mfilename[0m
+     The [4medit[24m command is used to begin an editing session on a new file  and  is
+     composed of several distinct actions.  [4mEdit[24m first checks to see if the buf‐
+     fer has been modified since the last [4mwrite[24m command was issued.  If  it  has
+     been,  a  warning  is  issued and the [4medit[24m command is never begun.  In this
+     case, the user has a second and last chance to write out  the  buffer.   If
+     another  [4medit[24m  (or  [4mnext[24m  or  [4mquit)[24m command is executed without a [4mwrite[24m and
+     before any further modifications to the buffer, the editing changes to  the
+     buffer  will  be  lost.  This entire warning procedure is suppressed if the
+     variant flag is given.
+
+     The [4medit[24m command next deletes the entire contents of the editor buffer mak‐
+     ing  the named file the current file and printing its name.  After insuring
+     that this file is sensible, i.e. that it is not a binary  file  such  as  a
+     directory,  a block or character special file other than [1m/dev/tty[22m, a termi‐
+     nal, or a binary or executable file (as indicated by the  first  word),  [4mex[0m
+     reads the file into the editor buffer.
+
+     If  the  read  of the file completes without error, the number of lines and
+     characters read is typed.  If there were any dirty  (non‐ASCII)  characters
+     in  the  file  they are stripped of their non‐ASCII high bits, and any null
+     characters in the file are discarded.  If none of  these  errors  occurred,
+     the file is considered [4medited[24m.  If the last line of the input file is miss‐
+     ing the trailing newline character, it will be  supplied  and  a  complaint
+     will  be issued.  This command leaves the current line ‘[1m.[22m’ at the last line
+     read.
+
+( [1m. [22m, [1m. [22m) [1mexpand [4m[22m![24m [4mcount[24m [4mflags[0m
+     The [4mexpand[24m command processes the text of the  specified  lines,  converting
+     tabs  to  an appropriate number of spaces.  The current line is left at the
+     last line which had a tab expanded.
+
+[1mfile[0m
+     The current filename is displayed along with an indication of whether it is
+     considered  ‘[Edited]’,  whether  it  has  been ‘[Modified]’ since the last
+     [4mwrite[24m command, and the number of lines in the buffer.
+
+[1mfile [4m[22mfilename[0m
+     The current file is changed to [4mfilename[24m which is not considered [4medited[24m.
+
+( 1 , $ ) [1mglobal [4m[22m![24m /[4mpat[24m/ [4mcmds[0m
+     The [4mglobal[24m command first  marks  each  line  among  those  specified  which
+     matches  the given regular expression.  Then the given command list is exe‐
+     cuted with ‘[1m.[22m’ initially set to each marked line.  In the variant form  the
+     list is executed at each line not matching the given regular expression.
+
+     The  command  list  consists of the remaining commands on the current input
+     line and may continue to multiple lines by ending all  but  the  last  such
+     line  with a ‘\’.  [4mAppend[24m, [4minsert[24m, and [4mchange[24m commands and associated input
+     are permitted; the ‘[1m.[22m’ terminating input may be omitted if it would  be  on
+     the  last line of the command list.  [4mOpen[24m and [4mvisual[24m commands are permitted
+     in the command list and take input from the terminal.
+
+
+
+
+
+
+
+
+
+
+                                      ‐14‐
+
+
+     The [4mglobal[24m command itself may not appear in [4mcmds.[24m  The [4mundo[24m command is also
+     not  permitted  there,  as  [4mundo[24m  instead can be used to reverse the entire
+     [4mglobal[24m command.  The options [4mautoprint[24m and [4mautoindent[24m are inhibited  during
+     a  [4mglobal[24m,  and  the value of the [4mnotify[24m option is temporarily infinite, in
+     deference to a [4mnotify[24m for the entire global.   Finally,  the  context  mark
+     ‘´´’ is set to the value of ‘.’ before the global command begins and is not
+     changed during a global command, except perhaps by an [4mopen[24m or [4mvisual[24m within
+     the [4mglobal[24m.
+
+[1mhelp [4m[22mtopic[0m
+     The  [4mhelp[24m  command  accepts keywords related to the editor and, if there is
+     information in its data base about that [4mtopic[24m supplies the information.   A
+     list  of topics can be had by [4mhelp[24m [4mindex[24m.  The data files for help are kept
+     in the directory [1m/usr/lib/how_ex[22m.
+
+( [1m. [22m)[1minsert [4m[22m![0m
+[4mtext[0m
+[1m.[0m
+     The [4minsert[24m command places the given text before the  specified  line.   The
+     current line is left at the last line input; if there were none input it is
+     left at the line before the addressed  line.   This  command  differs  from
+     [4mappend[24m  only in the placement of text.  The variant toggles [4mautoindent[24m dur‐
+     ing the [4minsert[24m.
+
+( [1m. [22m, [1m.[22m+1 ) [1mjoin [4m[22m![24m [4mcount[24m [4mflags[0m
+     The [4mjoin[24m command places the text from a specified range of  lines  together
+     on  one line.  White space is adjusted at each junction to provide at least
+     one blank character.  If there is already white space at  the  end  of  the
+     line, then the white space at the start of the next line will be discarded.
+     The variant causes a simpler [4mjoin[24m with no white space processing.
+
+( [1m. [22m) [1mk [4m[22mx[0m
+     The [4mk[24m command is a synonym for [4mmark[24m.
+
+( [1m. [22m, [1m. [22m) [1mlist [4m[22mcount[24m [4mflags[0m
+     The [4mlist[24m command prints the specified lines in a more unambiguous way; non‐
+     graphic characters are escaped in octal, tabs and backspaces are printed as
+     >− and <− with the overstruck ‘−’ being omitted if the terminal can not over‐
+     strike.   The  end of each line is marked with a trailing ‘$’.  The current
+     line is left at the last line printed.
+
+( [1m. [22m) [1mmark [4m[22mx[0m
+     The [4mmark[24m command gives the specified line mark [4mx[24m, a single lower case  let‐
+     ter.   (The  [4mx[24m  must  be  preceded by a blank or a tab.)  Subsequently, the
+     addressing form ‘´x’ addresses this line.  The current line is not affected
+     by this command.
+
+( [1m. [22m, [1m. [22m) [1mmove [4m[22maddr[0m
+     The  [4mmove[24m command repositions the specified lines after [4maddr[24m.  The first of
+     the moved lines becomes the current line.
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                      ‐15‐
+
+
+[1mnext [4m[22m![0m
+     The next file from the command line argument list is edited.   The  variant
+     suppresses  ‘‘No  write  since last change’’ warnings before performing the
+     [4mnext[24m as for the [4medit[24m command.
+
+[1mnext [4m[22m![24m [4mfilelist[0m
+     The specified [4mfilelist[24m is expanded and the resulting list replaces the cur‐
+     rent argument list; the first file in the new list is then edited.
+
+( [1m. [22m, [1m. [22m) [1mnumber [4m[22mcount[24m [4mflags[0m
+     The  [4mnumber[24m  command prints each specified line preceded by its buffer line
+     number.  The current line is left at the last line printed.
+
+( [1m. [22m) [1mopen [4m[22mflags[0m
+( [1m. [22m) [1mopen [22m/[4mpat[24m/ [4mflags[0m
+     The [4mopen[24m command enters intraline editing mode at each addressed line.   If
+     [4mpat[24m  is given, then the cursor will be placed initially at the beginning of
+     the  string  matched  by  the pattern.† Further lines containing [4mpat[24m may be
+     opened using the [4mnext[24m ‘n’ operation without leaving open.  The current line
+     is  left at the last line opened.  See the [4mopen[24m and [4mvisual[24m mode description
+     below for more details.
+
+[1mpreserve[0m
+     The current editor buffer is saved as though the editor had  just  crashed.
+     This  command  is  for  use  only  in  emergencies when a [4mwrite[24m command has
+     resulted in an error and you don’t know how to save  your  work.   After  a
+     [4mpreserve[24m you should seek help immediately.
+
+( [1m. [22m, [1m. [22m)[1mprint [4m[22mcount[24m [4mflags[0m
+     The  [4mprint[24m  command prints the specified lines with non‐printing characters
+     normally escaped as ‘?’.  The  current  line  is  left  at  the  last  line
+     printed.
+
+( [1m. [22m)[1mput[0m
+     The lines removed from the editing buffer by the last command which had the
+     ability to change the buffer are restored after the  addressed  line.   [4mPut[0m
+     can  be  used,  e.g.,  after a [4mchange[24m command to retrieve the lines changed
+     away when you decide that you want both these and the  lines  you  replaced
+     them  with.   A  [4mdelete[24m command and a [4mput[24m command effect a [4mmove[24m.  Note that
+     [4mput[24m is very similar to its [4mopen[24m and [4mvisual[24m mode counterpart.
+
+[1mquit [4m[22m![0m
+     The [4mquit[24m command causes [4mex[24m to exit.  No automatic write of the editor  buf‐
+     fer  to  a  file is performed.  However, [4mex[24m issues a warning message if the
+     file has changed since the last write command was issued and  it  offers  a
+     second  chance  to [4mwrite[24m.  [4mEx[24m will also complain if there are more files in
+     the argument list.  The variant form suppresses these complaints.
+
+
+
+───────────
+† The [4mpat[24m may be delimited only by ‘/’ characters; the  forms  ‘\/’
+and ‘\&/’ are also not allowed here.
+
+
+
+
+
+
+
+
+
+
+                                      ‐16‐
+
+
+( [1m. [22m) [1mread [4m[22mfilename[0m
+     The [4mread[24m command places a copy of the text of the given file in the editing
+     buffer  after the specified line.  If no [4mfilename[24m is given the current file
+     name is used.  The current file name is not changed unless there is none in
+     which case [4mfilename[24m becomes the current name.  The sensibility restrictions
+     for the [4medit[24m command apply here also.  If the  file  buffer  is  empty  and
+     there is no current name then [4mex[24m treats this as an [4medit[24m command.
+
+     Address ‘0’ is legal for this command and causes the file to be read at the
+     beginning of the buffer.  Statistics are given as for the [4medit[24m command when
+     the  [4mread[24m  successfully  terminates.   After a [4mread[24m the current line is the
+     last line read.
+
+[1mrecover [4m[22mfile[0m
+     The command [4mrecover[24m may be used to retrieve the contents of the editor buf‐
+     fer  after  a system crash, editor crash, or a [4mpreserve[24m command.  A [4mrecover[0m
+     also occurs implicitly when the [1m−r [22moption is specified on the command line.
+     A  file name should be given to [4mrecover[24m unless the file of the current name
+     is to be recovered.  Thus a name is always required on the command line.  A
+     [4mrecover[24m  results  in the removal of the saved buffer.  The recovered buffer
+     contents should be checked for sensibility and then saved.  It is not  pos‐
+     sible to recover from errors occurring during a [4mrecover[24m.
+
+[1mreset[0m
+     The  [4mreset[24m command restores the default settings of all numeric and Boolean
+     valued options.
+
+[1mset [4m[22mparameter[0m
+     The [4mset[24m command may be used to  interrogate  and  to  give  new  values  to
+     options.   With no arguments it prints those options whose values have been
+     changed from their defaults; with parameter [4mall[24m it prints all of the option
+     values
+
+     By  giving  an option name followed by a ‘?’  the current value of a single
+     option may be interrogated.  The ‘?’ is unnecessary unless  the  option  is
+     Boolean  valued.   Boolean options are given values either by the form ‘set
+     option’ to set them on or ‘set  nooption’  to  set  them  off;  string  and
+     numeric  options  are  assigned via the form ‘set option=value’.  More than
+     one parameter may be given to [4mset[24m; they are interpreted left‐to‐right.
+
+     It is also possible to interrogate the current values of  the  current  and
+     alternate file names, and the previous UNIX shell escape command by supply‐
+     ing the parameter ‘%’, ‘`’, or ‘!’  respectively.
+
+[1mshell[0m
+     A new [4mshell[24m is created.  This shell is [4minteractive[24m,  like  a  login  shell.
+     When it terminates, editing resumes.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                      ‐17‐
+
+
+[1msource [4m[22mfile[0m
+     The  [4msource[24m  command  causes  [4mex[24m  to read commands from the specified file.
+     [4mSource[24m commands may be nested.
+
+( [1m. [22m, [1m. [22m) [1msubstitute [22m/[4mpat[24m/[4mrepl[24m/ [4moptions[24m [4mcount[24m [4mflags[0m
+     On each specified line, the first instance of pattern [4mpat[24m  is  replaced  by
+     replacement  pattern  [4mrepl[24m.   If  the [4mglobal[24m indicator option character ‘g’
+     appears, then all instances are  substituted;  if  the  [4mconfirm[24m  indication
+     character ‘c’ appears, then before each substitution the line to be substi‐
+     tuted is typed with the string to be substituted marked  with  ‘↑’  charac‐
+     ters.   By  typing  an  ‘y’ one can cause the substitution to be performed,
+     otherwise no change takes place.  After a substitute the  current  line  is
+     the last line substituted.
+
+     See  the regular expression description for an explanation of metasequences
+     available in [4mrepl[24m.  In addition to these sequences, lines may be  split  by
+     substituting  new‐line  characters  into them.  The newline in [4mrepl[24m must be
+     escaped by preceding it with a ‘\’.  (If the [4msubstitute[24m is within a [4mglobal[24m,
+     then two escaping ‘\’ characters will be needed.)
+
+[1msync[0m
+     The  [4msync[24m  command  causes  the contents of the editor temporary file to be
+     synchronized to reflect the current state of editing.   [4mSync[24m  commands  are
+     done  automatically  whenever  there  is  a  difference of 15 lines or more
+     between the in‐core buffer and the temporary.  They are as useful as  [4mwrite[0m
+     commands,  and much faster, for those who are worried about losing work due
+     to an editor or system crash.
+
+( [1m. [22m, [1m. [22m) [1mtabulate [4m[22m![24m [4mcount[24m [4mflags[0m
+     The [4mtabulate[24m command causes leading white space to be converted to tabs  on
+     the  specified lines.  The variant causes this tabulation to occur through‐
+     out each line.  The current line is left at the last line  where  a  change
+     occurred.
+
+( [1m. [22m, [1m. [22m) [1mtranscribe [4m[22maddr[0m
+     The [4mtranscribe[24m command is a synonym for [4mcopy[24m.
+
+[1mundo [4m[22m![0m
+     The [4mundo[24m command reverses the changes made in the buffer by the last buffer
+     editing command.  Note that [4mglobal[24m commands are considered a single command
+     for the purpose of [4mundo[24m (as are [4mopen[24m and [4mvisual.)[24m  Also, the commands [4mwrite[0m
+     and [4medit[24m which interact with the UNIX file system cannot be  undone.   [4mUndo[0m
+     is  its  own  inverse.   After  an  [4mundo[24m the current line is the first line
+     restored or the line before  the  first  line  deleted  if  no  lines  were
+     restored.   For commands with more global effect, such as [4mglobal[24m and [4mvisual[0m
+     the current line regains it pre‐command value after an [4mundo.[24m   [4mUndo[24m  always
+     marks the previous value of the current line ‘[1m.[22m’  as ‘´´’.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                      ‐18‐
+
+
+( 1 , $ ) [1mv [22m/[4mpat[24m/ [4mcmds[0m
+     The [4mv[24m command is a synonym for the [4mglobal[24m command variant ‘global!’.
+
+[1mversion[0m
+     The [4mversion[24m command prints the current version number of the editor as well
+     as the date the binary was created.
+
+( [1m. [22m) [1mvisual [4m[22mtype[24m [4mflags[0m
+     The [4mvisual[24m command enters [4mvisual[24m mode  at  the  specified  line.   [4mType[24m  is
+     optional  and  may  be  ‘+’, ‘−’ , ‘↑’ (‘^’) or ‘[1m.[22m’  as in the [4mz[24m command to
+     specify the placement of the specified line on the screen.  By default,  if
+     [4mtype[24m  is  omitted, the specified line is placed as the first on the screen.
+     After a [4mvisual[24m, the current line is the last line the cursor was on when it
+     ended.  See the section describing [4mvisual[24m and [4mopen[24m for more details.
+
+( 1 , $ ) [1mwrite [4m[22m![24m [4mfile[0m
+( 1 , $ ) [1mwrite [4m[22m![24m >> [4mfile[0m
+     The  [4mwrite[24m command places data from the file buffer back into the file sys‐
+     tem.  The first form of the command will write to a file only if it is  the
+     current  file  and is [4medited[24m, if the file does not exist, or if the file is
+     actually a teletype, [1m/dev/tty [22mor [1m/dev/null[22m.  If the file does not exist  it
+     is  created.   The current file name is changed only if there is no current
+     file name.  The current line is unchanged by this command, and feedback  is
+     given as to the number of lines and characters written as for the [4medit[24m com‐
+     mand.  The second form is used to write the buffer contents at the  end  of
+     an  existing  file.   For both forms, the variant suppresses the file exis‐
+     tence and type checks.
+
+     If an error occurs while writing the current and [4medited[24m file, [4mex[24m  considers
+     that  there  has been ‘‘No write since last change’’ even if the buffer had
+     not previously been modified.
+
+( [1m. [22m, [1m. [22m) [1mxpand [4m[22mcount[24m [4mflags[0m
+     The [4mxpand[24m command is a synonym for [4mexpand[24m.
+
+( [1m. [22m, [1m. [22m)[1myank [4m[22mcount[0m
+     The [4myank[24m command causes the contents of the addressed lines to  define  the
+     text to be placed in the buffer by a succeeding [4mput[24m command.  The addressed
+     lines are not affected.  A [4myank[24m and a [4mput[24m can be used  instead  of  a  [4mcopy[0m
+     command.
+
+( [1m. [22m) [1mz [4m[22mtype[24m [4mcount[0m
+     The [4mz[24m command gives access to windows of text.  The default number of logi‐
+     cal lines in a window is given by the numeric [4mwindow[24m option or may be given
+     explicitly  by  the  [4mcount[24m  after the command.  The various types and their
+     meanings are:
+
+                     [1m.      [22mwindow around the current line
+                     −      window ending at the current line
+                     +      window starting after the current line
+                  omitted   window starting at the current line
+                  ↑ or ^    window before this window
+
+
+
+
+
+
+
+
+
+
+
+                                      ‐19‐
+
+
+     In addition, the form [4mz[24m= displays a window of text with the current line in
+     the  center  delimited  by lines of ‘−’ characters.  For all commands forms
+     except [4mz[24m= the current line is left at the last line  printed;  for  [4mz=[24m  ‘[1m.[22m’
+     addresses the bracketed line.
+
+     The  characters ‘+’, ‘^’ and ‘−’ may be repeated for cumulative effect.  On
+     a CRT the screen is cleared before display begins unless a count  which  is
+     less than the screen size is given.
+
+[1m![4m[22mcommand[0m
+     The  remainder of the line after the ‘!’ character is sent to a shell to be
+     executed.  The current line is unchanged by this command.  Within the  text
+     of  [4mcommand[24m the characters ‘%’ and ‘`’ are expanded as in filenames and the
+     character ‘!’ is replaced with the text of the previous command.  Thus,  in
+     particular, ‘!!’ repeats the last such shell escape.  If any such expansion
+     is performed, the expanded line will be echoed.
+
+     If there has been ‘‘No write’’ of the buffer contents since the last change
+     to  the  editing buffer, then a diagnostic will be produced before the com‐
+     mand is executed as a warning.  A single ‘!’ is printed  when  the  command
+     completes.
+
+( $ ) [1m=[0m
+     The  ‘=’ command prints the line number of the addressed line.  The current
+     line is unchanged.
+
+( [1m. [22m, [1m. [22m) [1m> [4m[22mcount[24m [4mflags[0m
+( [1m. [22m, [1m. [22m) [1m< [4m[22mcount[24m [4mflags[0m
+     The ‘>’ right shift and ‘<’ left shift commands perform intelligent  shift‐
+     ing  on  the  specified  lines.  The quantity of shift is determined by the
+     [4mshiftwidth[24m option and the repetition of the specification character.   Thus
+     ‘>>’ causes the current line to be right shifted two tab stops.  Only white
+     space is shifted; no non‐white space characters are discarded  in  a  left‐
+     shift.†  The  current  line  becomes the last line which changed due to the
+     shifting.
+
+EOF
+     If [4mex[24m receives an end‐of‐file (control‐d) from a terminal input, it  inter‐
+     prets  this  as being a request for a scroll through the file and sends the
+     next [4mscroll[24m logical lines of text, normally a half [4mwindow[24m.
+
+( [1m.[22m+1 ) NL
+( [1m.[22m+1 ) |
+     An address alone causes the addressed line to be  printed.   A  blank  line
+     alone is thus useful for stepping through text.
+
+
+
+
+
+
+───────────
+† White space characters are blank and tab.
+
+
+
+
+
+
+
+
+
+
+                                      ‐20‐
+
+
+( [1m. [22m, [1m. [22m) [1m: [4m[22mcount[24m [4mflags[0m
+     The  [4mcolon[24m command is used to override the options [4mnumber[24m and [4mlist[24m so as to
+     print a line without these features while the options remain set.
+
+( [1m. [22m, [1m. [22m) [1m& [4m[22moptions[24m [4mcount[24m [4mflags[0m
+     The ‘&’ command repeats the previous [4msubstitute[24m command.
+
+( [1m. [22m, [1m. [22m) [1m~ [4m[22moptions[24m [4mcount[24m [4mflags[0m
+     The ‘~’ command replaces the previous regular expression with the  previous
+     replacement pattern from a substitution.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                      ‐21‐
+
+
+[1mVisual and open modes[0m
+
+     [4mEx[24m  has  two modes, [4mvisual[24m and [4mopen[24m, which are quite different from command
+mode.  In command mode, one prepares command lines which are  then  executed  as
+they  are  sent  to the editor.  The editor maintains only a notion of a current
+line in command mode, not of a current position within that line.
+
+     In [4mopen[24m and [4mvisual[24m modes, there is both a current line and a current  posi‐
+tion  within  that  line.  The cursor appears on the current line, and indicates
+the current position within that line by its position.  One  then  forms  [4mopera‐[0m
+[4mtions[24m consisting of one or more operation characters which are immediately acted
+upon by the editor.  Most operation characters do not show on the screen, rather
+their effect on the contents of the buffer is shown.  Operation sequences do not
+form ‘‘lines’’ of input, and do not need to be terminated by a new‐line  charac‐
+ter.
+
+     [1mOperations.   [22mBecoming  proficient  at  using  [4mopen[24m or [4mvisual[24m thus requires
+learning a set of [4moperations[24m which you can use to modify the text of your  file.
+There  are a large number of operations.  They are associated with keys so as to
+suggest their function.  Related functions are often performed by the upper case
+counterpart  of  a  lower case operation.  Thus the ‘f’ find operation moves the
+cursor to the following specified character in the forward direction within  the
+line,  while  ‘F’  performs  the same function in the backward direction.  Simi‐
+larly, ‘r’ replaces the character under the cursor  with  the  single  following
+character,  while  ‘R’  replaces  successive text line characters with the input
+characters up to a terminating ESC.  It is not necessary to learn all or  nearly
+all  of  the available operations in [4mopen[24m and [4mvisual[24m.  As you become more profi‐
+cient with [4mopen[24m and [4mvisual[24m you may find use for more of them.
+
+     [1mIntraline operations.  [22mThere are two major kinds of  operations  in  [4mvisual[0m
+and [4mopen[24m − those dealing with the characters of a single line, and those dealing
+with the lines themselves.  The intraline operations deal with  the  text  of  a
+single  line.  The editor has facilities for referring to the line in terms of a
+number of characters, a column position, a number of ‘‘words’’, a target charac‐
+ter,  the  beginning of the line, the first non‐blank character on the line, the
+end of the line, etc.  In addition these operations will take  [4mcounts[24m  repeating
+their  effect  whenever  appropriate.   Thus  the  word  move operation ‘w’ will
+advance the cursor to the beginning of the next word in the current input  line,
+while the operation ‘3w’ will advance three words.
+
+     [1mInterline  operations.   [22mInterline operations allow the introduction of new
+lines, the movement of lines, making copies of existing lines, joining  together
+text from several lines to form one new line, substitution of new lines for old,
+and the deletion of lines.  Most of these operations ignore the cursor  position
+within  the  current  line.  It is also possible to introduce new lines into the
+file by inserting text within a line and including a new‐line character in  this
+text.  This has the effect of ‘‘splitting’’ the line into two new lines.
+
+     [1mOpen mode display.  [22mIn [4mopen[24m mode, the text of the current line is displayed
+with the cursor initially at the first non‐blank position of  the  line.   If  a
+regular  expression is given following the [4mopen[24m command then the first character
+which matched this expression is the character under  the  cursor.   The  single
+displayed logical line usually occupies one physical line on the screen but may,
+
+
+
+
+
+
+
+
+
+
+                                      ‐22‐
+
+
+on a cursor‐addressible terminal, occupy several lines.†
+
+     [1mVisual mode display.  [22mIn [4mvisual[24m mode, a number of logical lines are  placed
+on  the  screen,  with  long lines folded to occupy several physical lines.  The
+cursor may be moved between these lines and each can be edited as with [4mopen[24m.  In
+addition, the interline operations listed above may be conveniently performed in
+[4mvisual[24m mode.
+
+     [1mEmpty lines.  [22mPhysical lines in the display which are not occupied  by  any
+portion  of  logical  lines  are  represented  by the character ‘@’ alone at the
+beginning of the line.  Physical lines past the end of file are displayed  using
+the character ‘~’ instead of ‘@’.
+
+     [1mCleaning  up the screen.  [22mIf you have made a number of line changes, creat‐
+ing empty physical lines displayed as ‘@’, you may wish to maximize the informa‐
+tion on the screen.  You can do this with the CTRL(Z) operation.
+
+     [1mOperation  errors.  [22mIf an operation formation or execution error occurs the
+terminal bell is rung and any partially formed command is discarded.   The  bell
+is  also  rung  when  a DELETE is used to cancel an operation and when an ESC is
+sent when no operation is in progress.
+
+     [1mEscape.  [22mThe ESC escape character is extensively used in [4mopen[24m  and  [4mvisual[24m.
+As  we  saw above, it is used to terminate text input.  It is also used to abort
+partially formed commands.  Thus ‘4ESC5x’ will  delete  5  characters;  here  we
+changed our mind after typing a ‘4’ and cancelled it with ESC to start anew with
+a ‘5’.  If ESC is hit when there is no partially formed command in progress, the
+editor will ring the bell to let you know that nothing is happening.
+
+     [1mGetting  out.   [22mTo  get  out  of [4mopen[24m or [4mvisual[24m you should use the ‘q’ quit
+operation.  If you hit two successive DELETE (i.e. RUBOUT) characters or a  sin‐
+gle QUIT character, you will also drop out of [4mopen[24m or [4mvisual[24m.
+
+     [1mBombing  out.   [22mIf  you find a bug in the editor, or if a problem occurs in
+the system you may find the editor ungracefully terminating either just an  [4mopen[0m
+or [4mvisual[24m command or the entire session.  In this case, you may be left with the
+terminal in a funny state so that keys do not echo when you hit them.  The thing
+to  note  in  this  situation  is that your normal erase character and kill line
+sequences will, most likely, not work, and also that the carriage return charac‐
+ter may be different from the new‐line character, the former being, quite often,
+non‐functional.  The way to recover from this is to type the command:†
+
+     [1mstty cooked echo −nl[0m
+
+If  you  are  still talking to the editor you will have to put the escape ‘!’ in
+───────────
+† On cursor addressible terminals, the second to the last  line  is
+used instead of the last line.  This avoids screen roll‐up problems
+often associated with the last column of the last line.  On  termi‐
+nals  without  cursor‐addressing capability, an error will occur if
+the line is too long to fit on one physical screen line.
+† If you are lucky, your system may have  the  [4mtset[24m  command  which
+performs  this  function without requiring any arguments.  Then all
+
+
+
+
+
+
+
+
+
+
+                                      ‐23‐
+
+
+front of this command.  Note especially that you must type this command  without
+mistakes, and that you must terminate it with a newline.  (This entire operation
+may be difficult because you won’t be getting any echo from the system.)  If you
+make  a  mistake,  just send the mangled line with a newline and start over.  If
+you stick a single, unmatched ‘´’ on the end of the line, the shell will  scream
+about the syntax error and not execute the garbage you typed.
+
+     [1mSync.  [22mIf you have made a number of changes and wish to insure them against
+a system crash, you can invoke the [4msync[24m command from within [4mvisual[24m or  open  via
+the CTRL(S) operation.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+───────────
+you will have to do is type ‘tset’ followed by a new  line  charac‐
+ter, possibly preceded by a ‘!’ if the editor is still with you.
+
+
+
+
+
+
+
+
+
+
+                                      ‐24‐
+
+
+[1mOperation descriptions[0m
+
+     [1mScope  of operation.  [22mAll changes in [4mopen[24m or [4mvisual[24m are limited in scope to
+the visible screen text.  Each single change may be reversed with the  undo  ‘u’
+operation.   In  addition, a disastrous [4mopen[24m or [4mvisual[24m command may be completely
+undone at the command level.
+
+     [1mFormat of the operations.   [22mMost  operations  take  an  optional  preceding
+count,  given  as a decimal number (not starting with a digit ‘0’).  A number of
+operations take a following [4mtext[24m string which is inserted  into  the  buffer  as
+specified  by the operation.  Some operations take a following operation, called
+the targeting operation, to indicate the scope on which they are to have effect.
+This  second  ‘‘targeting’’  operation specifies the cursor motion for the first
+operation.  Thus a simple operation would be ‘x’ deleting the (single) character
+under  the  cursor.   We could delete two characters by specifying ‘2x’ or ‘xx’,
+the former being preferred.  An example of an operation which takes targeting is
+delete ‘d’, thus ‘dw’ will delete a word.  Finally, the insert operation is typ‐
+ified by ‘ifooESC’ where here the text ‘foo’ is inserted before the current cur‐
+sor position.  The character ESC here is used to terminate the text input.
+
+     [1mDefinition  of  ‘‘word’’.   [22mThere are two different definitions of ‘‘word’’
+used in [4mopen[24m and [4mvisual[24m.  The primary definition is a sequence of letters,  dig‐
+its,  and underscores, or a sequence of other (non‐white) characters followed by
+trailing white space (blanks and tabs).  This is the conservative definition  of
+word.   The other, liberal, definition of a ‘‘word’’ treats it simply as a maxi‐
+mal sequence of non‐blanks with trailing white space.  There  are  two  sets  of
+word  operations;  ‘w’  and ‘b’ are conservative, ‘W’ and ‘B’ liberal.  The back
+word CTRL(W) operation in text insert mode is liberal; it is  especially  useful
+for  fast  typists  who want to quickly and accurately back over several mangled
+input words.
+
+     [1mIntraline motion operations.  [22mThere  are  four  basic  kinds  of  intraline
+motion operations − those dealing with characters, those dealing with ‘‘words’’,
+those dealing with targets (either single characters or specified  column  posi‐
+tions),  and, finally, special motions e.g. to the beginning of, first non‐blank
+character of, or end of a line.  The basic  character  oriented  operations  are
+SPACE advancing one position to the right and CTRL(H) a backspace which backs up
+to the right.† The basic word oriented operations are ‘w’ moving forward to  the
+beginning of the next word, and ‘b’ moving backward to the beginning of the pre‐
+ceding word.
+
+     [1mSingle character targets.  [22mThe character targeting operations are ‘f’, ‘F’,
+‘t’  and  ‘T’.  Each takes a single following character and searches the current
+line for that character.  The lower case operations search  to  the  right,  the
+upper  case  operations  to  the  left.   The  ‘f’ and ‘F’ (find) operations are
+───────────
+† On the ADM‐3A the control functions of the keys  ‘h’,  ‘j’,  ‘k’,
+and  ‘l’  perform  the  left,  down,  up,  and right cursor motions
+respectively.  Hence, for convenience on this most commonly  avail‐
+able  terminal,  the  operations  ‘h’,  ‘j’, ‘k’ and ‘l’ perform as
+their control‐key counterparts in repositioning the cursor.   Thus,
+in  the  present  cases,  ‘h’  works as well as CTRL(H), and ‘l’ is
+equivalent to SPACE.
+
+
+
+
+
+
+
+
+
+
+                                      ‐25‐
+
+
+inclusive; that is, they reference through to the specified characters.  The ‘t’
+and  ‘T’  (to) operations are not inclusive but rather move the cursor up to the
+specified target.
+
+     [1mSpecial motions.  [22mThe special intraline motion sequences are ‘^’ specifying
+the  first non‐blank character on the line; ‘$’ specifying the last character on
+the line; and ‘0’ specifying the first position on the line.  Finally, there  is
+an operation ‘|’, used with a preceding count, which references the column posi‐
+tion specified by the count, much as a ‘f’ operation would.
+
+     [1mOperators and targeting operations.  [22mSome operations  are  actually  prefix
+operators,  taking  another  operation, called the targeting operation or [4mtarget[0m
+after them to indicate the scope on which they are to have  effect.   There  are
+four  such  operations  −  ‘c’  change, ‘d’ delete, ‘g’ grab, and ‘y’ yank.  The
+first two are by far the most important.  The  targeting  operation  must  be  a
+intraline  motion  sequence.   Thus  ‘c2w’ could begin an operation changing the
+next two words in the current line, while ‘dt)’ would delete the text up to  the
+next ‘)’ character in the current line.
+
+     [1mInterline  motions.   [22mThe  most  primitive  interline motion operations are
+those which advance integral numbers of lines, typified by a carriage return  CR
+or  new line NL.  There are two kinds of such operations in each direction − the
+pure cursor motion operations which maintain the current column position as much
+as possible, and the motion sequences which advance to the first non‐blank posi‐
+tion of the target line.
+
+     Interline motions which respect the current  column  position  include  ‘k’
+(also  CTRL(K)  on  an ADM‐3A) moving up a line, and NL or ‘j’ or CTRL(J) moving
+down a line.  Motion sequences which place the cursor  in  the  first  non‐blank
+position  are  ‘+’ or CR moving down, and ‘−’ moving up.  These motion sequences
+take counts thus ‘5−’ will  move  back  five  lines.   There  are  also  special
+sequences ‘H’ for home which returns the cursor to the first non‐blank character
+of the first line on the screen, and ‘L’ to the first non‐blank character of the
+last.
+
+     [1mInsertion.   [22mText  insertion is indicated by [4mtext[24m in the operation descrip‐
+tions below.  Pure text insertion is begun with the ‘i’ or  ‘a’  operations  and
+continues to an ESC.  If the first character of [4mtext[24m is the null character, gen‐
+erated by a CTRL(@), then the previous inserted text is re‐used.  [4mText[24m may  con‐
+tain new‐line characters which cause the current line to be split and a new line
+to be added to the buffer.  A number of control characters may be used  to  edit
+the inserted text while inserting.  These include CTRL(H) to back over a charac‐
+ter, CTRL(W) to back over a word (liberal definition), ‘@’ to delete  the  (cur‐
+rent line portion) of the input.  Also, the character CTRL(X) is interchangeable
+with ‘@’ here and as an deleting operation.  To enter any of these special char‐
+acters into the input line they must be preceded by a ‘\’.  This applies also to
+the DELETE, QUIT and CTRL(D) characters.  The first two normally cause  termina‐
+tion  of  the text insert; CTRL(D) is used as a backtab in [4mautoindent[24m and other‐
+wise normally ignored.
+
+     Convenient intraline insertion abbreviations are ‘I’ adding text before the
+first non‐blank of the current line, and ‘A’ adding text at the end of the line.
+These are similar to the two character sequences ‘^i’ and ‘$a’ respectively.
+
+
+
+
+
+
+
+
+
+
+                                      ‐26‐
+
+
+     [1mDeletion.  [22mThe deletion operator ‘d’ may be  placed  before  any  intraline
+motion  sequence to form a deleting operation, deleting the moved over text from
+the current line.  Thus ‘dw’ will delete a word while ‘d40|’ will delete to col‐
+umn  40.   Convenient  deletion  abbreviations  are ‘x’ deleting characters, ‘X’
+deleting the specified number of preceding characters, and ‘#’, similar  to  ‘X’
+except that it deletes the character at the cursor while ‘X’ deletes the charac‐
+ter before the cursor.  Finally there are the abbreviations ‘D’ which deletes to
+the  end  of  the line, i.e. ‘d$’, and ‘@’ which deletes to the beginning of the
+line, i.e. ‘d0’.  Note also that the operation CTRL(X) is a synonym for ‘@’.
+
+     [1mChange.  [22mSimilar to the delete operations are the change operations,  which
+are  formed  with  ‘c’  and any motion sequence.  The specified text is deleted,
+indicated by marking the right end of it with a  ‘$’  character,  and  then  the
+input  up  to an ESC replaces it.  Thus ‘cwfooESC’ will replace the current word
+with the word ‘foo’.  Useful abbreviated changes are ‘C’ which changes the  rest
+of the line, i.e. ‘c$’, and ‘s’ which changes the number of characters specified
+by the preceding count.
+
+     [1mReplace.  [22mThere are two forms of the replace operation.   The  first,  ‘r’,
+replaces the single character under the cursor with the single following charac‐
+ter (no terminating ESC is required.)  The second form ‘R’ replaces as many fol‐
+lowing characters as are typed with the new input characters.  This operation is
+essentially an ‘‘overstrike’’ much as a normal terminal display  functions.   It
+is  useful  in editing pictures and other data where a fixed field size is to be
+maintained.
+
+     [1mInterline inserts.  [22mSome operations add a new line to  the  buffer.   These
+ignore the cursor position on the current line, and do not split it, rather cre‐
+ating a new line.  The two operations of this type are ‘o’ which adds a new line
+after  the  current  line and ‘O’ which adds a new line before the current line.
+In both cases, following text up to an ESC defines one or  more  new  lines.   A
+count  may be usefully given before ‘o’ or ‘O’ indicating the number of physical
+lines to be opened up.  If this is an estimate of the  number  of  lines  to  be
+added it can help to minimize the output required to redraw the screen on termi‐
+nals which are unintelligent.  Thus an appropriate beginning of  a  sequence  to
+add three new lines after the current line would be ‘3o’.
+
+     [1mLine  deletes,  joins.  [22mLines may be deleted from the buffer using the com‐
+mand ‘\\’ (two backslashes) or joined together using ‘J’.  A specified number of
+lines may be replaced with new text conveniently using the line substitute oper‐
+ation ‘S’.
+
+     [1mInterline scans.  [22mIt is possible to scan between lines for  text  specified
+by  a regular expression and, in [4mvisual[24m, to specify where this line is to appear
+on the screen if it must be redrawn.  Forward scans are begun with ‘/’ and back‐
+ward scans with ‘?’.  After hitting ‘/’ or ‘?’ you enter the pattern you wish to
+scan for and it is shown on the bottom line of the screen.   You  can  terminate
+the  pattern either with an ESC or a CR or NL; to abort a partially formed scan‐
+ning operation you can type a DELETE or RUBOUT character.  If the  search  fails
+the  bell is rung, the scan delimiter ‘/’ or ‘?’ is replaced with a ‘F’ indicat‐
+ing a failed search, and the cursor returns to its previous position with typea‐
+head  discarded.  If the search succeeds then the cursor is placed at the begin‐
+ning of the string which matched.  The screen is redrawn with the  line  matched
+
+
+
+
+
+
+
+
+
+
+                                      ‐27‐
+
+
+in  the  center  unless (in [4mvisual[24m only) a specific positioning request has been
+made by following the pattern with ‘z’ or ‘v’ and then one of ‘↑’, ‘‐’, ‘.’,  or
+a CR or NL specifing the top of the screen.
+
+     [1mScrolling.   [22mThe  operation  CTRL(D)  may  be  used, as in command mode, to
+effect a scroll.  The number of lines to be scrolled may be specified by a  pre‐
+ceding  count; this count will hold for succeeding [4mopen[24m and [4mvisual[24m scrolls until
+respecified.
+
+     [1mContext displays.  [22mSequences ‘z[4mtype[24m’ and ‘v[4mtype[24m’ may be  equivalently  used
+to  specify  context  display  as in command mode.  In [4mopen[24m mode the [4mtype[24m is not
+required and a command mode like ‘z=’ command is always done.   In  [4mvisual[24m  [4mtype[0m
+may be any of ‘↑’, ‘‐’, ‘[1m.[22m’ or CR or NL specifying the top of the screen.
+
+     [1mMemory.   [22mThe  editor remembers the last [4mvisual[24m or [4mopen[24m command and associ‐
+ated data in each of several categories and allows it to  be  respecified  by  a
+very short, one character sequence.
+
+     [1mLast  single character scan.  [22mThe last of the targeting operations [4mf[24m, [4mF[24m, [4mt[24m,
+     and [4mT[24m is remembered with the character supplied to it.  This combination is
+     used again through the operation ‘;’.
+
+     [1mLast  interline  scan.  [22mThe last of the interline scans using ‘/’ or ‘?’ is
+     remembered and may be repeated with the operation [4mn[24m (next.)
+
+     [1mLast modifying command.  [22mThe last command  which  modified  the  buffer  is
+     remembered and may be repeated by the command form ‘[1m.[22m’.
+
+     [1mLast  inserted  text.   [22mThe text which was last inserted (up to 128 charac‐
+     ters) is remembered and may be specified in  future  operation  by  a  null
+     character,  generated  by  a CTRL(@).  This is given when [4mtext[24m would begin,
+     instead of [4mtext.[24m  The ESC terminating the [4mtext[24m is not needed.  If there  is
+     no previous inserted text, or if the previous inserted text was longer than
+     128 characters, the bell is rung and the operation completes  inserting  no
+     text.   If  the aborted operation was a scan via ‘/’ or ‘?’, then it aborts
+     as though it had been cancelled with a DELETE character.
+
+     [1mLast deleted text.  [22mThe last deleted text which was part of a  single  line
+     (up to 128 characters) is remembered.  If the last thing deleted was one or
+     more lines, then this will be remembered instead.  There are put operations
+     ‘p’  and  ‘P’  which  allow this deleted text to be returned to the buffer.
+     Note that a number of operations set both the  deleted  and  inserted  text
+     (notably change operations.)
+
+
+     [1mGrab, yank, and put.  [22mThere are two related operators yank ‘y’ and grab ‘g’
+which take a motion sequence target and pretend it was the previous inserted  or
+deleted text respectively.  The grab ‘g’ operation is especially useful when you
+wish to search for something on the screen − you can grab it, e.g. if  it  is  a
+word  with ‘gw’, and then do a scan defaulting the search with a null character,
+i.e.: ‘/CTRL(@)’.  There are also operations ‘p’ and ‘P’ which  put  text  which
+was  deleted  back into the buffer.  If the previous deletion was of lines, then
+these operations will add new lines with the  same  text  after  or  before  the
+
+
+
+
+
+
+
+
+
+
+                                      ‐28‐
+
+
+current  line  respectively.  Similarly if the previous deletion was a part of a
+line, then the text will be put after/before the cursor position in the  current
+line.  There is also an operation ‘Y’ which yanks a specified number of lines as
+though they had been deleted but does not delete them.  This can be used to copy
+lines.  As an example, the sequence ‘Yp’ places a copy of the current line after
+the current line.
+
+     [1mInterline motions.  [22mThe are a number of interline motion sequences  dealing
+with the mark registers and specific line numbers.  The operation ‘G’ causes the
+line specified by the preceding count to become the current line.  If this  line
+is  on  the screen, then the screen is not redrawn.  The default line for ‘G’ if
+no count is given is the last line of the file.  Thus ‘G’ is the easiest way  to
+get to the end of the file.
+
+     The  sequences ‘´[4mx[24m’ where [4mx[24m is a single lower case letter cause the display
+to return to the specified marked line, with the marked line in the center.  The
+previous  context  mark  ‘´´’  may  also be requested here, and it is set by the
+searching operations ‘/’ and ‘?’, the ‘G’ operation, the mark  operations  ‘´[4mx[24m’,
+and  the ‘v’ or ‘z’ operations when a count is given.  Marks may be set while in
+[4mvisual[24m or [4mopen[24m by using the [4mK[24m operation and following it by a single lower  case
+letter specifying the register to be marked.
+
+[1mMiscellaneous notes on visual and open[0m
+
+     The options [4mbeautify[24m and [4mindicateul[24m are suppressed in [4mopen[24m and [4mvisual[24m.  All
+the features of [4mautoindent[24m are available.  If the cursor is at a  tab  character
+in the line which is represented by a number of blanks, it is placed at the last
+blank.  Lines yanked with ‘Y’ or deleted with ‘\\’ may be put with ‘p’ or ‘P’ in
+a  later  [4mvisual[24m  or [4mopen[24m command only so long as no [4medit[24m or [4mnext[24m command inter‐
+venes.  It is not possible to [4mundo[24m an appending  operation  in  [4mopen[24m  or  [4mvisual[0m
+which  resulted  in the creation of more than a screen full of lines.  An opera‐
+tion affecting only the text within a single line is  undoable  only  while  the
+cursor remains on that line.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                      ‐29‐
+
+
+[1mVisual and open mode summary[0m
+
+     The  following  table  summarizes the [4mvisual[24m and [4mopen[24m operations.  For each
+operation we indicate its general form, whether it can take a [4mcount[24m, and whether
+it can be used as a [4mtargeting[24m operation.
+
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│                              Open and visual operations                                │
+├────────────────────────────────────────────────────────────────────────────────────────┤
+├───────────────┬────────┬─────────┬─────────────────────────────────────────────────────┤
+│Operation      │ Count? │ Target? │ Description                                         │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+└───────────────┴────────┴─────────┴─────────────────────────────────────────────────────┘
+│a[4mtext[24mESC       │ yes    │ no      │ Append [4mtext[24m after cursor                            │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│b              │ yes    │ yes     │ Backwards words                                     │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│c[4mtargettext[24mESC │ no     │ no      │ Change [4mtarget[24m to [4mtext[24m                               │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│d[4mtarget[24m        │ yes    │ no      │ Delete [4mtarget[24m                                       │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│e              │ yes    │ yes     │ To end of word (unimplemented)                      │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│f[4mchar[24m          │ yes    │ yes     │ Find [4mchar[24m to right of cursor                        │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│g[4mtarget[24m        │ no     │ no      │ Define previous inserted text                       │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│h (←)          │ yes    │ yes     │ Backwards characters (like CTRL(H))                 │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│i[4mtext[24mESC       │ yes    │ no      │ Insert [4mtext[24m before cursor                           │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│j (↓)          │ yes    │ no      │ Cursor down lines, same column if possible          │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│k (↑)          │ yes    │ no      │ Cursor up lines, same column                        │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│l (→)          │ yes    │ yes     │ Forwards character                                  │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│n              │ no     │ no      │ To next line matching the previous [4mscanning[24m regular │
+│               │        │         │ expression (as described below) in the direction of │
+│               │        │         │ the  previous [4mopen[24m or [4mvisual[24m intraline search using │
+│               │        │         │ ‘/’ or ‘?’.                                         │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│o[4mtext[24mESC       │ yes    │ no      │ Open a new line after the current line leaving room │
+│               │        │         │ for  the specified number of physical lines.  Enter │
+│               │        │         │ text insert mode on that line.                      │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│p              │ no     │ no      │ Put the text lines last deleted with  ‘\\’  or  the │
+│               │        │         │ last  yanked  ‘Y’ lines after the current line.  If │
+│               │        │         │ the last deletion was of part of a line rather than │
+│               │        │         │ a  ‘Y’  or  ‘\\’ then that deleted text is place in │
+│               │        │         │ the current line after the cursor.                  │
+└───────────────┴────────┴─────────┴─────────────────────────────────────────────────────┘
+
+
+
+
+
+
+
+
+
+
+
+                                      ‐30‐
+
+
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│                              Open and visual operations                                │
+├────────────────────────────────────────────────────────────────────────────────────────┤
+├───────────────┬────────┬─────────┬─────────────────────────────────────────────────────┤
+│Operation      │ Count? │ Target? │ Description                                         │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+└───────────────┴────────┴─────────┴─────────────────────────────────────────────────────┘
+│q              │ no     │ no      │ Quit [4mopen[24m or [4mvisual[24m,  returning  to  command  mode. │
+│               │        │         │ The  command level [4mundo[24m can reverse the entire [4mopen[24m │
+│               │        │         │ or [4mvisual[24m command.                                  │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│r[4mchar[24m          │ yes    │ no      │ Replace each of the specified number of  characters │
+│               │        │         │ with a [4mchar[24m                                         │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│s[4mtext[24mESC       │ yes    │ no      │ Replace the specified number of characters with the │
+│               │        │         │ specified [4mtext[24m                                      │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│t[4mchar[24m          │ yes    │ yes     │ Cursor right to just before [4mchar[24m                    │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│u              │ no     │ no      │ Undo last change                                    │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│v              │ no     │ no      │ (In [4mopen[24m) do command mode ‘z=’  returning  to  [4mopen[24m │
+│               │        │         │ mode on current line.                               │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│v[4mspec[24m          │ yes    │ no      │ (In  [4mvisual[24m) with [4mspec[24m one of ‘[1m.[22m’, ‘−’, ‘↑’ or ‘^’, │
+│               │        │         │ ‘+’, or CR or NL does the specified type of  [4mvisual[24m │
+│               │        │         │ command  at  the  specified line, defaulting to the │
+│               │        │         │ current line                                        │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│w              │ yes    │ yes     │ Forward to beginning of each word                   │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│x              │ yes    │ no      │ Delete characters                                   │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│y[4mtarget[24m        │ no     │ no      │ Define previous deleted text                        │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│z              │ ‐      │ ‐       │ Synonym for [4mv[24m                                       │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│A[4mstr[24mESC        │ yes    │ no      │ Append at end (short for ‘$a’)                      │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│B              │ yes    │ yes     │ Back word (simple blank/non‐blank)                  │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│C[4mstr[24mESC        │ no     │ no      │ Change to end (short for ‘c$’)                      │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│D              │ no     │ no      │ Delete to end (short for ‘d$’)                      │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│E              │ yes    │ yes     │ Back to end of previous word (unimplemented)        │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│F[4mchar[24m          │ yes    │ yes     │ Find [4mchar[24m to left of cursor                         │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│G              │ yes    │ no      │ Goto specified line; last line default              │
+└───────────────┴────────┴─────────┴─────────────────────────────────────────────────────┘
+
+
+
+
+
+
+
+
+
+
+
+
+                                      ‐31‐
+
+
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│                              Open and visual operations                                │
+├────────────────────────────────────────────────────────────────────────────────────────┤
+├───────────────┬────────┬─────────┬─────────────────────────────────────────────────────┤
+│Operation      │ Count? │ Target? │ Description                                         │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+└───────────────┴────────┴─────────┴─────────────────────────────────────────────────────┘
+│H              │ no     │ no      │ To first non‐blank on first screen line             │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│I              │ yes    │ no      │ Insert before first non‐blank character (i.e. ‘^i’) │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│J              │ yes    │ no      │ Join lines                                          │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│K[4mx[24m             │ no     │ no      │ Mark current line in mark register [4mx[24m                │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│L              │ no     │ no      │ To first non‐blank character on last screen line    │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│O[4mtext[24mESC       │ yes    │ no      │ Like [4mo[24m but before current line                      │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│P              │ no     │ no      │ Like [4mp[24m but before current line or before cursor     │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│R[4mtext[24mESC       │ no     │ no      │ Replace (overstrike) with input [4mtext[24m                │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│S[4mtext[24mESC       │ yes    │ no      │ Replace specified number of lines                   │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│T              │ yes    │ yes     │ Like [4mt[24m but scanning to left of cursor               │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│W              │ yes    │ yes     │ Forward word (simple blank/non‐blank)               │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│X              │ yes    │ no      │ Delete preceding characters                         │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│Y              │ yes    │ no      │ Yank lines, copying them without deleting  them  so │
+│               │        │         │ that they may be put with [4mp[24m or [4mP[24m.                   │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│SPACE          │ yes    │ yes     │ Right one character                                 │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│0              │ no     │ yes     │ To first character of line                          │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│↑ or ^         │ no     │ yes     │ To first non‐white character                        │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│$              │ no     │ yes     │ To end‐of‐line                                      │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│@              │ no     │ no      │ Delete characters before cursor                     │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│#              │ yes    │ no      │ Delete  characters  backwards,  starting  with  the │
+│               │        │         │ character under the cursor                          │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│[1m.              [22m│ no     │ no      │ Repeat last modifying command                       │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│;              │ yes    │ yes     │ Repeat last [4mf[24m, [4mF[24m, [4mt[24m, or [4mT[24m operation                 │
+└───────────────┴────────┴─────────┴─────────────────────────────────────────────────────┘
+
+
+
+
+
+
+
+
+
+
+
+
+                                      ‐32‐
+
+
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│                              Open and visual operations                                │
+├────────────────────────────────────────────────────────────────────────────────────────┤
+├───────────────┬────────┬─────────┬─────────────────────────────────────────────────────┤
+│Operation      │ Count? │ Target? │ Description                                         │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+└───────────────┴────────┴─────────┴─────────────────────────────────────────────────────┘
+│\\             │ yes    │ no      │ Delete lines                                        │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│+ or CR        │ yes    │ no      │ Forward lines to first non‐blank                    │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│−              │ yes    │ no      │ Backwards lines to first non‐blank                  │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│/[4mre[24mESC         │ no     │ no      │ Forward to first line matching [4mre[24m.  To  cancel  the │
+│               │        │         │ search, send a DELETE or RUBOUT.                    │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│?[4mre[24mESC         │ no     │ no      │ To previous line matching [4mre[24m                        │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│/[4mre[24m/z[4mtype[24mESC   │ no     │ no      │ (In visual) performs the specified type of a [4mz[24m or [4mv[24m │
+│               │        │         │ command before the target specified  with  /[4mre[24m/  or │
+│               │        │         │ ?[4mre[24m?.                                               │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│|              │ yes    │ yes     │ To  specified  column or column before last up/down │
+│               │        │         │ line movement                                       │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│CTRL(D)        │ yes    │ no      │ Down [4mscroll[24m lines; in [4mvisual[24m hold the cursor’s rel‐ │
+│               │        │         │ ative  position on the screen.  If a count is given │
+│               │        │         │ it becomes the number of logical lines to scroll in │
+│               │        │         │ [4mopen[24m or [4mvisual[24m until another such count is given.   │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│CTRL(S)        │ no     │ no      │ Do a [4msync[24m command                                   │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│CTRL(W)        │ yes    │ yes     │ Synonym for ‘B’                                     │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│CTRL(X)        │ no     │ no      │ Synonym for ‘@’                                     │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│CTRL(Z)        │ no     │ no      │ Maximize information on screen (clean‐up)           │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│ESC            │ ‐      │ ‐       │ Cancel partially formed command                     │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│RUB            │ ‐      │ ‐       │ Cancel  a  partially  formed command.  If repeated, │
+│               │        │         │ drop out to [4mcommand[24m mode                            │
+├───────────────┼────────┼─────────┼─────────────────────────────────────────────────────┤
+│QUIT           │ ‐      │ ‐       │ Drop out to [4mcommand[24m mode                            │
+└───────────────┴────────┴─────────┴─────────────────────────────────────────────────────┘
+
+[1mText insertion mode corrections[0m
+
+     The following sequences are used in making corrections to text being  added
+in [4mtext[24m [4minsertion[24m mode.  They are also used when entering the regular expression
+[4mre[24m for a interline search using ‘/’ or ‘?’.
+
+
+
+
+
+
+
+
+
+
+
+
+                                      ‐33‐
+
+
+     ┌─────────────────────────────────────────────────────────────────────┐
+     │               Text insertion mode editing sequences                 │
+     ├───────────┬─────────────────────────────────────────────────────────┤
+     │Sequence   │ Action                                                  │
+     ├───────────┼─────────────────────────────────────────────────────────┤
+     │ CTRL(H)   │ Back a character                                        │
+     │ @         │ Delete all input on current line                        │
+     │ CTRL(X)   │ Synonym for ‘@’                                         │
+     │ CTRL(W)   │ Delete a word (simple blank/non‐blank definition)       │
+     │ RUB       │ Drop out of text insert, and also [4mvisual[24m or [4mopen[24m        │
+     │ QUIT      │ Like RUB                                                │
+     │ \[4mspecial[24m  │ With special any of the above chars, gives [4mspecial[24m      │
+     │ CR or NL  │ End current line, rest of text to a new, following line │
+     │ ESC       │ Terminate the [4mtext[24m                                      │
+     └───────────┴─────────────────────────────────────────────────────────┘
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                      ‐34‐
+
+
+[1mSubstitute replacement patterns[0m
+
+     There are several metacharacters which may be used in  substitute  replace‐
+ment  patterns.  As is the case for the regular expression metacharacters, there
+are fewer replacement pattern metacharacters if [4mnomagic[24m is set.   This  is  dis‐
+cussed more below.  In fact, with [4mnomagic[24m the only replacement pattern metachar‐
+acter is the escaping ‘\’ (this is the default for [4medit[24m).
+
+     The basic metacharacters for the  replacement  pattern  are  ‘&’  and  ‘~’.
+These  are given as ‘\&’ and ‘\~’ when [4mnomagic[24m is set.  The metacharacter ‘&’ is
+by far the most important of these.  Each  instance  of  this  metacharacter  is
+replaced  by the characters which the regular expression matched.  Thus the sub‐
+stitute command
+
+     [1msubstitute[22m/some/& other/
+
+will replace the string ‘some’ with the string ‘some other’ the  first  time  it
+occurs  on  the  current line.  The metacharacter ‘~’ stands, in the replacement
+pattern, as it did in regular expression formation, for the defining text of the
+previous replacement pattern.
+
+     Other metasequences are possible in the replacement pattern, and are intro‐
+duced by the escaping character ‘\’; this is the default for [4medit[24m.  The sequence
+‘\[4mn[24m’  is replaced by the text matched by the [4mn[24m‐th regular subexpression enclosed
+between  ‘\(’  and ‘\)’.† The metasequences ‘\u’, ‘\l’, ‘\U’, ‘\L’, and ‘\E’ and
+‘\e’ are used to perform systematic case conversion of letters.   The  sequences
+‘\u’ and ‘\l’ cause the immediately following character in the replacement to be
+converted to upper‐ or lower‐case respectively if this character  is  a  letter.
+The  sequences  ‘\U’ and ‘\L’ turn such conversion on, either until ‘\E’ or ‘\e’
+is encountered, or until the end of  the  replacement  pattern.   By  bracketing
+selected  portions  of a regular expression with ‘\(’ and ‘\)’ and using ‘\U’ or
+‘\L’ it is possible to systematically capitalize entire words or phrases.
+
+[1mRegular expressions[0m
+
+     [4mEx[24m supports a form of regular expression notation.   A  regular  expression
+specifies  a  set  of strings of characters.  A member of this set of strings is
+said to be [4mmatched[24m by the regular expression.  Regular expressions may  be  used
+in  locating  or  selecting  lines by their content, in [4mopen[24m and [4mvisual[24m modes to
+position the cursor within the file, and in the [4msubstitute[24m command to select the
+portion of a line to be substituted.
+
+     [4mEx[24m remembers two previous regular expressions: the previous regular expres‐
+sion used in a [4msubstitute[24m command and the previous regular expression used else‐
+where  (referred  to as the previous [4mscanning[24m regular expression.)  The previous
+regular expression can always be referred to by a null [4mre[24m, e.g. ‘//’ or ‘??’.
+
+
+
+
+───────────
+† When nested,  parenthesized  subexpressions  are  present,  [4mn[24m  is
+determined by counting occurrences of ‘\(’ starting from the left.
+
+
+
+
+
+
+
+
+
+
+                                      ‐35‐
+
+
+[1mMagic and nomagic[0m
+
+     The regular expressions allowed by [4mex[24m are constructed in one  of  two  ways
+depending  on  the setting of the [4mmagic[24m option.  The [4mex[24m default setting of [4mmagic[0m
+gives quick access to a powerful set of regular expression metacharacters.   The
+disadvantage  of  [4mmagic[24m is that the user must remember that these metacharacters
+are [4mmagic[24m and precede them with the character ‘\’ to use  them  as  ‘‘ordinary’’
+characters.   With  [4mnomagic[24m,  the default for [4medit[24m, regular expressions are much
+simpler, there being only two metacharacters.  The power of the other  metachar‐
+acters  is still available by preceding the (now) ordinary character with a ‘\’.
+Note that ‘\’ is thus always a metacharacter.
+
+     The remainder of the discussion of regular expressions  assumes  that  that
+the  setting  of  this option is [4mmagic[24m.  To discern what is true with [4mnomagic[24m it
+suffices to remember that the only special characters in this case will  be  ‘↑’
+at  the  beginning  of a regular expression, ‘$’ at the end of a regular expres‐
+sion, and ‘\’.‡
+
+[1mBasic regular expression summary[0m
+
+     The  following  basic  constructs  are used to construct [4mmagic[24m mode regular
+expressions.
+
+ ┌─────────────────────────────────────────────────────────────────────────────┐
+ │                       Basic regular expression forms                        │
+ ├─────────┬───────────────────────────────────────────────────────────────────┤
+ │  Form   │ Meaning                                                           │
+ └─────────┴───────────────────────────────────────────────────────────────────┘
+ │  char   │  An ordinary character which matches itself.  The character  ‘↑’  │
+ │         │  (‘^’)  at  the beginning of a line, ‘$’ at the end of line, ‘∗’  │
+ │         │  as any character other than the first, ‘.’, ‘\’, ‘[’,  and  ‘~’  │
+ │         │  are  not  ordinary characters and must be escaped (preceded) by  │
+ │         │  ‘\’ to be treated as such.                                       │
+ ├─────────┼───────────────────────────────────────────────────────────────────┤
+ │   ↑     │  Up‐arrow (or circumflex ‘^’) at  the  beginning  of  a  pattern  │
+ │         │  forces the match to succeed only at the beginning of a line.     │
+ ├─────────┼───────────────────────────────────────────────────────────────────┤
+ │   $     │  At  the end of a regular expression forces the match to succeed  │
+ │         │  only at the end of the line.                                     │
+ ├─────────┼───────────────────────────────────────────────────────────────────┤
+ │   [1m.     [22m│  A period character matches any single character except the new‐  │
+ │         │  line character.                                                  │
+ ├─────────┼───────────────────────────────────────────────────────────────────┤
+ │   \<    │  This sequence in a regular expression forces the match to occur  │
+ │         │  only at the beginning of a ‘‘variable’’ or ‘‘word’’;  that  is,  │
+ │         │  either  at  the  beginning  of a line, or just before a letter,  │
+ │         │  digit, or underline and after a character not one of these.      │
+ └─────────┴───────────────────────────────────────────────────────────────────┘
+
+
+───────────
+‡ With [4mnomagic[24m the characters ‘~’ and ‘&’ also lose  their  special
+meanings related to the replacement pattern of a substitute.
+
+
+
+
+
+
+
+
+
+
+                                      ‐36‐
+
+
+ ┌─────────────────────────────────────────────────────────────────────────────┐
+ │                       Basic regular expression forms                        │
+ ├─────────┬───────────────────────────────────────────────────────────────────┤
+ │  Form   │ Meaning                                                           │
+ └─────────┴───────────────────────────────────────────────────────────────────┘
+ │   \>    │  Similar to ‘\<’, but matching the  end  of  a  ‘‘variable’’  or  │
+ │         │  ‘‘word’’,  i.e.  either the end of the line or before character  │
+ │         │  which is neither a letter, nor a digit, nor the underline char‐  │
+ │         │  acter.                                                           │
+ ├─────────┼───────────────────────────────────────────────────────────────────┤
+ │[[4mstring[24m] │  A  string of characters enclosed in square brackets matches any  │
+ │         │  (single) character in the class defined by [4mstring[24m.  Most  char‐  │
+ │         │  acters in [4mstring[24m define themselves.  A pair of characters sepa‐  │
+ │         │  rated by ‘−’ in [4mstring[24m defines the set of characters  collating  │
+ │         │  between the specified lower and upper bounds, thus ‘[a−z]’ as a  │
+ │         │  regular expression matches any (single) lower‐case letter.   If  │
+ │         │  the  first  character  of [4mstring[24m is an ‘↑’ or ‘^’ then the con‐  │
+ │         │  struct matches those characters which it otherwise  would  not;  │
+ │         │  thus  ‘[^a−z]’ matches anything but a lower‐case letter (and of  │
+ │         │  course a newline).  To place any of the  characters  ‘↑’,  ‘^’,  │
+ │         │  ‘[’,  or  ‘−’  in  [4mstring[24m you may escape them by preceding them  │
+ │         │  with a ‘\’.                                                      │
+ └─────────┴───────────────────────────────────────────────────────────────────┘
+
+     More complicated regular expressions are  built  by  putting  these  simple
+pieces together.  The concatenation of two regular expressions matches the long‐
+est string which can be divided with the first piece matching the first  regular
+expression  and  the second piece matching the second.  Thus the regular expres‐
+sion ‘[1m..[22me’ will match any three characters ending in the  character  ‘e’,  while
+‘^[aeiou]’ matches any vowel which appears at the beginning of a line.
+
+     Any  of the (single character matching) regular expressions mentioned above
+may be followed by the character ‘∗’ to form a regular expression which  matches
+any  number  of  adjacent occurrences (including 0) of characters matched by the
+regular expression it follows.  The character ‘~’  may  be  used  in  a  regular
+expression,  and matches the text which defined the replacement part of the last
+[4msubstitute[24m command.  A regular expression may be enclosed between the  sequences
+‘\(’ and ‘\)’ with side effects in the [4msubstitute[24m command, and an escaped digit,
+e.g. ‘\1’, matches the text which was matched by the corresponding previous ‘\(’
+and  ‘\)’  bracketed  expression,  numbered  in  order of occurrence of the ‘\(’
+delimiters.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                      ‐37‐
+
+
+[1mOption descriptions[0m
+
+autoindent, ai                default: noai
+     The [4mautoindent[24m option can be used to ease  the  preparation  of  structured
+     program text.  At the beginning of each [4mappend[24m, [4mchange[24m or [4minsert[24m command or
+     when a new line is [4mopened[24m or created by an [4mappend[24m, [4mchange[24m, [4minsert[24m, or  [4msub‐[0m
+     [4mstitute[24m  operation  within  [4mopen[24m or [4mvisual[24m mode, [4mex[24m looks at the line being
+     appended after, the first line [4mchanged[24m or the line inserted before and cal‐
+     culates the amount of white space at the start of the line.  It then aligns
+     the cursor at the level of indentation so determined.
+
+     If the user then types lines of text in, they will continue to be justified
+     at  the  displayed  indenting  level.   If more white space is typed at the
+     beginning of a line, the following line will start aligned with  the  first
+     non‐white  character  of  the  previous line.  To back the cursor up to the
+     preceding tab stop one can hit CTRL(D).  The tab stops going backwards  are
+     defined  at  multiples of the [4mshiftwidth[24m option.  You [1mcannot [22mbackspace over
+     the indent, except by sending an end‐of‐file with a CTRL(D).
+
+     Specially processed in this mode is a line with no characters added to  it,
+     which  turns into a completely blank line (the white space provided for the
+     [4mautoindent[24m is discarded.)  Also specially processed in this mode are  lines
+     beginning  with  an ‘^’ or ‘↑’ and immediately followed by a CTRL(D).  This
+     causes the input to be repositioned at  the  beginning  of  the  line,  but
+     retaining the previous indent for the next line.  Similarly, a ‘0’ followed
+     by a CTRL(D) repositions at the beginning but without retaining the  previ‐
+     ous indent.
+
+     [4mAutoindent[24m  doesn’t  happen  in  [4mglobal[24m commands or when the input is not a
+     terminal.
+
+autoprint, ap                 default: ap
+     The [4mautoprint[24m option causes the current  line  to  be  printed  after  each
+     [4mdelete[24m,  [4mcopy[24m, [4mjoin[24m, [4mmove[24m, [4msubstitute[24m, [4mtabulate[24m, [4mtranscribe[24m, [4mundo[24m, [4mxpand[24m or
+     shift command.  This has the same effect as supplying  a  trailing  ‘p’  to
+     each such command.  [4mAutoprint[24m is suppressed in globals, and only applies to
+     the last of many commands on a line.
+
+beautify                      default: nobeautify
+     Causes all control characters except tab, newline and form‐feed to be  dis‐
+     carded  from  the  input.   A  complaint  is  registered  the  first time a
+     backspace character is discarded.   [4mBeautify[24m  does  not  apply  to  command
+     input,  or  to  text insertion mode.  It applies only when you have entered
+     text input mode by issuing a [4minsert[24m, [4mdelete[24m, or [4mchange[24m command from command
+     mode.
+
+directory, dir                default: dir=/tmp
+     The  [4mdirectory[24m  option specifies the directory in which [4mex[24m places it buffer
+     file.  If this directory  in  not  writable,  then  the  editor  will  exit
+     abruptly when it fails to be able to create its buffer there.
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                      ‐38‐
+
+
+edited                        no default
+     The  current  file  is considered to be [4medited[24m when the buffer contents are
+     directly related to it.  In this case the [4mwrite[24m command will write  to  the
+     file  even  though  it  exists.  In all normal editing patterns the current
+     file is considered [4medited[24m.
+
+     When the current file name is explicitly changed by the [4mfile[24m command,  then
+     the  file  is  not considered [4medited[24m to protect a previous existing file of
+     the same name from accidental destruction.
+
+     If a file is not successfully read in by an [4medit[24m command, then  it  is  not
+     considered  [4medited[24m so that the possibly incomplete image of the file in the
+     editing buffer will not be accidentally written over its contents.
+
+editany, ea                   default: noea
+     Disables the [4medit[24m and [4mread[24m command file sensibility checks.
+
+errorbells, eb                default: eb
+     If [4meb[24m then error messages are preceded by two bells.  The bell  ringing  in
+     [4mopen[24m and [4mvisual[24m on errors is not suppressed by setting [4mnoeb[24m.
+
+fork                          default: fork
+     If [4mnofork[24m shell escapes will be inhibited the first time they are attempted
+     if there has been  ‘‘No  write’’  of  the  buffer  since  the  last  change
+     occurred.   In  this case, the aborted command can be repeated by using the
+     command form ‘!!’.  If [4mfork[24m, the default, a warning is given, but the  com‐
+     mand is given to a shell for execution anyways.
+
+home                          default: user‐dependent
+     The  [4mhome[24m  directory is an image of the user’s entry in the [4mhtmp[24m data base.
+     It is used initially as the origin of the file [1m.exrc  [22mand  is  the  default
+     directory for the [4mchdir[24m command.
+
+hush                          default: nohush
+     Inhibits  interactive diagnostic information including prompts, printing of
+     file names, line and character counts, command feedback, and echoing by the
+     ‘!’ shell escape.
+
+ignorecase, ic                default: noic
+     If  [4mignorecase[24m  is set, all upper case characters in the text are mapped to
+     lower case in regular expression matching.  In  addition,  all  upper  case
+     characters  in regular expressions are mapped to lower case except in char‐
+     acter class specifications.
+
+indicateul, iu                default: noiu
+     If [4mindicateul[24m is set, non‐blank characters overstruck with underlines  (and
+     vice‐versa)  cause  output  lines to be split into two parts for printing −
+     the text and the underlining.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                      ‐39‐
+
+
+list                          default: nolist
+     If [4mlist[24m is set, all printed lines will be displayed  (more)  unambiguously,
+     as is done by the [4mlist[24m command.
+
+magic                         default: magic†
+     If  [4mnomagic[24m  is  set,  the  number  of regular expression metacharacters is
+     greatly reduced, with only ‘↑’ or ‘^’ and ‘$’  having  magic  effects.   In
+     addition  the  metacharacters  ‘~’  and  ‘&’ of the replacement pattern are
+     treated as normal characters.  All the normal metacharacters  may  be  made
+     [4mmagic[24m when [4mnomagic[24m is set by preceding them with a ‘\’.
+
+mode                          default: mode=644
+     [4mMode[24m is the value the permission bits of any file created by the [4mwrite[24m com‐
+     mand will have initially.  The default allows reading and  writing  of  the
+     created file by its owner, as well as reading of the file by others.
+
+notify                        default: notify=5‡
+     The  [4mnotify[24m  option  specifies a threshold for feedback from commands.  Any
+     command which modifies more than the specified number of lines will provide
+     feedback  as  to  the  scope  of its changes.  For commands such as [4mglobal[24m,
+     [4mopen[24m, [4mundo[24m, and [4mvisual[24m which have potentially more far reaching scope,  the
+     net  change in the number of lines in the buffer is presented at the end of
+     the command, subject to this same threshold.   Thus  notification  is  sup‐
+     pressed during a [4mglobal[24m command on the individual commands performed.
+
+number                        default: nonumber
+     The  [4mnumber[24m  option may be set to cause all output lines to be printed with
+     their line numbers.  In addition each input line will be  prompted  for  by
+     supplying the line number it will have.
+
+open                          default: open†
+     If [4mnoopen[24m then the commands [4mopen[24m and [4mvisual[24m are not permitted.  This is set
+     for [4medit[24m to prevent confusion resulting from accidental entry  to  [4mopen[24m  or
+     [4mvisual[24m mode.
+
+optimize                      default: optimize
+     If  [4moptimize[24m  is set, and the terminal permits, throughput of text is expe‐
+     dited by setting the terminal to not do automatic carriage returns  and  to
+     [4mnoecho[24m mode when printing more than one (logical) line of output.  This can
+     greatly speed output on terminals without addressible  cursors  if  leading
+     blanks  are  present, but causes all type‐ahead to be lost.  With [4moptimize[24m,
+     after a multi‐line print you cannot type ahead until the prompt reappears.
+
+printall, pa                  default: noprintall
+     If [4mprintall[24m is set then all characters will be printed  in  the  output  as
+     they  appear  in  the  line  when the [4mprint[24m command is used.  Normally, the
+     blanks and tabs in the line may  be  rearranged  or  replaced  with  cursor
+     addressing  to  improve throughput, and non‐printing characters are printed
+     as ‘?’.  With [4mprintall[24m these  modifications  to  the  pure  line  text  are
+───────────
+† Default is [4mnomagic[24m for [4medit[24m.
+‡ [4mNotify[24m=1 for [4medit[24m.
+† [4mNoopen[24m for [4medit[24m.
+
+
+
+
+
+
+
+
+
+
+                                      ‐40‐
+
+
+     suppressed.
+
+prompt                        default: prompt
+     Command mode input is prompted for with a ‘:’ if the [4mprompt[24m option is set.
+
+scroll                        default: scroll=12
+     The  [4mscroll[24m  option determines the number of logical lines scrolled when an
+     end‐of‐file is received from a terminal input.
+
+shell, sh                     default: sh=/bin/sh
+     The [4mshell[24m option gives the path name of the  shell  forked  for  the  shell
+     escape command ‘!’.
+
+shiftwidth, sw                default: sw=8
+     The [4mshiftwidth[24m option gives the width a software tab stop.  This is used in
+     reverse tabbing with CTRL(D) when using [4mautoindent[24m to append text,  and  by
+     the  shift  commands.   Note  that  the tab character always references tab
+     stops every eight positions and is [1mnot [22maffected by this option.
+
+sticky                        default: nosticky
+     If [4msticky[24m is set then flags like ‘l’, ‘#’ and ‘:’, given after  a  command,
+     stick  around  until  new  flags  are  specified, allowing more lines to be
+     printed in the same way without permanently changing options or continually
+     hitting these keys.
+
+terse                         default: noterse
+     If  [4mterse[24m  is  set,  shorter  error  diagnostics  are  produced.  These are
+     designed for the experienced user.
+
+ttytype, tty                  default: terminal dependent
+     This option gives the terminal type of the output device.  Setting  [4mttytype[0m
+     indicates  the special capabilities of the terminal in use.  Current termi‐
+     nal types are defined by the [4mttycap[24m data base.  This data  base  is  conve‐
+     niently handled using the [4mttytype[24m program.  For most hard‐wired ports, [4mtty‐[0m
+     [4mtype[24m should be set correctly automatically.  A mechanism exists using  [4mtty‐[0m
+     [4mtype[24m (VI) for setting the type semi‐automatically on dial‐up lines.
+
+visualmessage, vm             default: novm
+     Interconsole messages are prohibited during [4mvisual[24m commands if [4mnovm[24m is set.
+
+window                        default: window=23
+     The  number of lines in a text window for the [4mz[24m command is specified by the
+     [4mwindow[24m option.
+
+wrap                          default: wrap
+     If [4mnowrap[24m then searches using the regular expressions  in  addressing  will
+     not wrap around past the end of the file.
+
+[1mLimits[0m
+
+     The  editor limits that the user is likely to encounter are as follows: 512
+characters per line, 256 characters per global command list, 64  characters  per
+file  name,  128 characters in the previous inserted and deleted text in [4mopen[24m or
+
+
+
+
+
+
+
+
+
+
+                                      ‐41‐
+
+
+[4mvisual,[24m 100 characters in a shell escape command, 30 characters in a string val‐
+ued option, and 256K characters in the temporary file.† The limit on the  number
+of  lines depends on the amount of core: each line takes at least 1 word, and to
+effect [4mundo[24m occasionally up to 2.  This editor is much larger than [4med[24m and on PDP
+11/40’s  which  do not have separate instruction and data space it is limited to
+about 2000 lines if [4mvisual[24m or [4mopen[24m are ever used.  If a full core load  of  user
+space  is  not available [4mex[24m may not be usable.  On a PDP 11/45 or 11/70 the size
+of the editor is not a problem as it can run with separate instruction and data.
+
+[1mNotes on temporary file overflow[0m
+
+     This editor uses a temporary file as a workspace.  The management  of  this
+file  is done in the same way as in [4med[24m.  Each line in the file is represented by
+an in‐core pointer to the image of that line on the disk.
+
+     The important point to note here is that the editor does [4mnot[24m reclaim  space
+in  this  temporary file used by lines which are deleted or changed.  This means
+that files which are larger than 128K characters may be difficult to edit.  Sim‐
+ilarly  systematic  changes  on large numbers of lines may run the editor out of
+temporary file space.
+
+     If the editor runs out of temporary space you can write the file  and  then
+use  an  [4medit[24m  command to read it back in.  This will reclaim the lost space.  A
+better solution is to split the file into smaller pieces or to use a stream edi‐
+tor  such  as [4mgres[24m on the file.  [4mGres[24m is described in section I of the [4mUNIX[24m [4mPro‐[0m
+[4mgrammers[24m [4mManual.[0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+───────────
+† Repeated blanks and tabs are compressed in the temporary file, as
+are blanks between ‘‘words’’.  This makes  the  buffer  effectively
+larger than 256K characters; if the file being edited contains many
+repeated blanks, it may be editable even if it is larger than 256K.
+
+
+
+
+
+
+
+
+
+
+                                      ‐42‐
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

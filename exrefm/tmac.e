@@ -1,4 +1,5 @@
 .\"'so /usr/lib/tmac.s
+.if n .nr LL 80n
 .if t .tr \(rh-
 .bd S B 3
 .de SM
