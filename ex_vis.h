@@ -23,8 +23,8 @@ int	vlast;
 
 #define vputc(c)	putc(c, stdout)
 
-#define	TUBELINES	100
-#define	TUBECOLS	300
+#define	TUBELINES	150
+#define	TUBECOLS	400
 #define	TUBESIZE	(TUBELINES * TUBECOLS)
 
 int	vliny[TUBELINES + 2];

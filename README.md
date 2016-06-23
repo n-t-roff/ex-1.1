@@ -76,6 +76,8 @@ The most significant differences for visual mode are:
 * Neither `ZZ` nor `:wq` nor `:x` had been implemented.
   Use the sequence `qw`&lt;ENTER&gt; `q`&lt;ENTER&gt;
   to write and quit.
+* `/`, `?` and `n` search only for the first occurrence
+  of a pattern in a line.
 * Use `K`*letter* instead of `m`*letter* to set marks.
 
 **Attention**:
