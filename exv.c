@@ -17,7 +17,8 @@ vop(void)
 #endif
 #ifdef VISUAL
 	register int c;
-	char atube[TUBESIZE + LBSIZE], *ic;
+	static char atube[TUBESIZE + LBSIZE];
+	char *ic;
 	int lines;
 
 	if (!CA)

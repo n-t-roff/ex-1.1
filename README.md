@@ -34,7 +34,8 @@ $ make distclean
 While `vi`
 [version 2.2](https://github.com/n-t-roff/ex-2.2)
 behaves quite similar to later versions,
-`vi` version 1.1 is rather different.
+`vi` version 1.1 is rather different (see
+[ex1.1-2.0.pdf](http://n-t-roff.github.io/ex/3.2/ex1.1-2.0.pdf)).
 Please study the manual
 [exrefm.pdf](http://n-t-roff.github.io/ex/1.1/exrefm.pdf)
 carefully.

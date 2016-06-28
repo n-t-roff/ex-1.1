@@ -16,7 +16,8 @@ oop(void)
 }
 #endif
 #ifdef VISUAL
-	char *ic, atube[TUBESIZE + LBSIZE];
+	char *ic;
+	static char atube[TUBESIZE + LBSIZE];
 	int lines;
 
 	if (!value(OPEN))
