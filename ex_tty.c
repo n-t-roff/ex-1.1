@@ -59,7 +59,7 @@ Setterm(char *type, int printerr)
 	CA = tgetflag("ca");
 	Tspace = tspace;
 	CM = Tgetstr("cm");
-	if (cgoto()[0] == 'O')
+	if (!CM || cgoto()[0] == 'O')
 		CA = 0, CM = 0;
 	else
 		CA = 1;

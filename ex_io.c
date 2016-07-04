@@ -381,6 +381,10 @@ synctmp(void)
 			oblock = *bp + 1;
 			bp[1] = -1;
 		}
+		if (*bp >= 511) {
+			ex_printf(" Tmp file overflow");
+			putNFL();
+		}
 		lseek(tfile, *bp * 512, SEEK_SET);
 		cnt = (dol - a + 2) << 1;
 		if (cnt > 512)
