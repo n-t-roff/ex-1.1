@@ -80,6 +80,8 @@ The most significant differences for visual mode are:
 * `/`, `?` and `n` search only for the first occurrence
   of a pattern in a line.
 * Use `K`*letter* instead of `m`*letter* to set marks.
+* The code is compiled for editing files with at most
+  16384 lines and 256 KB temp file size.
 
 **Attention**:
 The original `vi` had not been 8-bit clean!
