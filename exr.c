@@ -1,5 +1,8 @@
 #include <errno.h>
 #include <sys/types.h>
+#ifdef USE_SYS_MKDEV_H
+# include <sys/mkdev.h>
+#endif
 #include <unistd.h>
 #include <sys/stat.h>
 #include <fcntl.h>

@@ -265,14 +265,14 @@ scanfor(int c)
 		if (c == '/') {
 			addr++;
 			if (addr > dol) {
-				if (value(WRAP) == 0)
+				if (value(EX_WRAP) == 0)
 					error("No match to BOTTOM|Address search hit BOTTOM without matching pattern");
 				addr = zero;
 			}
 		} else {
 			addr--;
 			if (addr < zero) {
-				if (value(WRAP) == 0)
+				if (value(EX_WRAP) == 0)
 					error("No match to TOP|Address search hit TOP without matching pattern");
 				addr = dol;
 			}

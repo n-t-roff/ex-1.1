@@ -24,7 +24,7 @@ column(char *cp)
 int
 qcolumn(char *lim, char *gp)
 {
-	register int x;
+	int x = 0;
 	void (*OO)();
 
 	OO = Outchar;

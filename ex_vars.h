@@ -44,4 +44,4 @@ extern struct varbl varbls[];
 #define	TERSE		26
 #define	VISUALMESSAGE	27
 #define	WINDOW		28
-#define	WRAP		29
+#define	EX_WRAP		29

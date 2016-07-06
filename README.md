@@ -52,6 +52,11 @@ append mode.
 With the added text, command `vi` will work.
 Note that ex-1.1 places the cursor at the last line of the file.
 Use `1G` or `-` or `k` to move upwards.
+Alternatively use `1vi` as first command to open visual at first line.
+After any command ex-1.1 stays in ex mode.
+`vi` will put the current line to top of the window.
+Use command `vi.` instead to open visual with the current line
+centered in the window.
 The most significant differences for visual mode are:
 * **Don't use unescaped `@` in input mode, type `\@` instead.**
   `@` in input mode deletes the current line.
@@ -70,6 +75,16 @@ The most significant differences for visual mode are:
   This is intended and not a bug.
   (You may ignore these lines or type `^Z` to remove them.)
 * Use `Y` instead of `yy`.
+* Note that it is not possible to delete a range of lines
+  with `:`*startline*`,`*endline*`d` and then insert these
+  lines with `p` or `P`.
+  On change between ex and visual mode the yank buffer
+  information it lost.
+  So even `:`*line*`put` can't be used.
+  The combination `delete`/`put` does only work if ex
+  mode is not left.
+  Alternatively use *n*`\\` to delete and `p`/`P` to
+  insert.
 * In input mode use `^H` instead of &lt;BACKSPACE&gt;
 * Use `` :e` `` instead of `:e#` to address the alternate
   file name.
@@ -80,6 +95,18 @@ The most significant differences for visual mode are:
 * `/`, `?` and `n` search only for the first occurrence
   of a pattern in a line.
 * Use `K`*letter* instead of `m`*letter* to set marks.
+* Control characters are printed as `?` and it is not
+  possible to insert them preceded with `^V`.
+  Use at least
+  [vi version 2.2](https://github.com/n-t-roff/ex-2.2)
+  to edit control characters in files.
+  (Existing control characters are left unchanged by
+  vi 1.1.)
+* In rare cases some word characters are displayed as
+  spaces.
+  This is a visual effect and not a data issue.
+  Going to ex mode with `q` and returning to vi mode
+  fixes this.
 * The code is compiled for editing files with at most
   16384 lines and 256 KB temp file size.
 

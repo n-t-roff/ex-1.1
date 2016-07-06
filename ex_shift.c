@@ -10,7 +10,7 @@ void
 shift(int c, int cnt)
 {
 	register int *addr;
-	register char *cp;
+	char *cp = genbuf;
 	char *dp;
 	register int i;
 

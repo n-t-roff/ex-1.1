@@ -111,6 +111,36 @@ EOT
 	bmake -f $TMPMK >> $LOG 2>&1
 	test_result && MAKE=bmake
 }
+check_major_minor () {
+	check_for "major(3), minor(3)"
+
+	cat <<EOT >$TMPC
+#include <sys/types.h>
+int
+main() {
+	(void)major(0);
+	(void)minor(0);
+	return 0;
+}
+EOT
+	compile
+	test_result && return
+
+	check_for "major(3), minor(3) using <sys/mkdev.h>"
+
+	cat <<EOT >$TMPC
+#include <sys/types.h>
+#include <sys/mkdev.h>
+int
+main() {
+	(void)major(0);
+	(void)minor(0);
+	return 0;
+}
+EOT
+	compile
+	test_result && DEFS="$DEFS -DUSE_SYS_MKDEV_H"
+}
 	[ ! -s compat.h ] && rm compat.h
 OUTMK=Makefile
 INMK=${OUTMK}.in
@@ -126,11 +156,13 @@ rm -f $LOG
 gen_mk
 
 check_make
+check_major_minor
 
 TermTest () {
-	check_for "$1"
+	check_for "$1 $2"
 	Term="$1"
-	echo "TERMLIB=$1" > $OUTMK
+	echo "TERMLIB=$1" >  $OUTMK
+	echo "DEFS=$2"    >> $OUTMK
 	gen_mk 1
 	cat <<EOT >>$OUTMK
 $TMPNAM: ${TMPNAM}.o
@@ -138,8 +170,6 @@ $TMPNAM: ${TMPNAM}.o
 EOT
 	cat <<EOT >>$TMPC
 int tgetent(char *bp, const char *name);
-#include "ex.h"
-#include "ex_tty.h"
 int main() {
 	char tcbuf[1024];
 	char *terms[] = { "xterm", "screen" };
@@ -161,13 +191,19 @@ EOT
 }
 
 TestLocalTermlib () {
-	TermTest "-ltinfo"   && return
-	TermTest "-lcurses"  && return
 	TermTest "-lncurses" && return
+	D="-I/usr/pkg/include -L/usr/pkg/lib -Wl,-rpath,/usr/pkg/lib"
+	TermTest "-lncurses" "$D" && {
+		DEFS="$DEFS $D"
+		return
+	}
+	TermTest "-lcurses"  && return
+	TermTest "-ltinfo"   && return
 }
 
 TestLocalTermlib
 
-echo "TERMLIB=$Term" > $OUTMK
+echo "TERMLIB=$Term" >  $OUTMK
+echo "DEFS=$DEFS"    >> $OUTMK
 gen_mk 1
 rm -f $TMPNAM*

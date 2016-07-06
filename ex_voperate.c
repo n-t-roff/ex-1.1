@@ -290,6 +290,7 @@ word(void (*op)(), int cnt)
 			while (!margin() && wordof(which, wcursor))
 				wcursor--;
 		}
+		which = wordch(wcursor); /* reported by OI compiler */
 		if (margin() || !wordof(which, wcursor))
 			wcursor++;
 	}
