@@ -109,6 +109,11 @@ unix2(char *opt, char printub, char *up)
 		error("No more processes");
 	}
 	if (pid == 0) {
+		if (up) {
+			char *cp = up;
+			while (*cp)
+				*cp++ &= 0177;
+		}
 /*
 		if (io)
 			close(io);

@@ -7,7 +7,7 @@ DBG_CFLAGS=-DDEBUG \
 	-fsanitize=undefined \
 	-fsanitize=integer \
 	-fsanitize=address
-_CFLAGS=-DUNIMP -Wall -Wextra -DSHAREDIR='"$(SHAREDIR)"' $(DEFS) \
+_CFLAGS=-DUNIMP -Wall -Wextra -DSHAREDIR='"$(SHAREDIR)"' $(DEFINES) \
 	#$(DBG_CFLAGS)
 _LDFLAGS=-s
 OBJ=	ex.o ex_cmds.o exd.o ex_put.o ex_print.o exv.o ex_vmain.o exs.o \

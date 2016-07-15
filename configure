@@ -162,7 +162,6 @@ TermTest () {
 	check_for "$1 $2"
 	Term="$1"
 	echo "TERMLIB=$1" >  $OUTMK
-	echo "DEFS=$2"    >> $OUTMK
 	gen_mk 1
 	cat <<EOT >>$OUTMK
 $TMPNAM: ${TMPNAM}.o
@@ -204,6 +203,5 @@ TestLocalTermlib () {
 TestLocalTermlib
 
 echo "TERMLIB=$Term" >  $OUTMK
-echo "DEFS=$DEFS"    >> $OUTMK
 gen_mk 1
 rm -f $TMPNAM*

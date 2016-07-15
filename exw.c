@@ -70,8 +70,8 @@ cre:
 				ioerror();
 			break;
 		case 2:
-			io = open(file, O_WRONLY | O_APPEND);
-			if (io < 0) {
+			io = open(file, O_WRONLY);
+			if (io < 0 || lseek(io, 0, SEEK_END) == -1) {
 				if (exclam /* || value(WRITEANY) */)
 					goto cre;
 				ioerror();
