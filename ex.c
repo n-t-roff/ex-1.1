@@ -26,8 +26,8 @@ int
 main(int ac, char **av)
 {
 	char oop, nop, inite = 0, reenter;
-	register char **axargv0;
-	register int c;
+	char **axargv0;
+	int c;
 
 	xargc0 = ac;
 	xargv0 = av;
@@ -80,7 +80,7 @@ main(int ac, char **av)
 				oop = 1;
 				break;
 			default:
-				ex_printf("Unknown option %s\n", xargv[0]);
+				ex_printf("Unknown option %s\n", axargv0[0]);
 				flush();
 				break;
 		}
@@ -187,7 +187,7 @@ ex_rewind(void)
 void
 init(void)
 {
-	register int i;
+	int i;
 	extern int vyancnt;
 
 	fileinit();

@@ -38,7 +38,7 @@ Vmain(char *ic)
 	char hadcnt, first, *oglobp;
 	extern char Peekkey, *genindent();
 	void (*OP)();
-	int ind, *addr;
+	int ind = 0 /* (ck) */, *addr;
 	extern char *loc1;
 
 	if (nextic) {

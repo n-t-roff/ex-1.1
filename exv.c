@@ -96,8 +96,8 @@ vinit(void)
 {
 	register int *tp;
 	register int voy, vny;
-	char *ic;
-	int nvc;
+	char *ic = linebuf; /* init (ck) */
+	int nvc = vcline; /* init (ck) */
 
 #if 0
 	vcook();

@@ -15,14 +15,14 @@ int
 compile(int eof, char oknl)
 {
 	int c;
-	register char *ep;
+	char *ep;
 	char *lastep;
 	char bracket[NBRA], *bracketp, *rhsp;
 	int cclcnt;
 
 	if (letter(eof) || digit(eof))
 		error("Re delimiter must not be letter or digit|Regular expressions cannot be delimited by letters or digits");
-	ep = expbuf;
+	lastep = ep = expbuf;
 	c = ex_getchar();
 	if (eof == '\\')
 		switch (c) {
