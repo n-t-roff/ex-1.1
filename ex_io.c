@@ -371,7 +371,7 @@ synctmp(void)
 	if (oblock != -1)
 		blkio(oblock, obuff, write);
 	time(&header.Atime);
-	header.Auid = getuid() & mask;
+	header.Auid = getuid();
 	*zero = (int)header.Atime;
 	for (a = zero, bp = blocks; a <= dol; a += 256, bp++) {
 		if (*bp < 0) {

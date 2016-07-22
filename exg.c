@@ -96,7 +96,9 @@ save(int *a1, int *a2)
 			if (sbrk(1024) == -1)
 #endif
 				error("Out of memory@saving lines for undo - try using ed or re)");
+#ifdef UNIX_SBRK
 			endcore += 1024;
+#endif
 		}
 	undkind = UNDALL;
 	unddel = a1 - 1;

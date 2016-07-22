@@ -305,7 +305,7 @@ vappend(int ch, int cnt, int indent)
 			 * is just the pushed ahead material, and there
 			 * are no pre-inserted characters.
 			 */
-			strcpy(genbuf, gcursor + 1);
+			CP(genbuf, gcursor + 1);
 			gcursor = genbuf;
 		}
 		/*

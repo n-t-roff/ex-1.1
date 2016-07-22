@@ -90,7 +90,7 @@ void	onintr(int);
 
 struct {
 	time_t	Atime;
-	int	Auid;
+	uid_t	Auid;
 	int	Alines;
 	char	Afname[FNSIZE];
 	int	Ablocks[100];
@@ -127,7 +127,6 @@ char	aiflag;
 int	pid, rpid, status;
 struct termios tty;
 char	allredraw, pfast;
-int	mask;
 
 extern void (*Putchar)();
 

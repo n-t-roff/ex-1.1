@@ -2,14 +2,14 @@ VERSION=1.1
 PREFIX=	${DESTDIR}/usr/local
 BINDIR=	${PREFIX}/bin
 SHAREDIR=${PREFIX}/share/ex/${VERSION}
-DBG_CFLAGS=-DDEBUG \
+DEB	=#-DDEBUG \
 	-g -O0 -fno-omit-frame-pointer -fno-optimize-sibling-calls \
 	-fsanitize=undefined \
 	-fsanitize=integer \
 	-fsanitize=address
-_CFLAGS=-DUNIMP -Wall -Wextra -DSHAREDIR='"$(SHAREDIR)"' $(DEFINES) \
-	#$(DBG_CFLAGS)
-_LDFLAGS=-s
+_CFLAGS=$(CFLAGS) -DUNIMP -Wall -Wextra -DSHAREDIR='"$(SHAREDIR)"' $(DEFINES) \
+	$(DEB)
+_LDFLAGS=$(LDFLAGS) $(DEFINES) $(DEB) -s
 OBJ=	ex.o ex_cmds.o exd.o ex_put.o ex_print.o exv.o ex_vmain.o exs.o \
 	3printf.o ex_io.o ex_pack.o ex_recover.o ex_set.o ex_get.o ex_subr.o \
 	ex_tty.o ex_ca.o ex_unix.o ex_init.o ex_re.o ex_source.o ex_glob.o \
@@ -47,7 +47,7 @@ ${BINDIR} ${LIBDIR} ${SHAREDIR}:
 	mkdir -p $@
 
 a.out: $(OBJ)
-	$(CC) $(CFLAGS) $(_CFLAGS) $(LDFLAGS) $(_LDFLAGS) $(OBJ) $(TERMLIB)
+	$(CC) $(_LDFLAGS) $(OBJ) $(TERMLIB)
 
 .c.o:
-	$(CC) $(CFLAGS) $(_CFLAGS) -c $<
+	$(CC) $(_CFLAGS) -c $<

@@ -159,16 +159,16 @@ check_make
 check_major_minor
 
 TermTest () {
-	check_for "$1 $2"
+	check_for "$1"
 	Term="$1"
-	echo "TERMLIB=$1" >  $OUTMK
+	echo "TERMLIB=$1" > $OUTMK
 	gen_mk 1
 	cat <<EOT >>$OUTMK
 $TMPNAM: ${TMPNAM}.o
-	\$(CC) \$(_CFLAGS) -o \$@ ${TMPNAM}.o \$(TERMLIB)
+	\$(CC) \$(_LDFLAGS) -o \$@ ${TMPNAM}.o \$(TERMLIB)
 EOT
 	cat <<EOT >>$TMPC
-int tgetent(char *bp, const char *name);
+int tgetent(char *, const char *);
 int main() {
 	char tcbuf[1024];
 	char *terms[] = { "xterm", "screen" };
@@ -190,18 +190,18 @@ EOT
 }
 
 TestLocalTermlib () {
-	TermTest "-lncurses" && return
-	D="-I/usr/pkg/include -L/usr/pkg/lib -Wl,-rpath,/usr/pkg/lib"
-	TermTest "-lncurses" "$D" && {
-		DEFS="$DEFS $D"
-		return
-	}
-	TermTest "-lcurses"  && return
 	TermTest "-ltinfo"   && return
+	TermTest "-lncurses" && return
+	ODEFS=$DEFS
+	D="-I/usr/pkg/include -L/usr/pkg/lib -Wl,-rpath,/usr/pkg/lib"
+	DEFS="$DEFS $D"
+	TermTest "-lncurses $D" && return
+	DEFS=$ODEFS
+	TermTest "-lcurses" && return
 }
 
 TestLocalTermlib
 
-echo "TERMLIB=$Term" >  $OUTMK
+echo "TERMLIB=$Term" > $OUTMK
 gen_mk 1
 rm -f $TMPNAM*
