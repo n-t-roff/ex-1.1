@@ -88,7 +88,7 @@ The most significant differences for visual mode are:
 * In input mode use `^H` instead of &lt;BACKSPACE&gt;
 * Use `` :e` `` instead of `:e#` to address the alternate
   file name.
-  (Also `^6` did not exist.)
+  (Also `^^` and `^6` did not exist.)
 * Neither `ZZ` nor `:wq` nor `:x` had been implemented.
   Use the sequence `qw`&lt;ENTER&gt; `q`&lt;ENTER&gt;
   to write and quit.
@@ -102,6 +102,11 @@ The most significant differences for visual mode are:
   to edit control characters in files.
   (Existing control characters are left unchanged by
   vi 1.1.)
+* `%` (find matching `()`, `{}` or `[]`) is not
+  available before ex version 2.
+* `]]` and `[[` (search for begin of a C function,
+  i.e. a line starting with `{`) had not been available
+  before ex version 2.
 * In rare cases some word characters are displayed as
   spaces.
   This is a visual effect and not a data issue.
