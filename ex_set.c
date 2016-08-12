@@ -1,4 +1,3 @@
-#include <string.h>
 #include "ex.h"
 #include "ex_tty.h"
 /*

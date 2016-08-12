@@ -1,5 +1,4 @@
 #include <unistd.h>
-#include <string.h>
 #include "ex.h"
 #include "ex_re.h"
 #include "ex_vis.h"

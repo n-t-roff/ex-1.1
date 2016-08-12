@@ -4,7 +4,6 @@
  * Bill Joy UCB September 1977
  */
 
-#include <string.h>
 #include "ex.h"
 #include "ex_tty.h"
 
@@ -58,7 +57,7 @@ Setterm(char *type, int printerr)
 */
 	CA = tgetflag("ca");
 	Tspace = tspace;
-	CM = Tgetstr("cm");
+	CM = Tgetstr("cm"); /* ex-2 */
 	if (!CM || cgoto()[0] == 'O')
 		CA = 0, CM = 0;
 	else
@@ -71,7 +70,7 @@ Setterm(char *type, int printerr)
 	UPLINE = Tgetstr("up");
 /*
 	AL = Tgetstr("al");
-	DL = Tgetstr"dl");
+	DL = Tgetstr("dl");
 */
 	CE = Tgetstr("ce");
 /*

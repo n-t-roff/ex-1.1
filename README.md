@@ -110,14 +110,23 @@ The most significant differences for visual mode are:
   vi 1.1.)
 * `%` (find matching `()`, `{}` or `[]`) is not
   available before ex version 2.
+* `%` and `` ` `` are substituted for the current and
+  alternate filename only in *filenames*.
+  Use `1,$` instead of `%` to address all lines of the
+  current buffer.
+* `,` (intraline search in reverse direction) is not
+  available before ex version 2,
+  but `;` exists.
 * `]]` and `[[` (search for begin of a C function,
   i.e. a line starting with `{`) had not been available
   before ex version 2.
-* In rare cases some word characters are displayed as
-  spaces.
+* After upward scrolling
+  or using *n*`G`
+  some word characters may be displayed as spaces.
   This is a visual effect and not a data issue.
   Going to ex mode with `q` and returning to vi mode
   fixes this.
+  (Downward scrolling doesn't have this problem.)
 * The code is compiled for editing files with at most
   16384 lines and 256 KB temp file size.
 

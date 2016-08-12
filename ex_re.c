@@ -414,7 +414,11 @@ copy(char *to, char *from, int size)
 {
 
 	if (size > 0)
+#ifdef UNIX_SBRK
 		do
 			*to++ = *from++;
 		while (--size > 0);
+#else
+		memmove(to, from, size);
+#endif
 }

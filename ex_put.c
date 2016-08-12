@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <termios.h>
 #include <unistd.h>
 #include "ex.h"
@@ -257,14 +256,16 @@ fgoto(void)
 void
 setcol(int col)
 {
+	/*register int del;*/
 
 	flush1();
+	/*del = col - outcol;*/
 	destcol = col;
 	if (destcol < 0)
 		destcol = 0;
-#if 0
 	/* off the line may not work on 3a here */
 	fgoto();
+#if 0
 	/*
 	 * ADM3A special - fix tabs
 	 */
@@ -282,8 +283,8 @@ setcol(int col)
 			del--;
 		}
 	}
-	flush();
 #endif
+	flush();
 }
 
 /*
@@ -334,8 +335,7 @@ plod(void)
 		if (NOCR || pfast == 0)
 			outcol = 0;
 	}
-	if (!NOCR && (outcol - destcol > destcol + 1
-	    || (outcol > destcol && !BS))) {
+	if (!NOCR && (outcol - destcol > destcol + 1 || (outcol > destcol && !BS))) {
 		putch('\r');
 		outcol = 0;
 	}
@@ -399,10 +399,10 @@ notech(int i)
 }
 
 
-#ifndef ECHO
+#if 0
 #define	ECHO	010
-#endif
 #define	CRLF	020
+#endif
 
 /*
  * Newline + flush.

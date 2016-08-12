@@ -1,4 +1,3 @@
-#include <string.h>
 #include <unistd.h>
 #include "ex.h"
 #include "ex_tty.h"
@@ -255,6 +254,5 @@ setin(int *addr)
 static int
 junk(int c)
 {
-	return (c == 0 || (value(BEAUTIFY) && c < ' ' && c != '\t'
-	    && c != '\n' && c != '\f'));
+	return (c == 0 || (value(BEAUTIFY) && c < ' ' && c != '\t' && c != '\n' && c != '\f'));
 }

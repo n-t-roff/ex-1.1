@@ -1,5 +1,3 @@
-#include <string.h>
-#include <stdio.h>
 #include "ex.h"
 #ifdef VISUAL
 #include "ex_tty.h"

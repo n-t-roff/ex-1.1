@@ -3,7 +3,6 @@
  * Ex - a text editor
  * Bill Joy UCB October 1977
  */
-#include <string.h>
 #include "ex.h"
 
 void

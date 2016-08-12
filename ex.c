@@ -5,7 +5,6 @@
  * Version 1.0 September, 1977
  */
 
-#include <string.h>
 #include <stdlib.h>
 #include <signal.h>
 #include "ex.h"

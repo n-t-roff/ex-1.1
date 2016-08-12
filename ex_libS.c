@@ -7,7 +7,6 @@
  * we need a printf which prints through putchar().
  */
 
-#include <string.h>
 #include "ex.h"
 
 #if 0
@@ -45,5 +44,5 @@ char *
 strcLIN(char *dp)
 {
 
-	return (strcpy(linebuf, dp));
+	return CP(linebuf, dp);
 }

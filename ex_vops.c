@@ -1,4 +1,3 @@
-#include <string.h>
 #include "ex.h"
 #ifdef VISUAL
 #include "ex_tty.h"
@@ -223,13 +222,13 @@ vappend(int ch, int cnt, int indent)
 		 * appended material (at gcursor + 1).
 		 * This frees up linebuf for use in saving lines, etc.
 		 */
-		strcpy(gcursor + 1, cursor);
+		CP(gcursor + 1, cursor);
 		/*
 		 * Catenate cnt copies of the inserted text after
 		 * the material which precedes this insert.
 		 */
 		do {
-			strcpy(cursor, genbuf);
+			CP(cursor, genbuf);
 			cursor += gcursor - genbuf;
 		} while (--cnt > 0);
 		/*
@@ -237,7 +236,7 @@ vappend(int ch, int cnt, int indent)
 		 * then we want to put the whole line back together.
 		 */
 		if (escape != '\n')
-			strcpy(cursor, gcursor + 1);
+			CP(cursor, gcursor + 1);
 		/*
 		 * Clean up the line image on the screen.
 		 * I is the first line after this lines image for use
@@ -298,7 +297,7 @@ vappend(int ch, int cnt, int indent)
 			/*
 			 * Paste the first image of the line together.
 			 */
-			strcpy(gcursor, linebuf);
+			CP(gcursor, linebuf);
 		} else {
 			/*
 			 * Without ai the first image of the new line

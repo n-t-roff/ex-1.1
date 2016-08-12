@@ -1,4 +1,3 @@
-#include <string.h>
 #include "ex.h"
 /*
  * Ex3a - a text editor

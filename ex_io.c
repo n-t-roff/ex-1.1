@@ -3,7 +3,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <time.h>
-#include <string.h>
 #include <fcntl.h>
 #include <stdlib.h>
 #include "ex.h"

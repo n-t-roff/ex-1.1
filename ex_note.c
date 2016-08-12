@@ -4,7 +4,6 @@
  * Bill Joy UCB September, 1977
  */
 
-#include <string.h>
 #include "ex.h"
 #include "ex_glob.h"
 

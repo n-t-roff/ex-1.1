@@ -1,4 +1,3 @@
-#include <string.h>
 #include "ex.h"
 #ifdef VISUAL
 #include "ex_vis.h"
