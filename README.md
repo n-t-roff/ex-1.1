@@ -57,7 +57,7 @@ After any command ex-1.1 stays in ex mode.
 `vi` will put the current line to top of the window.
 Use command `vi.` instead to open visual with the current line
 centered in the window.
-The most significant differences for visual mode are:
+The most significant differences are:
 * **Don't use unescaped `@` in input mode, type `\@` instead.**
   `@` in input mode deletes the current line.
   This is an intended feature and not a bug.
@@ -126,6 +126,7 @@ The most significant differences for visual mode are:
   This is a visual effect and not a data issue.
   Going to ex mode with `q` and returning to vi mode
   fixes this.
+  A single line can fixed with the sequence `\\u`.
   (Downward scrolling doesn't have this problem.)
 * The code is compiled for editing files with at most
   16384 lines and 256 KB temp file size.

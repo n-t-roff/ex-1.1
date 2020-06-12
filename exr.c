@@ -1,5 +1,8 @@
 #include <errno.h>
 #include <sys/types.h>
+#ifdef USE_SYS_SYSMACROS_H
+# include <sys/sysmacros.h>
+#endif
 #ifdef USE_SYS_MKDEV_H
 # include <sys/mkdev.h>
 #endif
