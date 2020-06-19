@@ -3,6 +3,7 @@ PREFIX=	${DESTDIR}/usr/local
 BINDIR=	${PREFIX}/bin
 SHAREDIR=${PREFIX}/share/ex/${VERSION}
 _CFLAGS=$(CFLAGS) -DUNIMP -Wall -Wextra -DSHAREDIR='"$(SHAREDIR)"' $(DEFINES) \
+	-fcommon \
 	#-DDEBUG $(__CDBG) $(__SAN)
 _LDFLAGS=$(LDFLAGS) $(DEFINES) $(__SAN) \
 	-s
